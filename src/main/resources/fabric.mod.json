@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "dungeondodgeplus",
+  "version": "${version}",
+  "name": "DungeonDodge+",
+  "description": "A Utility mod for a server known as DungeonDodge.",
+  "authors": [
+    "PikiBanana",
+    "BasicallyIAmFox"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/dungeondodgeplus/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "io.github.pikibanana.DataGenerator"
+    ],
+    "main": [
+      "io.github.pikibanana.Main"
+    ],
+    "modmenu": [
+      "io.github.pikibanana.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "dungeondodgeplus.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": ">=1.20.6",
+    "java": ">=21",
+    "fabric-api": "*",
+    "cloth-config2": ">=14.0.126"
+  },
+  "suggests": {
+    "modmenu": ">=10.0.0-beta.1"
+  },
+  "custom": {
+    "modmenu": {
+      "id": "dungeondodgeplus",
+      "name": "DungeonDodge+",
+      "description": "A Utility mod for a server known as DungeonDodge.",
+      "icon": "assets/dungeondodgeplus/icon.png",
+      "update_checker": true
+    }
+  }
+}
