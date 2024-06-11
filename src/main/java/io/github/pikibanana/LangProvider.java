@@ -17,5 +17,6 @@ public class LangProvider extends FabricLanguageProvider {
         translationBuilder.add(configPrefix + ".essenceFinder", "Essence Finder");
         translationBuilder.add(configPrefix + ".essenceFinder.enabled", "Essence Finder Enabled");
         translationBuilder.add(configPrefix + ".essenceFinder.color", "Essence Finder Color");
+        translationBuilder.add(configPrefix + ".timestamp.enabled","Enable Timestamp");
     }
 }
