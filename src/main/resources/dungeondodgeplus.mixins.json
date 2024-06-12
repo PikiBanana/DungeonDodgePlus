@@ -1,11 +1,13 @@
 {
-	"required": true,
-	"package": "io.github.pikibanana.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"SkullRenderer"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "io.github.pikibanana.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "SkullRenderer",
+    "ChestRenderer",
+    "BlockEventS2CPacketMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

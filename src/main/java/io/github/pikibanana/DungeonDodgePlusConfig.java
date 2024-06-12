@@ -28,10 +28,10 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public EssenceFinder essenceFinder = new EssenceFinder();
 
         @ConfigEntry.Gui.CollapsibleObject
-        public CookieFinder cookieFinder = new CookieFinder();
+        public BlessingFinder blessingFinder = new BlessingFinder();
 
-        @ConfigEntry.Gui.TransitiveObject
-        public Timestamp timestamp = new Timestamp();
+//        @ConfigEntry.Gui.TransitiveObject
+//        public Timestamp timestamp = new Timestamp();
 
 
         public static class EssenceFinder {
@@ -43,17 +43,17 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public int color = 0x4682B4;
         }
 
-        public static class CookieFinder {
+        public static class BlessingFinder {
             @ConfigEntry.Gui.Excluded
-            public String label = "Cookie Finder Settings";
+            public String label = "Blessing Finder Settings";
 
             public boolean enabled = true;
-//            @ConfigEntry.ColorPicker
-//            public Color color = Color.decode("#DB7093"); // Default color is coral
+            @ConfigEntry.ColorPicker
+            public int color = 0x228B22;
         }
 
-        public static class Timestamp {
-            public boolean enabled = false;
-        }
+//        public static class Timestamp {
+//            public boolean enabled = false;
+//        }
     }
 }

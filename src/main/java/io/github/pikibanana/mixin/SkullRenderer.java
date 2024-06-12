@@ -8,6 +8,7 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.pikibanana.DungeonDodgePlusConfig;
+import io.github.pikibanana.dungeonapi.DungeonTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.SkullBlockEntity;
@@ -46,7 +47,7 @@ public abstract class SkullRenderer {
             at = @At("HEAD"))
     private void renderSkullValidation(SkullBlockEntity skullBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider,
                                        int i, int j, CallbackInfo ci, @Share("dungeondodgeplus$validSkull") LocalBooleanRef validSkull) {
-        validSkull.set(isValidSkull(skullBlockEntity));
+        validSkull.set(isValidSkull(skullBlockEntity) && DungeonTracker.inDungeon());
     }
 
     @ModifyArgs(
@@ -66,7 +67,7 @@ public abstract class SkullRenderer {
         if (validSkull.get()) {
             Color color = new Color(DungeonDodgePlusConfig.get().features.essenceFinder.color);
             outlineVertexConsumerProvider.setColor(color.getRed(), color.getGreen(), color.getBlue(),128);
-            args.set(4, (VertexConsumerProvider)outlineVertexConsumerProvider);
+            args.set(4, (VertexConsumerProvider) outlineVertexConsumerProvider);
         }
     }
 
