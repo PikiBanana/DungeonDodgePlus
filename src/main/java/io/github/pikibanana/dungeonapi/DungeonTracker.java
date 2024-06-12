@@ -19,17 +19,17 @@ public class DungeonTracker {
     private static final Pattern dungeonEntryRegex = Pattern.compile("You have entered the (\\w*) dungeon!");
     private static final Pattern dungeonDifficultyRegex = Pattern.compile("[!] Notice! Your dungeon difficulty is set to (\\w*)");
     private static final Logger LOGGER = Main.LOGGER;
-    private static final Map<String, DungeonMessage> MESSAGE_MAP = new HashMap<>();
+    private static final Map<Pattern, DungeonMessage> MESSAGE_MAP = new HashMap<>();
     private static boolean isInDungeon = false;
     private static DungeonType dungeonType = DungeonType.UNKNOWN;
     private static DungeonDifficulty dungeonDifficulty = DungeonDifficulty.UNKNOWN;
 
     static {
-        MESSAGE_MAP.put("You have entered the", DungeonMessage.ENTER);
-        MESSAGE_MAP.put("Dungeon failed! The whole team died!", DungeonMessage.DEATH);
-        MESSAGE_MAP.put("Teleported you to spawn!", DungeonMessage.LEAVE);
-        MESSAGE_MAP.put("The boss has been defeated! The dungeon will end in  10 seconds!", DungeonMessage.LEAVE);
-        MESSAGE_MAP.put("Teleporting...", DungeonMessage.TELEPORTING);
+        MESSAGE_MAP.put(Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*"), DungeonMessage.ENTER);
+        MESSAGE_MAP.put(Pattern.compile("Dungeon failed! The whole team died!"), DungeonMessage.DEATH);
+        MESSAGE_MAP.put(Pattern.compile("Teleported you to spawn!"), DungeonMessage.LEAVE);
+        MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will end in 10 seconds!"), DungeonMessage.LEAVE);
+        MESSAGE_MAP.put(Pattern.compile("Teleporting..."), DungeonMessage.TELEPORTING);
     }
 
     public static boolean inDungeon() {
@@ -61,41 +61,31 @@ public class DungeonTracker {
     }
 
     public void handleMessage(Text message, @Nullable SignedMessage signedMessage, @Nullable GameProfile sender, MessageType.Parameters params, Instant receptionTimestamp) {
-        LOGGER.error("Received message: {}", message.getString()); // Log the received message content
 
-        // Iterate over the keys in the MESSAGE_MAP and check if the message content contains any of them
-        for (Map.Entry<String, DungeonMessage> entry : MESSAGE_MAP.entrySet()) {
-            if (message.getString().contains(entry.getKey())) {
+        // Iterate over the patterns in the MESSAGE_MAP and check if the message content matches any of them
+        for (Map.Entry<Pattern, DungeonMessage> entry : MESSAGE_MAP.entrySet()) {
+            if (entry.getKey().matcher(message.getString()).find()) {
                 DungeonMessage msgType = entry.getValue();
-                LOGGER.error("Message type: {}", msgType); // Log the determined message type
 
                 // Handle the message based on its type
                 switch (msgType) {
                     case ENTER:
-                        LOGGER.error("Handling ENTER message.");
                         handleEntry(message);
                         break;
                     case DEATH:
-                        LOGGER.error("Handling DEATH message.");
                         handleDeath(message);
                         break;
                     case LEAVE:
                     case TELEPORTING:
-                        LOGGER.error("Handling LEAVE/TELEPORTING message.");
                         handleLeave(message);
                         break;
                     default:
-                        LOGGER.error("Unknown message type.");
                         break;
                 }
                 return; // Exit the loop after handling the message
             }
         }
-
-        // If no matching key is found in the MESSAGE_MAP, log that the message type is not recognized
-        LOGGER.error("Message type not recognized.");
     }
-
 
 
     private enum DungeonMessage {
