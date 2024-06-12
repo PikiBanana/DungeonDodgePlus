@@ -23,4 +23,4 @@ public class LangProvider extends FabricLanguageProvider {
         translationBuilder.add(configPrefix + ".blessingFinder.color", "blessing Finder Color");
         translationBuilder.add(configPrefix + ".timestamp.enabled","Enable Timestamp");
     }
-}
+} //TODO: Fix language provider and Data generator
