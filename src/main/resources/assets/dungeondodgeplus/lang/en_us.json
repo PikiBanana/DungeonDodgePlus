@@ -1,0 +1,10 @@
+{
+  "text.autoconfig.DungeonDodgePlus.title": "DungeonDodge+ Config",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceFinder": "Essence Finder",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceFinder.enabled": "Essence Finder Enabled",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceFinder.color": "Essence Finder Color",
+  "text.autoconfig.DungeonDodgePlus.option.features.blessingFinder": "Blessing Finder",
+  "text.autoconfig.DungeonDodgePlus.option.features.blessingFinder.enabled": "Blessing Finder Enabled",
+  "text.autoconfig.DungeonDodgePlus.option.features.blessingFinder.color": "Blessing Finder Color",
+  "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp"
+}
