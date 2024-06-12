@@ -31,7 +31,7 @@ public class Main implements ModInitializer {
             ClientReceiveMessageEvents.CHAT_CANCELED.register(chatHandler::onReceiveChatMessageCanceled);
 
             DungeonTracker dungeonTracker = new DungeonTracker();
-            ClientReceiveMessageEvents.CHAT.register(dungeonTracker::handleMessage);
+            ClientReceiveMessageEvents.GAME.register(dungeonTracker::handleMessage);
         } catch (Exception e) {
             LOGGER.warn("Chat listeners did not register correctly!");
             LOGGER.error(e.toString());

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class DungeonTracker {
 
-    private static final Pattern dungeonEntryRegex = Pattern.compile("You have entered the (\\w*) dungeon!");
+    private static final Pattern dungeonEntryRegex = Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*");
     private static final Pattern dungeonDifficultyRegex = Pattern.compile("[!] Notice! Your dungeon difficulty is set to (\\w*)");
     private static final Logger LOGGER = Main.LOGGER;
     private static final Map<Pattern, DungeonMessage> MESSAGE_MAP = new HashMap<>();
@@ -40,17 +40,26 @@ public class DungeonTracker {
         return dungeonType;
     }
 
-    public static void handleEntry(Text message) {
-        Matcher typeMatcher = dungeonEntryRegex.matcher(message.getContent().toString());
+    public static void handleEntry(Text text) {
+        LOGGER.debug("Handling dungeon entry message: {}", text.getString());
+        String message = text.getString();
+
+        Matcher typeMatcher = dungeonEntryRegex.matcher(message);
         if (typeMatcher.find()) {
             isInDungeon = true;
-            dungeonType = DungeonType.valueOf(typeMatcher.group(1).toUpperCase());
+            String dungeonName = typeMatcher.group(1);
+            LOGGER.debug("Entered dungeon: {}", dungeonName);
+            dungeonType = DungeonType.valueOf(dungeonName.toUpperCase());
         }
-        Matcher difficultyMatcher = dungeonDifficultyRegex.matcher(message.getContent().toString());
+
+        Matcher difficultyMatcher = dungeonDifficultyRegex.matcher(message);
         if (difficultyMatcher.find()) {
-            dungeonDifficulty = DungeonDifficulty.valueOf(difficultyMatcher.group(1).toUpperCase());
+            String difficultyName = difficultyMatcher.group(1);
+            LOGGER.debug("Dungeon difficulty set to: {}", difficultyName);
+            dungeonDifficulty = DungeonDifficulty.valueOf(difficultyName.toUpperCase());
         }
     }
+
 
     public static void handleDeath(Text message) {
         isInDungeon = false;
@@ -60,24 +69,23 @@ public class DungeonTracker {
         isInDungeon = false;
     }
 
-    public void handleMessage(Text message, @Nullable SignedMessage signedMessage, @Nullable GameProfile sender, MessageType.Parameters params, Instant receptionTimestamp) {
+    public void handleMessage(Text text, boolean b) {
+        String message = text.getString();
 
-        // Iterate over the patterns in the MESSAGE_MAP and check if the message content matches any of them
         for (Map.Entry<Pattern, DungeonMessage> entry : MESSAGE_MAP.entrySet()) {
-            if (entry.getKey().matcher(message.getString()).find()) {
+            if (entry.getKey().matcher(message).find()) {
                 DungeonMessage msgType = entry.getValue();
 
-                // Handle the message based on its type
                 switch (msgType) {
                     case ENTER:
-                        handleEntry(message);
+                        handleEntry(text);
                         break;
                     case DEATH:
-                        handleDeath(message);
+                        handleDeath(text);
                         break;
                     case LEAVE:
                     case TELEPORTING:
-                        handleLeave(message);
+                        handleLeave(text);
                         break;
                     default:
                         break;
