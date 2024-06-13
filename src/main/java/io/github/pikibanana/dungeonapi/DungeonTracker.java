@@ -1,14 +1,9 @@
 package io.github.pikibanana.dungeonapi;
 
-import com.mojang.authlib.GameProfile;
 import io.github.pikibanana.Main;
-import net.minecraft.network.message.MessageType;
-import net.minecraft.network.message.SignedMessage;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -41,22 +36,21 @@ public class DungeonTracker {
     }
 
     public static void handleEntry(Text text) {
-        LOGGER.debug("Handling dungeon entry message: {}", text.getString());
-        String message = text.getString();
+        if (DungeonDodgeConnection.isConnected()) {
+            String message = text.getString();
 
-        Matcher typeMatcher = dungeonEntryRegex.matcher(message);
-        if (typeMatcher.find()) {
-            isInDungeon = true;
-            String dungeonName = typeMatcher.group(1);
-            LOGGER.debug("Entered dungeon: {}", dungeonName);
-            dungeonType = DungeonType.valueOf(dungeonName.toUpperCase());
-        }
+            Matcher typeMatcher = dungeonEntryRegex.matcher(message);
+            if (typeMatcher.find()) {
+                isInDungeon = true;
+                String dungeonName = typeMatcher.group(1);
+                dungeonType = DungeonType.valueOf(dungeonName.toUpperCase());
+            }
 
-        Matcher difficultyMatcher = dungeonDifficultyRegex.matcher(message);
-        if (difficultyMatcher.find()) {
-            String difficultyName = difficultyMatcher.group(1);
-            LOGGER.debug("Dungeon difficulty set to: {}", difficultyName);
-            dungeonDifficulty = DungeonDifficulty.valueOf(difficultyName.toUpperCase());
+            Matcher difficultyMatcher = dungeonDifficultyRegex.matcher(message);
+            if (difficultyMatcher.find()) {
+                String difficultyName = difficultyMatcher.group(1);
+                dungeonDifficulty = DungeonDifficulty.valueOf(difficultyName.toUpperCase());
+            }
         }
     }
 
@@ -67,6 +61,10 @@ public class DungeonTracker {
 
     public static void handleLeave(Text message) {
         isInDungeon = false;
+    }
+
+    public static DungeonDifficulty getDungeonDifficulty() {
+        return dungeonDifficulty;
     }
 
     public void handleMessage(Text text, boolean b) {

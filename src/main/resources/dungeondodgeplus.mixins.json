@@ -5,7 +5,8 @@
   "mixins": [
     "SkullRenderer",
     "ChestRenderer",
-    "BlockEventS2CPacketMixin"
+    "BlockEventS2CPacketMixin",
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

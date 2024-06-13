@@ -2,6 +2,7 @@ package io.github.pikibanana;
 
 import io.github.pikibanana.chat.ChatMessageHandlerImpl;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
+import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -32,6 +33,8 @@ public class Main implements ModInitializer {
 
             DungeonTracker dungeonTracker = new DungeonTracker();
             ClientReceiveMessageEvents.GAME.register(dungeonTracker::handleMessage);
+            DungeonDodgeConnection connectionTracker = new DungeonDodgeConnection();
+            ClientReceiveMessageEvents.GAME.register(connectionTracker::handleMessage);
         } catch (Exception e) {
             LOGGER.warn("Chat listeners did not register correctly!");
             LOGGER.error(e.toString());
