@@ -23,7 +23,7 @@
       "io.github.pikibanana.Main"
     ],
     "modmenu": [
-      "io.github.pikibanana.ModMenuIntegration"
+      "io.github.pikibanana.config.ModMenuIntegration"
     ]
   },
   "mixins": [

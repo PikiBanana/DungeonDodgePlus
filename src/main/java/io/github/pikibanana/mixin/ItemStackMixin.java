@@ -2,7 +2,7 @@ package io.github.pikibanana.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.pikibanana.CustomModelDataFormats;
-import io.github.pikibanana.DungeonDodgePlusConfig;
+import io.github.pikibanana.config.DungeonDodgePlusConfig;
 import net.minecraft.component.Component;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentMapImpl;

@@ -1,21 +1,14 @@
 package io.github.pikibanana.chat;
 
 import com.mojang.authlib.GameProfile;
-import io.github.pikibanana.DungeonDodgePlusConfig;
 import io.github.pikibanana.chat.handlers.ChatMessageHandler;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.text.Text;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 public class ChatMessageHandlerImpl implements ChatMessageHandler {
     private final MinecraftClient client = MinecraftClient.getInstance();

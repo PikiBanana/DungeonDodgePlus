@@ -1,6 +1,8 @@
 package io.github.pikibanana;
 
 import io.github.pikibanana.chat.ChatMessageHandlerImpl;
+import io.github.pikibanana.config.ConfigKeybind;
+import io.github.pikibanana.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
 import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
@@ -40,6 +42,7 @@ public class Main implements ModInitializer {
             LOGGER.error(e.toString());
         }
         BlessingFinderData.init();
+        ConfigKeybind.register();
         LOGGER.info("DungeonDodge+ is ready!");
     }
 }

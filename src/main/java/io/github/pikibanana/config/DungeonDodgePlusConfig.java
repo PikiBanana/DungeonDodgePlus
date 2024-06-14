@@ -1,5 +1,6 @@
-package io.github.pikibanana;
+package io.github.pikibanana.config;
 
+import io.github.pikibanana.CustomModelDataFormats;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
