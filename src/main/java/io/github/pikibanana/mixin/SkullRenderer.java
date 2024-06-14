@@ -38,7 +38,7 @@ public abstract class SkullRenderer {
     private static OutlineVertexConsumerProvider outlineVertexConsumerProvider;
 
     @Unique
-    private static String textureURL = "http://textures.minecraft.net/texture/280d44ca15e303a1714d8d688bc3d0c4848af48bbe16b38893e64298ddcfe10e";
+    private static final String textureURL = "http://textures.minecraft.net/texture/280d44ca15e303a1714d8d688bc3d0c4848af48bbe16b38893e64298ddcfe10e";
 
 
     @Inject(method = "render(Lnet/minecraft/block/entity/SkullBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
@@ -76,7 +76,7 @@ public abstract class SkullRenderer {
     at = @At(
             value = "INVOKE",
             shift = At.Shift.AFTER,
-            target = "Lnet/minecraft/client/render/block/entity/SkullBlockEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V")
+            target = "Lnet/minecraft/client/render/block/entity/SkullBlockEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V")
     )
     private static void drawOutline(Direction direction, float yaw, float animationProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, SkullBlockEntityModel model, RenderLayer renderLayer, CallbackInfo ci) {
         if (outlineVertexConsumerProvider != null) {
