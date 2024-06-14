@@ -71,6 +71,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             public boolean enabled = false;
 
+            @ConfigEntry.Gui.PrefixText
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
             public CustomModelDataFormats format = CustomModelDataFormats.PLAIN;
         }
