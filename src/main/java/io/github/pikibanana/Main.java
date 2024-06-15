@@ -6,6 +6,7 @@ import io.github.pikibanana.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
 import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
+import io.github.pikibanana.keybinds.QuickWardrobe;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import org.slf4j.Logger;
@@ -37,12 +38,14 @@ public class Main implements ModInitializer {
             ClientReceiveMessageEvents.GAME.register(dungeonTracker::handleMessage);
             DungeonDodgeConnection connectionTracker = new DungeonDodgeConnection();
             ClientReceiveMessageEvents.GAME.register(connectionTracker::handleMessage);
+            ClientReceiveMessageEvents.ALLOW_GAME.register(connectionTracker::allowMessage);
         } catch (Exception e) {
             LOGGER.warn("Chat listeners did not register correctly!");
             LOGGER.error(e.toString());
         }
         BlessingFinderData.init();
         ConfigKeybind.register();
+        QuickWardrobe.register();
         LOGGER.info("DungeonDodge+ is ready!");
     }
 }
