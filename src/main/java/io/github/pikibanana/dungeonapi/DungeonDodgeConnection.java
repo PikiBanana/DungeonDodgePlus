@@ -26,4 +26,13 @@ public class DungeonDodgeConnection {
         }
     }
 
+    public boolean allowMessage(Text text, boolean b) {
+        String message = text.getString();
+        if (message.contains("Your pet is now hidden!") && isToggled) {
+            return false;
+        } else if (message.contains("This ability is still on cooldown")) {
+            return false;
+        }
+        return true;
+    }
 }
