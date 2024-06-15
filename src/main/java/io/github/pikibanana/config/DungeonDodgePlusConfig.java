@@ -34,7 +34,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public CustomModelDataDisplay customModelDataDisplay = new CustomModelDataDisplay();
 
         @ConfigEntry.Gui.CollapsibleObject
-        public autoTogglePet autoTogglePet = new autoTogglePet();
+        public AutoTogglePet autoTogglePet = new AutoTogglePet();
 
         @ConfigEntry.Gui.CollapsibleObject
         public HideCooldownMessages hideCooldownMessages = new HideCooldownMessages();
@@ -62,7 +62,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public int color = 0x228B22;
         }
 
-        public static class autoTogglePet {
+        public static class AutoTogglePet {
             @ConfigEntry.Gui.Excluded
             public String label = "Auto Toggle Pet";
 
