@@ -28,11 +28,12 @@ public class DungeonDodgeConnection {
 
     public boolean allowMessage(Text text, boolean b) {
         String message = text.getString();
+        boolean blockCooldowns = DungeonDodgePlusConfig.get().features.hideCooldownMessages.enabled;
         if (message.contains("Your pet is now hidden!") && isToggled) {
             return false;
-        } else if (message.contains("This ability is still on cooldown")) {
+        } else if (message.contains("This ability is still on cooldown") && blockCooldowns) {
             return false;
-        } else if (message.contains("You may use this ability again in")) {
+        } else if (message.contains("You may use this ability again in") && blockCooldowns) {
             return false;
         }
         return true;

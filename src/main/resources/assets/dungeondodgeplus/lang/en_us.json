@@ -12,6 +12,8 @@
   "text.autoconfig.DungeonDodgePlus.option.features.customModelDataDisplay.format.@PrefixText": "Select the format you would like the custom model data to be shown in.\nExample: CustomModelData = 1000000 \n PLAIN: 1000000 \n UNDERSCORES: 1_000_000 ",
   "text.autoconfig.DungeonDodgePlus.option.features.autoTogglePet": "Automatic Pet Hider",
   "text.autoconfig.DungeonDodgePlus.option.features.autoTogglePet.enabled": "Automatic Pet Hider Enabled",
+  "text.autoconfig.DungeonDodgePlus.option.features.hideCooldownMessages": "Hide Cooldown Messages",
+  "text.autoconfig.DungeonDodgePlus.option.features.hideCooldownMessages.enabled": "Hide Cooldown Messages Enabled",
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
 
   "category.dungeondodgeplus": "DungeonDodge+",

@@ -34,7 +34,10 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public CustomModelDataDisplay customModelDataDisplay = new CustomModelDataDisplay();
 
         @ConfigEntry.Gui.CollapsibleObject
-        public autoTogglePet  autoTogglePet = new autoTogglePet();
+        public autoTogglePet autoTogglePet = new autoTogglePet();
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public HideCooldownMessages hideCooldownMessages = new HideCooldownMessages();
 
 
 //        @ConfigEntry.Gui.TransitiveObject
@@ -62,6 +65,13 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public static class autoTogglePet {
             @ConfigEntry.Gui.Excluded
             public String label = "Auto Toggle Pet";
+
+            public boolean enabled = true;
+        }
+
+        public static class HideCooldownMessages {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Hide Cooldown Messages";
 
             public boolean enabled = true;
         }
