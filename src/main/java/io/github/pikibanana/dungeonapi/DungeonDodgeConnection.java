@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 public class DungeonDodgeConnection {
 
     private static boolean isConnected = false;
+    private boolean isToggled = false;
 
     public static boolean isConnected() {
         return isConnected;
@@ -15,11 +16,14 @@ public class DungeonDodgeConnection {
 
     public void handleMessage(Text text, boolean b) {
         String message = text.getString();
-        if (message.equals("Enjoy your stay at DungeonDodge!")) isConnected = true;
+        if (message.contains("Enjoy your stay at DungeonDodge!"))
+            isConnected = true;
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null && isConnected && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
+        if (player != null && isConnected && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled && !isToggled) {
             player.networkHandler.sendCommand("togglepet");
+            isToggled = true;
         }
     }
+
 }
