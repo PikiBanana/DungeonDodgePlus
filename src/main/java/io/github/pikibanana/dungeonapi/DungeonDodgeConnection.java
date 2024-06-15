@@ -32,6 +32,8 @@ public class DungeonDodgeConnection {
             return false;
         } else if (message.contains("This ability is still on cooldown")) {
             return false;
+        } else if (message.contains("You may use this ability again in")) {
+            return false;
         }
         return true;
     }
