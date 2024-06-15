@@ -19,16 +19,16 @@
   "category.dungeondodgeplus": "DungeonDodge+",
   "key.dungeondodgeplus.config": "Open Config",
 
-  "category.dungeondodgeplus.wardrobe": "DungeonDodge+ Wardrobe",
-  "key.dungeondodgeplus.wardrobe.1": "Equip Wardrobe 1",
-  "key.dungeondodgeplus.wardrobe.2": "Equip Wardrobe 2",
-  "key.dungeondodgeplus.wardrobe.3": "Equip Wardrobe 3",
-  "key.dungeondodgeplus.wardrobe.4": "Equip Wardrobe 4",
-  "key.dungeondodgeplus.wardrobe.5": "Equip Wardrobe 5",
-  "key.dungeondodgeplus.wardrobe.6": "Equip Wardrobe 6",
-  "key.dungeondodgeplus.wardrobe.7": "Equip Wardrobe 7",
-  "key.dungeondodgeplus.wardrobe.8": "Equip Wardrobe 8",
-  "key.dungeondodgeplus.wardrobe.9": "Equip Wardrobe 9"
+  "category.dungeondodgeplus.wardrobe": "Wardrobe",
+  "key.dungeondodgeplus.wardrobe.1": "Equip Slot 1",
+  "key.dungeondodgeplus.wardrobe.2": "Equip Slot 2",
+  "key.dungeondodgeplus.wardrobe.3": "Equip Slot 3",
+  "key.dungeondodgeplus.wardrobe.4": "Equip Slot 4",
+  "key.dungeondodgeplus.wardrobe.5": "Equip Slot 5",
+  "key.dungeondodgeplus.wardrobe.6": "Equip Slot 6",
+  "key.dungeondodgeplus.wardrobe.7": "Equip Slot 7",
+  "key.dungeondodgeplus.wardrobe.8": "Equip Slot 8",
+  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9"
 
 
 }
