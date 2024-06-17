@@ -63,10 +63,19 @@ public abstract class SkullRenderer {
         }
 
         if (validSkull.get()) {
-            Color color = new Color(DungeonDodgePlusConfig.get().features.essenceFinder.color);
-            outlineVertexConsumerProvider.setColor(color.getRed(), color.getGreen(), color.getBlue(),128);
+            Color originalColor = new Color(DungeonDodgePlusConfig.get().features.essenceFinder.color);
+            int red = originalColor.getRed();
+            int green = originalColor.getGreen();
+            int blue = originalColor.getBlue();
+
+            int invertedRed = 255 - red;
+            int invertedGreen = 255 - green;
+            int invertedBlue = 255 - blue;
+
+            outlineVertexConsumerProvider.setColor(invertedRed, invertedGreen, invertedBlue, 128);
             args.set(4, (VertexConsumerProvider) outlineVertexConsumerProvider);
         }
+
     }
 
 
