@@ -2,7 +2,7 @@ package io.github.pikibanana.mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import io.github.pikibanana.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import net.minecraft.block.Blocks;

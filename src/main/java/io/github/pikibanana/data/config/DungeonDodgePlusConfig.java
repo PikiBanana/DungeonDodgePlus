@@ -1,4 +1,4 @@
-package io.github.pikibanana.config;
+package io.github.pikibanana.data.config;
 
 import io.github.pikibanana.CustomModelDataFormats;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -6,7 +6,6 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-
 
 @Config(name = "DungeonDodgePlus")
 public class DungeonDodgePlusConfig implements ConfigData {
@@ -39,10 +38,8 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public HideCooldownMessages hideCooldownMessages = new HideCooldownMessages();
 
-
-//        @ConfigEntry.Gui.TransitiveObject
-//        public Timestamp timestamp = new Timestamp();
-
+        @ConfigEntry.Gui.CollapsibleObject
+        public EssenceCounter essenceCounter = new EssenceCounter();
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -87,8 +84,11 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public CustomModelDataFormats format = CustomModelDataFormats.PLAIN;
         }
 
-//        public static class Timestamp {
-//            public boolean enabled = false;
-//        }
+        public static class EssenceCounter {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Count Collected Essence";
+
+            public boolean enabled = true;
+        }
     }
 }

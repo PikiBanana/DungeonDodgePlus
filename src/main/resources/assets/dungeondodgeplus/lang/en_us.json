@@ -14,7 +14,10 @@
   "text.autoconfig.DungeonDodgePlus.option.features.autoTogglePet.enabled": "Automatic Pet Hider Enabled",
   "text.autoconfig.DungeonDodgePlus.option.features.hideCooldownMessages": "Hide Cooldown Messages",
   "text.autoconfig.DungeonDodgePlus.option.features.hideCooldownMessages.enabled": "Hide Cooldown Messages Enabled",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter": "Essence Counter",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter.enabled": "Essence Counter Enabled",
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
+
 
   "category.dungeondodgeplus": "DungeonDodge+",
   "key.dungeondodgeplus.config": "Open Config",
@@ -28,7 +31,7 @@
   "key.dungeondodgeplus.wardrobe.6": "Equip Slot 6",
   "key.dungeondodgeplus.wardrobe.7": "Equip Slot 7",
   "key.dungeondodgeplus.wardrobe.8": "Equip Slot 8",
-  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9"
+  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9",
 
 
 }

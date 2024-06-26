@@ -1,4 +1,4 @@
-package io.github.pikibanana.config;
+package io.github.pikibanana.data.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

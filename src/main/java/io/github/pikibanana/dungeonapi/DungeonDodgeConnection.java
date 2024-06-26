@@ -1,7 +1,7 @@
 package io.github.pikibanana.dungeonapi;
 
 import io.github.pikibanana.Main;
-import io.github.pikibanana.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;

@@ -1,6 +1,8 @@
 package io.github.pikibanana.dungeonapi;
 
 import io.github.pikibanana.Main;
+import io.github.pikibanana.data.DungeonData;
+import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
@@ -18,6 +20,9 @@ public class DungeonTracker {
     private static boolean isInDungeon = false;
     private static DungeonType dungeonType = DungeonType.UNKNOWN;
     private static DungeonDifficulty dungeonDifficulty = DungeonDifficulty.UNKNOWN;
+    public static final EssenceCounter essenceCounter = EssenceCounter.getInstance();
+    private static final DungeonData dungeonData = DungeonData.getInstance();
+
 
     static {
         MESSAGE_MAP.put(Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*"), DungeonMessage.ENTER);
@@ -59,8 +64,13 @@ public class DungeonTracker {
         isInDungeon = false;
     }
 
+
     public static void handleLeave(Text message) {
         isInDungeon = false;
+        int essence = essenceCounter.getEssence();
+        dungeonData.addTotalEssence(essence);
+        essenceCounter.setEssence(0);
+
     }
 
     public static DungeonDifficulty getDungeonDifficulty() {

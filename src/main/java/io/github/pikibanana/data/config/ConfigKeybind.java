@@ -1,4 +1,4 @@
-package io.github.pikibanana.config;
+package io.github.pikibanana.data.config;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

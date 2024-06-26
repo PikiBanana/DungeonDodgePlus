@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.mojang.authlib.properties.Property;
-import io.github.pikibanana.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -40,7 +40,6 @@ public abstract class SkullRenderer {
     @Unique
     private static final String textureURL = "http://textures.minecraft.net/texture/280d44ca15e303a1714d8d688bc3d0c4848af48bbe16b38893e64298ddcfe10e";
 
-
     @Inject(method = "render(Lnet/minecraft/block/entity/SkullBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
             at = @At("HEAD"))
     private void renderSkullValidation(SkullBlockEntity skullBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider,
@@ -72,7 +71,7 @@ public abstract class SkullRenderer {
             int invertedGreen = 255 - green;
             int invertedBlue = 255 - blue;
 
-            outlineVertexConsumerProvider.setColor(invertedRed, invertedGreen, invertedBlue, 128);
+            outlineVertexConsumerProvider.setColor(red, green, blue, 128);
             args.set(4, (VertexConsumerProvider) outlineVertexConsumerProvider);
         }
 
