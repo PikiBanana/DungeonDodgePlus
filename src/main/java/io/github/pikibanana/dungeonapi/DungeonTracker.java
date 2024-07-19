@@ -28,7 +28,7 @@ public class DungeonTracker {
         MESSAGE_MAP.put(Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*"), DungeonMessage.ENTER);
         MESSAGE_MAP.put(Pattern.compile("Dungeon failed! The whole team died!"), DungeonMessage.DEATH);
         MESSAGE_MAP.put(Pattern.compile("Teleported you to spawn!"), DungeonMessage.LEAVE);
-        MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will end in 10 seconds!"), DungeonMessage.LEAVE);
+        MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will end in (\\d+) seconds!"), DungeonMessage.LEAVE);
         MESSAGE_MAP.put(Pattern.compile("Teleporting..."), DungeonMessage.TELEPORTING);
     }
 
@@ -68,7 +68,7 @@ public class DungeonTracker {
     public static void handleLeave(Text message) {
         isInDungeon = false;
         int essence = essenceCounter.getEssence();
-        dungeonData.addTotalEssence(essence);
+        dungeonData.addInt("totalEssence",essence);
         essenceCounter.setEssence(0);
 
     }
@@ -98,7 +98,7 @@ public class DungeonTracker {
                     default:
                         break;
                 }
-                return; // Exit the loop after handling the message
+                return;
             }
         }
     }
