@@ -29,7 +29,7 @@ public class DungeonData {
     private static final Set<Object> DEFAULT_SET = new HashSet<>();
     private static final Map<String, Object> DEFAULT_MAP = new HashMap<>();
 
-    private static DungeonData instance;
+    private static final DungeonData instance;
 
     private DungeonData() {
         init();

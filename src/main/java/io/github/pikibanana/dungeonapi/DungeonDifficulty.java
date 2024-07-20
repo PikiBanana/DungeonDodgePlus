@@ -37,7 +37,6 @@ public enum DungeonDifficulty {
     IMPOSSIBLE(9, Text.literal("You have entered the ").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED))
             .append(Text.literal("IMPOSSIBLE").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED).withBold(true)))
             .append(Text.literal(" difficulty!").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED))));
-    ;
 
 
     private final int id;

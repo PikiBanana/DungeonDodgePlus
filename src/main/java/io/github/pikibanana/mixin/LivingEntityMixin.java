@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.awt.*;
+
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
     @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
@@ -29,7 +31,7 @@ public class LivingEntityMixin {
                 if (dungeonUtils.isParticipating(player.getName().getString()) && DungeonDodgePlusConfig.get().features.teammateHighlighter.enabled) {
                     Team team = entity.getScoreboardTeam();
                     if (team != null) {
-                        team.setColor(Formatting.byColorIndex(DungeonDodgePlusConfig.get().features.teammateHighlighter.color));
+                        team.setColor(Formatting.GREEN);
                     }
                     cir.setReturnValue(true);
                 }

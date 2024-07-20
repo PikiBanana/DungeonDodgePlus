@@ -67,7 +67,9 @@ public class DungeonTracker {
                 String difficultyName = difficultyMatcher.group(1);
                 try {
                     dungeonDifficulty = DungeonDifficulty.valueOf(difficultyName.toUpperCase());
-                    if (DungeonDodgePlusConfig.get().features.difficultyAnnouncer.enabled) MinecraftClient.getInstance().inGameHud.setTitle(dungeonDifficulty.getAnnouncementText());
+                    if (DungeonDodgePlusConfig.get().features.difficultyAnnouncer.enabled) {
+                        MinecraftClient.getInstance().inGameHud.setTitle(dungeonDifficulty.getAnnouncementText());
+                    }
                 } catch (IllegalArgumentException e) {
                     dungeonDifficulty = DungeonDifficulty.UNKNOWN;
                 }

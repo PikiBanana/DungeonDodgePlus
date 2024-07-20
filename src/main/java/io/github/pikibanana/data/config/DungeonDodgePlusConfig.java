@@ -114,9 +114,6 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.Gui.Excluded
             public String label = "Teammate Highlighter";
 
-            @ConfigEntry.ColorPicker
-            public int color = 0x7CFC00;
-
             public boolean enabled = false;
 
             @ConfigEntry.Gui.CollapsibleObject

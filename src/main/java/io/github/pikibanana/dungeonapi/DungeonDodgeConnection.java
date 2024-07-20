@@ -53,11 +53,7 @@ public class DungeonDodgeConnection {
                 .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
                 .toList();
 
-        if (!teams.isEmpty() && teams.get(teams.size() - 1).getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("mc.dungeondodge.net")) {
-            return true;
-        } else {
-            return false;
-        }
+        return !teams.isEmpty() && teams.getLast().getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("mc.dungeondodge.net");
     }
 
 
