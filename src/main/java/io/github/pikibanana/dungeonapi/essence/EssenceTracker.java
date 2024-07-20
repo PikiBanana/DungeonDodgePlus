@@ -1,6 +1,5 @@
 package io.github.pikibanana.dungeonapi.essence;
 
-import io.github.pikibanana.Main;
 import net.minecraft.text.Text;
 
 import java.util.HashMap;
@@ -14,8 +13,9 @@ public class EssenceTracker {
 
     static {
         MESSAGE_MAP.put(Pattern.compile("TREASURE! You have found (a|\\d+) Dungeon Essence!"), null);
-
         MESSAGE_MAP.put(Pattern.compile("TREASURE! (\\w+) has found (\\d+) Dungeon Essence!"), null);
+        MESSAGE_MAP.put(Pattern.compile("Treasure: You have found an Essence Pile! \\((\\d+)\\)"), null);
+        MESSAGE_MAP.put(Pattern.compile("BONUS ESSENCE! You received (\\d+) bonus dungeon essence for going through the dungeon!"), null);
     }
 
     private final EssenceCounter essenceCounter = EssenceCounter.getInstance();
@@ -26,10 +26,14 @@ public class EssenceTracker {
             Pattern pattern = entry.getKey();
             Matcher matcher = pattern.matcher(message);
             if (matcher.matches()) {
-                if (matcher.groupCount() == 1) {
+                if (pattern.pattern().equals("TREASURE! You have found (a|\\d+) Dungeon Essence!")) {
                     handleEssenceFound(matcher.group(1));
-                } else if (matcher.groupCount() == 2) {
+                } else if (pattern.pattern().equals("TREASURE! (\\w+) has found (\\d+) Dungeon Essence!")) {
                     handlePlayerEssenceFound(matcher.group(1), Integer.parseInt(matcher.group(2)));
+                } else if (pattern.pattern().equals("Treasure: You have found a Essence Pile! (\\d+)")) {
+                    handleEssencePileFound(Integer.parseInt(matcher.group(1)));
+                } else if (pattern.pattern().equals("BONUS ESSENCE! You received (\\d+) bonus dungeon essence for going through the dungeon!")) {
+                    handleBonusEssenceFound(Integer.parseInt(matcher.group(1)));
                 }
             }
         }
@@ -41,6 +45,14 @@ public class EssenceTracker {
     }
 
     private void handlePlayerEssenceFound(String playerName, int essenceAmount) {
+        essenceCounter.addEssence(essenceAmount);
+    }
+
+    private void handleEssencePileFound(int essenceAmount) {
+        essenceCounter.addEssence(essenceAmount);
+    }
+
+    private void handleBonusEssenceFound(int essenceAmount) {
         essenceCounter.addEssence(essenceAmount);
     }
 }

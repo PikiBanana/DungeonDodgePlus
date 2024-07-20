@@ -16,6 +16,9 @@
   "icon": "assets/dungeondodgeplus/icon.png",
   "environment": "*",
   "entrypoints": {
+    "fabric-datagen": [
+      "io.github.pikibanana.DataGenerator"
+    ],
     "main": [
       "io.github.pikibanana.Main"
     ],

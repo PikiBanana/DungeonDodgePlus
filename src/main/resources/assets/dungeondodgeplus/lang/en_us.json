@@ -16,11 +16,16 @@
   "text.autoconfig.DungeonDodgePlus.option.features.hideCooldownMessages.enabled": "Hide Cooldown Messages Enabled",
   "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter": "Essence Counter",
   "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter.enabled": "Essence Counter Enabled",
-  "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter.text": "Essence Counter Text",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter.totalText": "Total Essence Counter Text",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter.showTotal": "Show Total Essence Enabled",
+  "text.autoconfig.DungeonDodgePlus.option.features.essenceCounter.color": "Essence Counter Text Color",
 
+  "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
 
   "category.dungeondodgeplus": "DungeonDodge+",
   "key.dungeondodgeplus.config": "Open Config",
+  "key.dungeondodgeplus.essenceScreen": "Edit Essence Counter",
 
   "category.dungeondodgeplus.wardrobe": "Wardrobe",
   "key.dungeondodgeplus.wardrobe.1": "Equip Slot 1",
@@ -31,7 +36,5 @@
   "key.dungeondodgeplus.wardrobe.6": "Equip Slot 6",
   "key.dungeondodgeplus.wardrobe.7": "Equip Slot 7",
   "key.dungeondodgeplus.wardrobe.8": "Equip Slot 8",
-  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9",
-
-
+  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9"
 }

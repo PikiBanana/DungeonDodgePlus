@@ -41,6 +41,16 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public EssenceCounter essenceCounter = new EssenceCounter();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public TeammateHighlighter teammateHighlighter = new TeammateHighlighter();
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public EnemyHighlighter enemyHighlighter = new EnemyHighlighter();
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public DifficultyAnnouncer difficultyAnnouncer = new DifficultyAnnouncer();
+
+
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
             public String label = "Essence Finder Settings";
@@ -88,7 +98,55 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.Gui.Excluded
             public String label = "Count Collected Essence";
 
+            public String text = "Essence";
+
+            public String totalText = "Essence";
+
+            public boolean showTotal = true;
+
+            @ConfigEntry.ColorPicker
+            public int color = 0xffffff;
+
             public boolean enabled = true;
         }
+
+        public static class TeammateHighlighter {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Teammate Highlighter";
+
+            @ConfigEntry.ColorPicker
+            public int color = 0x7CFC00;
+
+            public boolean enabled = false;
+
+            @ConfigEntry.Gui.CollapsibleObject
+            public TeammateHealthDisplay teammateHealthDisplay = new TeammateHealthDisplay();
+
+            public static class TeammateHealthDisplay {
+                @ConfigEntry.Gui.Excluded
+                public String label = "Teammate Health Display";
+
+                @ConfigEntry.ColorPicker
+                public int color = 0xAA0000;
+
+                public boolean enabled = false;
+            }
+
+        }
+
+        public static class EnemyHighlighter {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Enemy Highlighter";
+
+            public boolean enabled = false;
+        }
+
+        public static class DifficultyAnnouncer {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Difficulty Announcement";
+
+            public boolean enabled = false;
+        }
+
     }
 }

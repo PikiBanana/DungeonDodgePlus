@@ -3,12 +3,16 @@
   "package": "io.github.pikibanana.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "SkullRenderer",
-    "ChestRenderer",
     "BlockEventS2CPacketMixin",
-    "ItemStackMixin"
+    "ChestRenderer",
+    "ItemStackMixin",
+    "LivingEntityMixin",
+    "SkullRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "PlayerEntityRendererMixin"
+  ]
 }

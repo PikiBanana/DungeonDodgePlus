@@ -4,28 +4,27 @@ import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 
-import java.util.Objects;
+import java.util.*;
 
 public class DungeonDodgeConnection {
 
     private static boolean isConnected = false;
     private boolean isToggled = false;
     private int hiddenTogglePet = 0;
-    private int tickCounter = 0; // Counter to limit the frequency of connection checks
 
     public static boolean isConnected() {
         return isConnected;
     }
 
     public void handleMessage(Text text, boolean b) {
-        if (isDungeonDodgeSidebar())
+        if (isDungeonDodgeSidebar2())
             isConnected = true;
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -33,7 +32,35 @@ public class DungeonDodgeConnection {
             player.networkHandler.sendCommand("togglepet");
             isToggled = true;
         }
+
+
     }
+
+    public boolean isDungeonDodgeSidebar2() {
+        Scoreboard scoreboardObJ = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getScoreboard();
+        ScoreboardObjective sidebarObjective = null;
+
+        for (ScoreboardObjective objective : scoreboardObJ.getObjectives()) {
+            if (scoreboardObJ.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) == objective) {
+                sidebarObjective = objective;
+                break;
+            }
+        }
+
+        Scoreboard scoreboard = Objects.requireNonNull(sidebarObjective).getScoreboard();
+
+        List<Team> teams = scoreboard.getTeams().stream()
+                .filter(team -> team.getName().startsWith("TAB-Sidebar-"))
+                .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
+                .toList();
+
+        if (!teams.isEmpty() && teams.get(teams.size() - 1).getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("dungeondodge.net")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public boolean isDungeonDodgeSidebar() {
         if (!isConnected) {
@@ -48,9 +75,9 @@ public class DungeonDodgeConnection {
             }
             if (sidebarObjective != null) {
                 String displayName = sidebarObjective.getDisplayName().getString();
-                Main.LOGGER.info("Display Name: " + displayName);
+                Main.LOGGER.info("Display Name: {}", displayName);
                 String displayNameColorless = displayName.replaceAll("§[0-9a-fk-or]", "").trim();
-                Main.LOGGER.info("Colorless Display Name: " + displayNameColorless);
+                Main.LOGGER.info("Colorless Display Name: {}", displayNameColorless);
                 return displayNameColorless.contains("Dungeon Dodge");
             }
         }
@@ -70,12 +97,4 @@ public class DungeonDodgeConnection {
         }
         return true;
     }
-
-    public void handleLeave(ServerPlayNetworkHandler serverPlayNetworkHandler, MinecraftServer minecraftServer) {
-        Main.LOGGER.warn("Player disconnected: " + serverPlayNetworkHandler.player.getName().getString());
-        if (isConnected) {
-            isConnected = false;
-            Main.LOGGER.info("Player is now disconnected, setting isConnected to false.");
-        }
-    } //TODO: Fix event not registering correctly
 }
