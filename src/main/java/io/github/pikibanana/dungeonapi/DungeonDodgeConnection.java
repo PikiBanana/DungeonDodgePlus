@@ -4,7 +4,6 @@ import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -54,7 +53,7 @@ public class DungeonDodgeConnection {
                 .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
                 .toList();
 
-        if (!teams.isEmpty() && teams.get(teams.size() - 1).getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("dungeondodge.net")) {
+        if (!teams.isEmpty() && teams.get(teams.size() - 1).getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("mc.dungeondodge.net")) {
             return true;
         } else {
             return false;
