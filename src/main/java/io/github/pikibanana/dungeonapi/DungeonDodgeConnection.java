@@ -10,7 +10,9 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 public class DungeonDodgeConnection {
 
@@ -31,8 +33,6 @@ public class DungeonDodgeConnection {
             player.networkHandler.sendCommand("togglepet");
             isToggled = true;
         }
-
-
     }
 
     public boolean isDungeonDodgeSidebar2() {
