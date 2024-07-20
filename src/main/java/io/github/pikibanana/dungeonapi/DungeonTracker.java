@@ -68,6 +68,7 @@ public class DungeonTracker {
                 try {
                     dungeonDifficulty = DungeonDifficulty.valueOf(difficultyName.toUpperCase());
                     if (DungeonDodgePlusConfig.get().features.difficultyAnnouncer.enabled) {
+                        MinecraftClient.getInstance().inGameHud.setTitleTicks(10,30,20);
                         MinecraftClient.getInstance().inGameHud.setTitle(dungeonDifficulty.getAnnouncementText());
                     }
                 } catch (IllegalArgumentException e) {
