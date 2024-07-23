@@ -1,5 +1,6 @@
 package io.github.pikibanana.dungeonapi.essence;
 
+import io.github.pikibanana.data.DungeonData;
 import net.minecraft.text.Text;
 
 import java.util.HashMap;
@@ -45,7 +46,8 @@ public class EssenceTracker {
     }
 
     private void handlePlayerEssenceFound(String playerName, int essenceAmount) {
-        essenceCounter.addEssence(essenceAmount);
+        DungeonData dungeonData = DungeonData.getInstance();
+        dungeonData.addInt("totalEssence", essenceAmount);
     }
 
     private void handleEssencePileFound(int essenceAmount) {
