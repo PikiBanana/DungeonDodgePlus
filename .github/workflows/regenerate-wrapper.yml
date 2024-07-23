@@ -12,7 +12,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu' # Using Zulu OpenJDK distribution
+          distribution: 'zulu'
           java-version: '21'
 
       - name: Download and Install Gradle 8.8
@@ -32,3 +32,5 @@ jobs:
           git add gradle/wrapper/gradle-wrapper.properties
           git commit -m 'Regenerate Gradle Wrapper for Gradle 8.8'
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
