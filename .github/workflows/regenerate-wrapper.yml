@@ -21,5 +21,19 @@ jobs:
       - name: Unzip Gradle
         run: unzip gradle-8.8-bin.zip
 
-      - name: Copy Gradle Wrapper
-        run: cp gradle-8.8/bin/gradle-wrapper.jar
+      - name: Copy Gradle Wrapper JAR
+        run: cp gradle-8.8/lib/plugins/gradle-wrapper-*.jar gradle/wrapper/gradle-wrapper.jar
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Regenerate Gradle Wrapper
+        run: ./gradlew wrapper --gradle-version 8.8
+
+      - name: Commit Gradle Wrapper
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add gradle/wrapper/gradle-wrapper.jar
+          git commit -m 'Regenerate Gradle Wrapper for Gradle 8.8'
+          git push
