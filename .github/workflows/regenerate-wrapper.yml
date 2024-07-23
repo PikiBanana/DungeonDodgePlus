@@ -1,0 +1,38 @@
+name: Regenerate Gradle Wrapper
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+
+      - name: Download Gradle 8.8
+        run: wget https://services.gradle.org/distributions/gradle-8.8-bin.zip
+
+      - name: Unzip Gradle
+        run: unzip gradle-8.8-bin.zip
+
+      - name: Copy Gradle Wrapper
+        run: cp gradle-8.8/bin/gradle-wrapper.jar gradle/wrapper/
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Regenerate Gradle Wrapper
+        run: ./gradlew wrapper --gradle-version 8.8
+
+      - name: Commit Gradle Wrapper
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add gradle/wrapper/gradle-wrapper.jar
+          git commit -m 'Regenerate Gradle Wrapper for Gradle 8.8'
+          git push
