@@ -3,6 +3,7 @@
   "package": "io.github.pikibanana.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BiomeMixin",
     "BlockEventS2CPacketMixin",
     "ChestRenderer",
     "ItemStackMixin",

@@ -50,6 +50,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public DifficultyAnnouncer difficultyAnnouncer = new DifficultyAnnouncer();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public DungeonWaterColors dungeonWaterColors = new DungeonWaterColors();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -141,6 +144,13 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public static class DifficultyAnnouncer {
             @ConfigEntry.Gui.Excluded
             public String label = "Difficulty Announcement";
+
+            public boolean enabled = false;
+        }
+
+        public static class DungeonWaterColors {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Dungeon Water Colors";
 
             public boolean enabled = false;
         }
