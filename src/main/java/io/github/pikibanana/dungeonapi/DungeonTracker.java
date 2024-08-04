@@ -88,6 +88,7 @@ public class DungeonTracker {
         int essence = essenceCounter.getEssence();
         dungeonData.addInt("totalEssence", essence);
         essenceCounter.setEssence(0);
+        dungeonType = DungeonType.UNKNOWN;
     }
 
     public static DungeonDifficulty getDungeonDifficulty() {
