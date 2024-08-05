@@ -1,6 +1,8 @@
 package io.github.pikibanana.mixin;
 
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.dungeonapi.DungeonTracker;
+import io.github.pikibanana.dungeonapi.DungeonType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
@@ -20,16 +22,9 @@ public class BiomeMixin {
     @Inject(method = "getWaterColor", at = @At("HEAD"), cancellable = true)
     private void getWaterColor(CallbackInfoReturnable<Integer> cir) {
         if (config.features.dungeonWaterColors.enabled) {
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (client.world != null && client.player != null) {
-                BlockPos pos = client.player.getBlockPos();
-                RegistryEntry<Biome> biomeEntry = client.world.getBiome(pos);
-                Biome biome = biomeEntry.value();
-
-                int color = getColorForBiome(biomeEntry);
-                if (color != -1) {
-                    cir.setReturnValue(color);
-                }
+            int color = getColorForDungeon(DungeonTracker.getDungeonType());
+            if (color != -1) {
+                cir.setReturnValue(color);
             }
         }
     }
@@ -37,27 +32,19 @@ public class BiomeMixin {
     @Inject(method = "getWaterFogColor", at = @At("HEAD"), cancellable = true)
     private void getWaterFogColor(CallbackInfoReturnable<Integer> cir) {
         if (config.features.dungeonWaterColors.enabled) {
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (client.world != null && client.player != null) {
-                BlockPos pos = client.player.getBlockPos();
-                RegistryEntry<Biome> biomeEntry = client.world.getBiome(pos);
-                Biome biome = biomeEntry.value();
-
-                int color = getColorForBiome(biomeEntry);
-                if (color != -1) {
-                    cir.setReturnValue(color);
-                }
+            int color = getColorForDungeon(DungeonTracker.getDungeonType());
+            if (color != -1) {
+                cir.setReturnValue(color);
             }
         }
     }
 
     @Unique
-    private int getColorForBiome(RegistryEntry<Biome> biomeEntry) {
-        if (biomeEntry.getKey().isEmpty()) return -1;
-        return switch (biomeEntry.getKey().get().getValue().toString()) {
-            case "minecraft:ice_spikes" -> 0xAECBFE;
-            case "minecraft:jungle" -> 0x478800;
-            case "minecraft:desert" -> 0x0092a3;
+    private int getColorForDungeon(DungeonType dungeonType) {
+        return switch (dungeonType) {
+            case ICE -> 0xA4C1FE;
+            case JUNGLE -> 0x478800;
+            case DESERT -> 0x0092a3;
             default -> -1;
         };
     }
