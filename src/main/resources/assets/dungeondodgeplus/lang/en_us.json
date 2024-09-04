@@ -31,6 +31,8 @@
   "text.autoconfig.DungeonDodgePlus.option.features.difficultyAnnouncer.enabled": "Announce Difficulty on Dungeon Entry",
   "text.autoconfig.DungeonDodgePlus.option.features.dungeonWaterColors": "Dungeon Water Colors",
   "text.autoconfig.DungeonDodgePlus.option.features.dungeonWaterColors.enabled": "Change the water color in certain dungeons.",
+  "text.autoconfig.DungeonDodgePlus.option.features.hideOtherFishingBobbers": "Hide Other Fishing Bobbers",
+  "text.autoconfig.DungeonDodgePlus.option.features.hideOtherFishingBobbers.enabled": "Hide other player's fishing lines and bobbers.",
 
 
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",

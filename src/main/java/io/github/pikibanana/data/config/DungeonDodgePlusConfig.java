@@ -53,6 +53,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public DungeonWaterColors dungeonWaterColors = new DungeonWaterColors();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public HideOtherFishingBobbers hideOtherFishingBobbers = new HideOtherFishingBobbers();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -153,6 +156,13 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public String label = "Dungeon Water Colors";
 
             public boolean enabled = false;
+        }
+
+        public static class HideOtherFishingBobbers {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Hide Other Fishing Bobbers";
+
+            public boolean enabled = true;
         }
 
     }
