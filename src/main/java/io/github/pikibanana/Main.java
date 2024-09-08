@@ -6,6 +6,7 @@ import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
 import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
+import io.github.pikibanana.dungeonapi.PlayerStats;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounterScreen;
 import io.github.pikibanana.dungeonapi.essence.EssenceTracker;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
+    public static final String MOD_ID = "dungeondodgeplus";
 
     @Override
     public void onInitialize() {
@@ -57,6 +59,7 @@ public class Main implements ModInitializer {
         ConfigKeybind.register();
         QuickWardrobe.register();
         EssenceCounterScreen.register();
+        PlayerStats.init();
 
         EssenceCounter essenceCounter = EssenceCounter.getInstance();
         HudRenderCallback.EVENT.register(essenceCounter::render);

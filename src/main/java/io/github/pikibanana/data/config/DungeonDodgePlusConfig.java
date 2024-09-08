@@ -56,6 +56,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public HideOtherFishingBobbers hideOtherFishingBobbers = new HideOtherFishingBobbers();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public ShowManaBar showManaBar = new ShowManaBar();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -161,6 +164,13 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public static class HideOtherFishingBobbers {
             @ConfigEntry.Gui.Excluded
             public String label = "Hide Other Fishing Bobbers";
+
+            public boolean enabled = true;
+        }
+
+        public static class ShowManaBar {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Show Mana Bar";
 
             public boolean enabled = true;
         }

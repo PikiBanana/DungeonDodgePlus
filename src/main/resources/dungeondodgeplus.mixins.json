@@ -15,6 +15,7 @@
   },
   "client": [
     "FishingBobberEntityRendererMixin",
+    "InGameHudMixin",
     "PlayerEntityRendererMixin"
   ]
 }

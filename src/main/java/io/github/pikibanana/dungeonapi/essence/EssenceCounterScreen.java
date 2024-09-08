@@ -1,5 +1,6 @@
 package io.github.pikibanana.dungeonapi.essence;
 
+import io.github.pikibanana.Main;
 import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -14,7 +15,7 @@ import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class EssenceCounterScreen extends Screen {
-    private static final Identifier ESSENCE_TEXTURE = Identifier.of("dungeondodgeplus", "textures/gui/essence.png");
+    private static final Identifier ESSENCE_TEXTURE = Identifier.of(Main.MOD_ID, "textures/gui/essence.png");
     private static final Identifier SHEEP_TEXTURE = EssenceCounter.SHEEP_TEXTURE;
     private static final int MIN_ESSENCE_SIZE = 35;
     private static final int MAX_ESSENCE_SIZE = 120;
