@@ -3,6 +3,7 @@ package io.github.pikibanana.dungeonapi;
 import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
@@ -12,7 +13,6 @@ import net.minecraft.text.Text;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class DungeonDodgeConnection {
 
@@ -36,7 +36,10 @@ public class DungeonDodgeConnection {
     }
 
     public boolean isDungeonDodgeSidebar2() {
-        Scoreboard scoreboardObJ = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getScoreboard();
+        ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
+        if (networkHandler == null) return false;
+
+        Scoreboard scoreboardObJ = networkHandler.getScoreboard();
         ScoreboardObjective sidebarObjective = null;
 
         for (ScoreboardObjective objective : scoreboardObJ.getObjectives()) {
@@ -46,20 +49,25 @@ public class DungeonDodgeConnection {
             }
         }
 
-        Scoreboard scoreboard = Objects.requireNonNull(sidebarObjective).getScoreboard();
+        if (sidebarObjective == null) return false;
+
+        Scoreboard scoreboard = sidebarObjective.getScoreboard();
 
         List<Team> teams = scoreboard.getTeams().stream()
                 .filter(team -> team.getName().startsWith("TAB-Sidebar-"))
                 .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
                 .toList();
 
-        return !teams.isEmpty() && teams.getLast().getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("mc.dungeondodge.net");
+        return !teams.isEmpty() && teams.getLast().getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("dungeondodge.net");
     }
 
 
     public boolean isDungeonDodgeSidebar() {
         if (!isConnected) {
-            Scoreboard scoreboard = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getScoreboard();
+            ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
+            if (networkHandler == null) return false;
+
+            Scoreboard scoreboard = networkHandler.getScoreboard();
             ScoreboardObjective sidebarObjective = null;
 
             for (ScoreboardObjective objective : scoreboard.getObjectives()) {
