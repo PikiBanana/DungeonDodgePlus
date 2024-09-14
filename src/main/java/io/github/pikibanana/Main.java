@@ -8,8 +8,9 @@ import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import io.github.pikibanana.dungeonapi.PlayerStats;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
-import io.github.pikibanana.dungeonapi.essence.EssenceCounterScreen;
+import io.github.pikibanana.hud.DungeonDodgePlusScreen;
 import io.github.pikibanana.dungeonapi.essence.EssenceTracker;
+import io.github.pikibanana.hud.FPSRenderer;
 import io.github.pikibanana.keybinds.QuickWardrobe;
 import io.github.pikibanana.misc.SheepRandomizer;
 import net.fabricmc.api.ModInitializer;
@@ -58,11 +59,12 @@ public class Main implements ModInitializer {
         BlessingFinderData.init();
         ConfigKeybind.register();
         QuickWardrobe.register();
-        EssenceCounterScreen.register();
+        DungeonDodgePlusScreen.register();
         PlayerStats.init();
 
         EssenceCounter essenceCounter = EssenceCounter.getInstance();
         HudRenderCallback.EVENT.register(essenceCounter::render);
+        HudRenderCallback.EVENT.register(FPSRenderer::renderFPS);
 
         SheepRandomizer.registerSheepCommand();
 

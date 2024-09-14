@@ -1,44 +1,66 @@
-package io.github.pikibanana.dungeonapi.essence;
+package io.github.pikibanana.hud;
 
 import io.github.pikibanana.Main;
 import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-public class EssenceCounterScreen extends Screen {
+public class DungeonDodgePlusScreen extends Screen {
     private static final Identifier ESSENCE_TEXTURE = Identifier.of(Main.MOD_ID, "textures/gui/essence.png");
     private static final Identifier SHEEP_TEXTURE = EssenceCounter.SHEEP_TEXTURE;
     private static final int MIN_ESSENCE_SIZE = 35;
     private static final int MAX_ESSENCE_SIZE = 120;
     private final DungeonData dungeonData = DungeonData.getInstance();
+
     private int essenceX;
     private int essenceY;
     private int essenceWidth;
     private int essenceHeight;
-    private boolean dragging;
+
+    private int fpsX;
+    private int fpsY;
+    private int fpsWidth;
+    private int fpsHeight;
+
+    @NotNull
+    private DraggingObject dragging = DraggingObject.NONE;
+
     private int dragOffsetX;
     private int dragOffsetY;
 
-    protected EssenceCounterScreen() {
-        super(Text.of("Essence Counter Configuration Screen"));
+    protected DungeonDodgePlusScreen() {
+        super(Text.of("DungeonDodge+ Configuration"));
         essenceX = dungeonData.getInt("essenceX", 10);
-        essenceY = dungeonData.getInt("essenceY", 10);
+        essenceY = dungeonData.getInt("essenceY", 50);
         essenceWidth = dungeonData.getInt("essenceWidth", 50);
         essenceHeight = dungeonData.getInt("essenceHeight", 50);
+
+        fpsX = dungeonData.getInt("fpsX", 10);
+        fpsY = dungeonData.getInt("fpsY", 10);
+
+        TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+        String fpsText = MinecraftClient.getInstance().getCurrentFps() + " FPS";
+
+        fpsWidth = fpsX + 10 + renderer.getWidth(fpsText);
+        fpsHeight = fpsY + 10 + renderer.fontHeight;
     }
 
     public static void register() {
         KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.dungeondodgeplus.essenceScreen",
+                "key.dungeondodgeplus.configScreen",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
                 "category.dungeondodgeplus"
@@ -48,7 +70,7 @@ public class EssenceCounterScreen extends Screen {
             while (keyBinding.wasPressed()) {
                 if (client.currentScreen != null) client.currentScreen.close();
                 client.execute(() -> {
-                    EssenceCounterScreen screen = new EssenceCounterScreen();
+                    DungeonDodgePlusScreen screen = new DungeonDodgePlusScreen();
                     client.setScreen(screen);
                     ScreenMouseEvents.afterMouseScroll(screen).register(screen::afterMouseScroll);
                 });
@@ -74,6 +96,7 @@ public class EssenceCounterScreen extends Screen {
             context.drawTexture(ESSENCE_TEXTURE, essenceX, essenceY, 0, 0, essenceWidth, essenceHeight, essenceWidth, essenceHeight);
         }
 
+        //draw essence lines
         int textX = essenceX + essenceWidth + 5;
 
         if (textX + client.textRenderer.getWidth(displayText) > width) {
@@ -90,14 +113,29 @@ public class EssenceCounterScreen extends Screen {
             context.drawText(client.inGameHud.getTextRenderer(), line, textX, textY, DungeonDodgePlusConfig.get().features.essenceCounter.color, false);
             textY += client.textRenderer.fontHeight + 2;
         }
+
+        //draw fps text
+        TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+        String fpsText = MinecraftClient.getInstance().getCurrentFps() + " FPS";
+
+        fpsWidth = fpsX + 10 + renderer.getWidth(fpsText);
+        fpsHeight = fpsY + 10 + renderer.fontHeight;
+
+        FPSRenderer.drawFPS(context, renderer, fpsText, fpsX, fpsY, fpsWidth, fpsHeight);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && isMouseOverSheep(mouseX, mouseY)) {
-            dragging = true;
-            dragOffsetX = (int) mouseX - essenceX;
-            dragOffsetY = (int) mouseY - essenceY;
+        if (button == 0) {
+            if (isMouseOverSheep(mouseX, mouseY)) {
+                dragging = DraggingObject.ESSENCE;
+                dragOffsetX = (int) mouseX - essenceX;
+                dragOffsetY = (int) mouseY - essenceY;
+            } else if (isMouseOverFPS(mouseX, mouseY)) {
+                dragging = DraggingObject.FPS;
+                dragOffsetX = (int) mouseX - fpsX;
+                dragOffsetY = (int) mouseY - fpsY;
+            }
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -106,8 +144,8 @@ public class EssenceCounterScreen extends Screen {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            dragging = false;
-            saveEssenceData();
+            saveData(dragging);
+            dragging = DraggingObject.NONE;
             return true;
         }
         return super.mouseReleased(mouseX, mouseY, button);
@@ -115,15 +153,31 @@ public class EssenceCounterScreen extends Screen {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (dragging) {
-            essenceX = (int) mouseX - dragOffsetX;
-            essenceY = (int) mouseY - dragOffsetY;
+        switch (dragging) {
+            case ESSENCE -> {
+                essenceX = (int) mouseX - dragOffsetX;
+                essenceY = (int) mouseY - dragOffsetY;
 
-            essenceX = Math.max(0, Math.min(width - essenceWidth, essenceX));
-            essenceY = Math.max(0, Math.min(height - essenceHeight, essenceY));
+                essenceX = Math.max(0, Math.min(width - essenceWidth, essenceX));
+                essenceY = Math.max(0, Math.min(height - essenceHeight, essenceY));
+                saveData(dragging);
+                return true;
+            }
+            case FPS -> {
+                fpsX = (int) mouseX - dragOffsetX;
+                fpsY = (int) mouseY - dragOffsetY;
 
-            saveEssenceData();
-            return true;
+                TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+                String fpsText = MinecraftClient.getInstance().getCurrentFps() + " FPS";
+
+                fpsWidth = fpsX + 10 + renderer.getWidth(fpsText);
+                fpsHeight = fpsY + 10 + renderer.fontHeight;
+
+                fpsX = Math.max(0, Math.min(width - fpsWidth, fpsX));
+                fpsY = Math.max(0, Math.min(height - fpsHeight, fpsY));
+                saveData(dragging);
+                return true;
+            }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
@@ -132,11 +186,23 @@ public class EssenceCounterScreen extends Screen {
         return mouseX >= essenceX && mouseX <= essenceX + essenceWidth && mouseY >= essenceY && mouseY <= essenceY + essenceHeight;
     }
 
-    private void saveEssenceData() {
-        dungeonData.setInt("essenceX", essenceX);
-        dungeonData.setInt("essenceY", essenceY);
-        dungeonData.setInt("essenceWidth", essenceWidth);
-        dungeonData.setInt("essenceHeight", essenceHeight);
+    private boolean isMouseOverFPS(double mouseX, double mouseY) {
+        return mouseX >= fpsX && mouseX <= fpsX + fpsWidth && mouseY >= fpsY && mouseY <= fpsY + fpsHeight;
+    }
+
+    private void saveData(DraggingObject dragging) {
+        switch (dragging) {
+            case FPS -> {
+                dungeonData.setInt("fpsX", fpsX);
+                dungeonData.setInt("fpsY", fpsY);
+            }
+            case ESSENCE -> {
+                dungeonData.setInt("essenceX", essenceX);
+                dungeonData.setInt("essenceY", essenceY);
+                dungeonData.setInt("essenceWidth", essenceWidth);
+                dungeonData.setInt("essenceHeight", essenceHeight);
+            }
+        }
     }
 
     private void afterMouseScroll(Screen screen, double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
@@ -159,8 +225,14 @@ public class EssenceCounterScreen extends Screen {
                 essenceX = Math.max(0, Math.min(width - essenceWidth, essenceX));
                 essenceY = Math.max(0, Math.min(height - essenceHeight, essenceY));
 
-                saveEssenceData();
+                saveData(DraggingObject.ESSENCE);
             }
         }
+    }
+
+    private enum DraggingObject {
+        ESSENCE,
+        FPS,
+        NONE
     }
 }
