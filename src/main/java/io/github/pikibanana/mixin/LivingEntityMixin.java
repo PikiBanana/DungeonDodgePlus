@@ -18,20 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.awt.*;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
     @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
     public void setGlow(CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (Entity) (Object) this;
         DungeonUtils dungeonUtils = new DungeonUtils();
         if (DungeonTracker.inDungeon()) {
-            if (entity instanceof MobEntity && DungeonDodgePlusConfig.get().features.enemyHighlighter.enabled) {
-                cir.setReturnValue(true);
-            }
             if (entity instanceof PlayerEntity player) {
                 if (dungeonUtils.isParticipating(player.getName().getString()) && DungeonDodgePlusConfig.get().features.teammateHighlighter.enabled) {
                     Team team = entity.getScoreboardTeam();
                     if (team != null) {
-                        team.setColor(Formatting.GREEN);
+                        team.setColor(Main.features.teammateHighlighter.color.color);
                     }
                     cir.setReturnValue(true);
                 }

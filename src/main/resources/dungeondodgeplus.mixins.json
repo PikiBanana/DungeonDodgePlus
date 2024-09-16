@@ -16,6 +16,9 @@
   "client": [
     "FishingBobberEntityRendererMixin",
     "InGameHudMixin",
+    "LivingEntityRendererMixin",
+    "MinecraftClientMixin",
+    "ParticleManagerMixin",
     "PlayerEntityRendererMixin"
   ]
 }

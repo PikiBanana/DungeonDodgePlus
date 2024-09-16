@@ -55,6 +55,7 @@ public class EssenceTracker {
     }
 
     private void handleBonusEssenceFound(int essenceAmount) {
-        essenceCounter.addEssence(essenceAmount);
+        DungeonData dungeonData = DungeonData.getInstance();
+        dungeonData.addInt("totalEssence", essenceAmount);
     }
 }

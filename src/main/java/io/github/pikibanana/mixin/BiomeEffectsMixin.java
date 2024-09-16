@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BiomeEffects.class)
-public class BiomeEffectsMixin {
+public abstract class BiomeEffectsMixin {
 
     @Unique
     DungeonDodgePlusConfig config = DungeonDodgePlusConfig.get();

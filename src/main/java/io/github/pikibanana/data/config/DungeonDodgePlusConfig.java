@@ -1,6 +1,7 @@
 package io.github.pikibanana.data.config;
 
 import io.github.pikibanana.CustomModelDataFormats;
+import io.github.pikibanana.misc.Color;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -56,6 +57,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public HideOtherFishingBobbers hideOtherFishingBobbers = new HideOtherFishingBobbers();
 
+
         @ConfigEntry.Gui.CollapsibleObject
         public ShowManaBar showManaBar = new ShowManaBar();
 
@@ -64,6 +66,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
         @ConfigEntry.Gui.CollapsibleObject
         public ColorMaxEnchantments colorMaxEnchantments = new ColorMaxEnchantments();
+
 
 
         public static class EssenceFinder {
@@ -131,6 +134,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             public boolean enabled = false;
 
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Color color = Color.GREEN;
+
             @ConfigEntry.Gui.CollapsibleObject
             public TeammateHealthDisplay teammateHealthDisplay = new TeammateHealthDisplay();
 
@@ -151,6 +157,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public String label = "Enemy Highlighter";
 
             public boolean enabled = false;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            public Color color = Color.RED;
         }
 
         public static class DifficultyAnnouncer {
@@ -204,6 +213,5 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.ColorPicker
             public int enchantmentColor = 0xFFD500;
         }
-
     }
 }
