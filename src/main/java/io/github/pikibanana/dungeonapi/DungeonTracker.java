@@ -48,9 +48,9 @@ public class DungeonTracker {
             Matcher typeMatcher = dungeonEntryRegex.matcher(message);
             if (typeMatcher.find()) {
                 isInDungeon = true;
-                String dungeonName = typeMatcher.group(1);
+                String dungeonName = typeMatcher.group(1).toUpperCase();
                 try {
-                    dungeonType = DungeonType.valueOf(dungeonName.toUpperCase());
+                    dungeonType = DungeonType.valueOf(dungeonName);
                 } catch (IllegalArgumentException e) {
                     dungeonType = DungeonType.UNKNOWN;
                 }
