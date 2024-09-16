@@ -1,5 +1,6 @@
 package io.github.pikibanana.hud;
 
+import io.github.pikibanana.Main;
 import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.client.MinecraftClient;
@@ -14,8 +15,9 @@ public class FPSRenderer {
     public static void drawFPS(DrawContext context, TextRenderer renderer, String fpsText, int fpsX, int fpsY, int fpsWidth, int fpsHeight) {
         int color = DungeonDodgePlusConfig.get().features.showFPSCounter.textColor; //white (default)
         int bg = 0x66000000; //translucent black
+        boolean showBackground = Main.features.showFPSCounter.backgroundColor;
 
-        context.fill(fpsX, fpsY + 1, fpsWidth, fpsHeight - 2, bg);
+        if (showBackground) context.fill(fpsX, fpsY + 1, fpsWidth, fpsHeight - 2, bg);
         context.drawText(renderer, fpsText, fpsX + 5, fpsY + 5, color, false);
     }
 

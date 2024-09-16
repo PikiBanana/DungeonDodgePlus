@@ -164,7 +164,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.Gui.Excluded
             public String label = "Dungeon Water Colors";
 
-            public boolean enabled = false;
+            public boolean enabled = true;
         }
 
         public static class HideOtherFishingBobbers {
@@ -189,6 +189,8 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.ColorPicker
             public int textColor = 0xFFFFFF;
+
+            public boolean backgroundColor = true;
         }
 
         public static class ColorMaxEnchantments {

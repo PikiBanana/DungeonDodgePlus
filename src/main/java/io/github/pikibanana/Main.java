@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
     public static final String MOD_ID = "dungeondodgeplus";
+    public static DungeonDodgePlusConfig.Features features;
 
     @Override
     public void onInitialize() {
@@ -30,6 +31,7 @@ public class Main implements ModInitializer {
         try {
             DungeonDodgePlusConfig.register();
             DungeonDodgePlusConfig.get();
+            features = DungeonDodgePlusConfig.get().features;
             LOGGER.info("Config loaded correctly!");
         } catch (Exception e) {
             LOGGER.warn("Config did not load correctly!");

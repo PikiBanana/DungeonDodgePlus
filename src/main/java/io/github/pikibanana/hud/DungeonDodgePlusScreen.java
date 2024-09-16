@@ -170,17 +170,19 @@ public class DungeonDodgePlusScreen extends Screen {
                 TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
                 String fpsText = MinecraftClient.getInstance().getCurrentFps() + " FPS";
 
-                fpsWidth = fpsX + 10 + renderer.getWidth(fpsText);
-                fpsHeight = fpsY + 10 + renderer.fontHeight;
+                fpsWidth = renderer.getWidth(fpsText) + 10;
+                fpsHeight = renderer.fontHeight + 10;
 
                 fpsX = Math.max(0, Math.min(width - fpsWidth, fpsX));
                 fpsY = Math.max(0, Math.min(height - fpsHeight, fpsY));
+
                 saveData(dragging);
                 return true;
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
+
 
     private boolean isMouseOverSheep(double mouseX, double mouseY) {
         return mouseX >= essenceX && mouseX <= essenceX + essenceWidth && mouseY >= essenceY && mouseY <= essenceY + essenceHeight;
