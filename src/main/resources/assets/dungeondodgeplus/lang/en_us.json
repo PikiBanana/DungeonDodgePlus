@@ -44,6 +44,11 @@
   "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.enabled": "Colored Max Level Enchantments Enabled",
   "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.isRainbow": "Maximum-level enchantments will appear with a rainbow gradient effect.",
   "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.enchantmentColor": "If the rainbow effect is disabled, maximum-level enchantments will appear with this color.",
+  "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement": "Fish Caught Announcement",
+  "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.enabled": "Enable Fish Caught Announcement",
+  "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.bold": "Bold Text",
+  "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.text": "Announcement Text",
+  "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.announcementColor": "Announcement Text Color",
 
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
 

@@ -57,7 +57,6 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public HideOtherFishingBobbers hideOtherFishingBobbers = new HideOtherFishingBobbers();
 
-
         @ConfigEntry.Gui.CollapsibleObject
         public ShowManaBar showManaBar = new ShowManaBar();
 
@@ -67,6 +66,8 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public ColorMaxEnchantments colorMaxEnchantments = new ColorMaxEnchantments();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public FishingAnnouncement fishingAnnouncement = new FishingAnnouncement();
 
 
         public static class EssenceFinder {
@@ -212,6 +213,20 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.ColorPicker
             public int enchantmentColor = 0xFFD500;
+        }
+
+        public static class FishingAnnouncement {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Fish Caught Announcement";
+
+            public boolean enabled = true;
+
+            public boolean bold = false;
+
+            public String text = "Fish Caught!";
+
+            @ConfigEntry.ColorPicker
+            public int announcementColor = 0x87CEFA;
         }
     }
 }

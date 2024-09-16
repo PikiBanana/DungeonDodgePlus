@@ -6,6 +6,7 @@
     "BiomeEffectsMixin",
     "BlockEventS2CPacketMixin",
     "ChestRenderer",
+    "FishingBobberEntityMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "SkullRenderer"
