@@ -2,6 +2,7 @@ package io.github.pikibanana.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.pikibanana.CustomModelDataFormats;
+import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.util.EnchantmentUtils;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.component.Component;
@@ -66,7 +67,7 @@ public abstract class ItemStackMixin {
             // Generate a rainbow gradient dynamically with 256 colors for a smooth animation.
             int[] rainbowGradient = EnchantmentUtils.generateRainbowGradient(256);
             // Smaller number in the division results in faster animation
-            int rainbowIndex = (int)((System.currentTimeMillis() / 60) % rainbowGradient.length);
+            int rainbowIndex = (int)((System.currentTimeMillis() / DungeonData.getInstance().getInt("enchantmentAnimationSpeed",50)) % rainbowGradient.length);
 
             // Define the base color for non-rainbow max enchantments
             int baseColor = DungeonDodgePlusConfig.get().features.colorMaxEnchantments.enchantmentColor;
