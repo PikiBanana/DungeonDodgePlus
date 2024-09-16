@@ -1,4 +1,4 @@
-package io.github.pikibanana.data;
+package io.github.pikibanana.util;
 
 import java.util.List;
 import java.util.Map;
@@ -41,5 +41,60 @@ public class EnchantmentUtils {
                     "undead protection", "nether protection", "fortune"),
             "X", List.of("boss slayer", "mana saver", "infinite quiver", "piercing", "agility", "wisdom", "efficiency")
     );
+
+    /**
+     * Generates an array of colors that form a rainbow gradient.
+     * The colors are distributed evenly across the HSV spectrum.
+     *
+     * @param n The number of colors to be generated. A higher number results in a smoother color transition.
+     * @return An array of integers where each integer represents a color in RGB format.
+     */
+    public static int[] generateRainbowGradient(int n) {
+        int[] colors = new int[n];
+        for (int i = 0; i < n; i++) {
+            float hue = (float) i / n * 360;
+            colors[i] = hsvToRgb(hue, 1.0f, 1.0f);
+        }
+        return colors;
+    }
+
+    /**
+     * Converts HSV (Hue, Saturation, Value) color values to RGB format.
+     * The RGB color is returned as an integer where the red, green, and blue
+     * components are packed into a single 24-bit value.
+     *
+     * @param h The hue component, ranging from 0 to 360 degrees. Hue represents the color type.
+     * @param s The saturation component, ranging from 0.0 to 1.0. Saturation represents the intensity of the color.
+     * @param v The value component, ranging from 0.0 to 1.0. Value represents the brightness of the color.
+     * @return An integer representing the RGB color, with red in the highest byte, green in the middle byte,
+     *         and blue in the lowest byte.
+     */
+    public static int hsvToRgb(float h, float s, float v) {
+        float c = v * s;
+        float x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        float m = v - c;
+        float rPrime = 0, gPrime = 0, bPrime = 0;
+
+        if (0 <= h && h < 60) {
+            rPrime = c; gPrime = x; bPrime = 0;
+        } else if (60 <= h && h < 120) {
+            rPrime = x; gPrime = c; bPrime = 0;
+        } else if (120 <= h && h < 180) {
+            rPrime = 0; gPrime = c; bPrime = x;
+        } else if (180 <= h && h < 240) {
+            rPrime = 0; gPrime = x; bPrime = c;
+        } else if (240 <= h && h < 300) {
+            rPrime = x; gPrime = 0; bPrime = c;
+        } else if (300 <= h && h < 360) {
+            rPrime = c; gPrime = 0; bPrime = x;
+        }
+
+        int r = (int) ((rPrime + m) * 255);
+        int g = (int) ((gPrime + m) * 255);
+        int b = (int) ((bPrime + m) * 255);
+
+        return (r << 16) | (g << 8) | b;
+    }
+
 
 }
