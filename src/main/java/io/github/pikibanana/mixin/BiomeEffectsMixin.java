@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BiomeEffects.class)
-public class BiomeMixin {
+public class BiomeEffectsMixin {
 
+    @Unique
     DungeonDodgePlusConfig config = DungeonDodgePlusConfig.get();
 
     @Inject(method = "getWaterColor", at = @At("HEAD"), cancellable = true)
