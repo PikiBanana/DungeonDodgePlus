@@ -49,6 +49,11 @@
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.bold": "Bold Text",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.text": "Announcement Text",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.announcementColor": "Announcement Text Color",
+  "text.autoconfig.DungeonDodgePlus.option.features.roomCleared": "Room Cleared Announcement",
+  "text.autoconfig.DungeonDodgePlus.option.features.roomCleared.enabled": "Enable Room Cleared Announcement",
+  "text.autoconfig.DungeonDodgePlus.option.features.roomCleared.bold": "Bold Text",
+  "text.autoconfig.DungeonDodgePlus.option.features.roomCleared.text": "Announcement Text",
+  "text.autoconfig.DungeonDodgePlus.option.features.roomCleared.announcementColor": "Announcement Text Color",
 
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
 

@@ -4,6 +4,7 @@ import io.github.pikibanana.Main;
 import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
+import io.github.pikibanana.util.FormattingUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -15,15 +16,15 @@ import java.util.regex.Pattern;
 
 public class DungeonTracker {
 
+    public static final EssenceCounter essenceCounter = EssenceCounter.getInstance();
     private static final Pattern dungeonEntryRegex = Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*");
     private static final Pattern dungeonDifficultyRegex = Pattern.compile("\\[!] Notice! Your dungeon difficulty is set to (\\w*)!");
     private static final Logger LOGGER = Main.LOGGER;
     private static final Map<Pattern, DungeonMessage> MESSAGE_MAP = new HashMap<>();
+    private static final DungeonData dungeonData = DungeonData.getInstance();
     private static boolean isInDungeon = false;
     private static DungeonType dungeonType = DungeonType.UNKNOWN;
     private static DungeonDifficulty dungeonDifficulty = DungeonDifficulty.UNKNOWN;
-    public static final EssenceCounter essenceCounter = EssenceCounter.getInstance();
-    private static final DungeonData dungeonData = DungeonData.getInstance();
 
     static {
         MESSAGE_MAP.put(Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*"), DungeonMessage.ENTER);
@@ -32,6 +33,7 @@ public class DungeonTracker {
         MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will end in (\\d+) seconds!"), DungeonMessage.LEAVE);
         MESSAGE_MAP.put(Pattern.compile("Teleporting..."), DungeonMessage.TELEPORTING);
         MESSAGE_MAP.put(dungeonDifficultyRegex, DungeonMessage.DIFFICULTY);
+        MESSAGE_MAP.put(Pattern.compile("The current room has been completed!*"), DungeonMessage.CLEAR);
     }
 
     public static boolean inDungeon() {
@@ -68,7 +70,7 @@ public class DungeonTracker {
                 try {
                     dungeonDifficulty = DungeonDifficulty.valueOf(difficultyName.toUpperCase());
                     if (DungeonDodgePlusConfig.get().features.difficultyAnnouncer.enabled) {
-                        MinecraftClient.getInstance().inGameHud.setTitleTicks(10,30,20);
+                        MinecraftClient.getInstance().inGameHud.setTitleTicks(10, 30, 20);
                         MinecraftClient.getInstance().inGameHud.setTitle(Text.of(""));
                         MinecraftClient.getInstance().inGameHud.setSubtitle(dungeonDifficulty.getAnnouncementText());
                     }
@@ -81,6 +83,14 @@ public class DungeonTracker {
 
     public static void handleDeath(Text message) {
         isInDungeon = false;
+    }
+
+    public static void handleClear(Text message){
+        FormattingUtils.sendSubtitles(
+                Main.features.roomCleared.text,
+                Main.features.roomCleared.announcementColor,
+                Main.features.roomCleared.bold
+        );
     }
 
     public static void handleLeave(Text message) {
@@ -117,6 +127,9 @@ public class DungeonTracker {
                     case DIFFICULTY:
                         handleDifficulty(text);
                         break;
+                    case CLEAR:
+                        handleClear(text);
+                        break;
                     default:
                         break;
                 }
@@ -126,6 +139,6 @@ public class DungeonTracker {
     }
 
     private enum DungeonMessage {
-        ENTER, DEATH, LEAVE, TELEPORTING, DIFFICULTY
+        ENTER, DEATH, LEAVE, TELEPORTING, DIFFICULTY, CLEAR
     }
 }

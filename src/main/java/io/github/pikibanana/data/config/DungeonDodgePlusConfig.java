@@ -69,6 +69,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public FishingAnnouncement fishingAnnouncement = new FishingAnnouncement();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public RoomCleared roomCleared = new RoomCleared();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -227,6 +230,20 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.ColorPicker
             public int announcementColor = 0x87CEFA;
+        }
+
+        public static class RoomCleared {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Room Cleared Announcement";
+
+            public boolean enabled = true;
+
+            public boolean bold = false;
+
+            public String text = "Room Cleared!";
+
+            @ConfigEntry.ColorPicker
+            public int announcementColor = 0xDC143C;
         }
     }
 }
