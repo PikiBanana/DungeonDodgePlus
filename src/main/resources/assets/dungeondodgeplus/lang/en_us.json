@@ -35,13 +35,16 @@
   "text.autoconfig.DungeonDodgePlus.option.features.hideOtherFishingBobbers.enabled": "Hide other player's fishing lines and bobbers.",
   "text.autoconfig.DungeonDodgePlus.option.features.showManaBar": "Mana Bar",
   "text.autoconfig.DungeonDodgePlus.option.features.showManaBar.enabled": "Shows a mana bar with your active mana instead of the hunger bar!",
+  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter": "Show FPS Counter",
+  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter.enabled": "Shows a tracker that tracks your active FPS!",
+  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter.textColor": "FPS Text Color",
 
 
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
 
   "category.dungeondodgeplus": "DungeonDodge+",
   "key.dungeondodgeplus.config": "Open Config",
-  "key.dungeondodgeplus.essenceScreen": "Edit Essence Counter",
+  "key.dungeondodgeplus.configScreen": "Edit the UI layout for DungeonDodge+",
 
   "category.dungeondodgeplus.wardrobe": "Wardrobe",
   "key.dungeondodgeplus.wardrobe.1": "Equip Slot 1",

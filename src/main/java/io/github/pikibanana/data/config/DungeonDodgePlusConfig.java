@@ -59,6 +59,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public ShowManaBar showManaBar = new ShowManaBar();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public ShowFPSCounter showFPSCounter = new ShowFPSCounter();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -173,6 +176,16 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public String label = "Show Mana Bar";
 
             public boolean enabled = true;
+        }
+
+        public static class ShowFPSCounter {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Show FPS Counter";
+
+            @ConfigEntry.ColorPicker
+            public int textColor = 0xFFFFFF;
+
+            public boolean enabled = false;
         }
 
     }
