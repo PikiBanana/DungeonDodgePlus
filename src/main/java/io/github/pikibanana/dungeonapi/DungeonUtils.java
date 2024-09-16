@@ -9,7 +9,6 @@ import net.minecraft.scoreboard.Team;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,21 +67,26 @@ public class DungeonUtils {
     }
 
     public List<Team> getScoreboardTeams() {
-        Scoreboard scoreboardObj = Objects.requireNonNull(client.getNetworkHandler()).getScoreboard();
-        ScoreboardObjective sidebarObjective = null;
+        try {
+            Scoreboard scoreboardObj = client.getNetworkHandler().getScoreboard();
+            ScoreboardObjective sidebarObjective = null;
 
-        for (ScoreboardObjective objective : scoreboardObj.getObjectives()) {
-            if (scoreboardObj.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) == objective) {
-                sidebarObjective = objective;
-                break;
+            for (ScoreboardObjective objective : scoreboardObj.getObjectives()) {
+                if (scoreboardObj.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) == objective) {
+                    sidebarObjective = objective;
+                    break;
+                }
             }
+
+            Scoreboard scoreboard = sidebarObjective.getScoreboard();
+            List<Team> teams = scoreboard.getTeams().stream()
+                    .filter(team -> team.getName().startsWith("TAB-Sidebar-"))
+                    .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
+                    .toList();
+            return teams != null ? teams : new ArrayList<>();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        Scoreboard scoreboard = Objects.requireNonNull(sidebarObjective).getScoreboard();
-
-        return scoreboard.getTeams().stream()
-                .filter(team -> team.getName().startsWith("TAB-Sidebar-"))
-                .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
-                .toList();
     }
 }
