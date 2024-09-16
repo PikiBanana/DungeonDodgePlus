@@ -62,6 +62,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public ShowFPSCounter showFPSCounter = new ShowFPSCounter();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public ColorMaxEnchantments colorMaxEnchantments = new ColorMaxEnchantments();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -182,10 +185,22 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.Gui.Excluded
             public String label = "Show FPS Counter";
 
+            public boolean enabled = false;
+
             @ConfigEntry.ColorPicker
             public int textColor = 0xFFFFFF;
+        }
 
-            public boolean enabled = false;
+        public static class ColorMaxEnchantments {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Color Max Enchantments";
+
+            public boolean enabled = true;
+
+            public boolean isRainbow = true;
+
+            @ConfigEntry.ColorPicker
+            public int enchantmentColor = 0xFFD500;
         }
 
     }

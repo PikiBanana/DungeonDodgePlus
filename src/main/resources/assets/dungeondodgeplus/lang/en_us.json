@@ -35,10 +35,13 @@
   "text.autoconfig.DungeonDodgePlus.option.features.hideOtherFishingBobbers.enabled": "Hide other player's fishing lines and bobbers.",
   "text.autoconfig.DungeonDodgePlus.option.features.showManaBar": "Mana Bar",
   "text.autoconfig.DungeonDodgePlus.option.features.showManaBar.enabled": "Shows a mana bar with your active mana instead of the hunger bar!",
-  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter": "Show FPS Counter",
-  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter.enabled": "Shows a tracker that tracks your active FPS!",
+  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter": "Show FPS Tracker",
+  "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter.enabled": "FPS Tracker Enabled",
   "text.autoconfig.DungeonDodgePlus.option.features.showFPSCounter.textColor": "FPS Text Color",
-
+  "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments": "Colored Max Level Enchantments",
+  "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.enabled": "Colored Max Level Enchantments Enabled",
+  "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.isRainbow": "Maximum-level enchantments will appear with a rainbow gradient effect.",
+  "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.enchantmentColor": "If the rainbow effect is disabled, maximum-level enchantments will appear with this color.",
 
   "text.autoconfig.DungeonDodgePlus.option.features.timestamp.enabled": "Enable Timestamp",
 
