@@ -57,6 +57,9 @@ public class DungeonTracker {
                     dungeonType = DungeonType.UNKNOWN;
                 }
             }
+            if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
+                MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
+            }
         }
     }
 
@@ -99,6 +102,9 @@ public class DungeonTracker {
         dungeonData.addInt("totalEssence", essence);
         essenceCounter.setEssence(0);
         dungeonType = DungeonType.UNKNOWN;
+        if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
+            MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
+        }
     }
 
     public static DungeonDifficulty getDungeonDifficulty() {
