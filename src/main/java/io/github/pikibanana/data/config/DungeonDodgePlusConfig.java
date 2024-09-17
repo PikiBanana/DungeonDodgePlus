@@ -5,8 +5,8 @@ import io.github.pikibanana.misc.Color;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 @Config(name = "DungeonDodgePlus")
 public class DungeonDodgePlusConfig implements ConfigData {
@@ -138,7 +138,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             public boolean enabled = false;
 
-            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
             public Color color = Color.GREEN;
 
             @ConfigEntry.Gui.CollapsibleObject
@@ -162,7 +162,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             public boolean enabled = false;
 
-            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
             public Color color = Color.RED;
         }
 
@@ -216,6 +216,10 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.ColorPicker
             public int enchantmentColor = 0xFFD500;
+
+            @ConfigEntry.Gui.PrefixText
+            @ConfigEntry.BoundedDiscrete(min = 10, max = 100)
+            public int animationSpeed = 50;
         }
 
         public static class FishingAnnouncement {

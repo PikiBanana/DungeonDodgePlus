@@ -1,5 +1,6 @@
 package io.github.pikibanana.data.config;
 
+import io.github.pikibanana.data.DungeonData;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -19,10 +20,27 @@ public class ConfigKeybind {
         );
 
         ClientTickEvents.END_CLIENT_TICK.register(client ->
-        {while (keyBinding.wasPressed()) {
-            if (client.currentScreen != null) client.currentScreen.close();
-            client.setScreen(AutoConfig.getConfigScreen(DungeonDodgePlusConfig.class, client.currentScreen).get());
-        }});
+        {
+            while (keyBinding.wasPressed()) {
+                if (client.currentScreen != null) client.currentScreen.close();
+                client.setScreen(AutoConfig.getConfigScreen(DungeonDodgePlusConfig.class, client.currentScreen).get());
+            }
+        });
+
+        KeyBinding hidePlayers = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                        "key.dungeondodgeplus.hidePlayers",
+                        InputUtil.Type.KEYSYM,
+                        GLFW.GLFW_KEY_DELETE,
+                        "category.dungeondodgeplus"
+                )
+        );
+
+        ClientTickEvents.END_CLIENT_TICK.register(client ->
+        {
+            while (hidePlayers.wasPressed()) {
+                DungeonData.getInstance().setBoolean("hidePlayers",!DungeonData.getInstance().getBoolean("hidePlayers",false));
+            }
+        });
     }
 
 }

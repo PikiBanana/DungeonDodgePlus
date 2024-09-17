@@ -32,14 +32,17 @@ public class EnchantmentUtils {
      */
     public static final Map<String, List<String>> MAX_LEVEL_MAP = Map.of(
             "I", List.of("chicken slayer", "homing", "tough rod", "fish streak", "treasure streak"),
-            "III", List.of("knockback", "depth strider"),
-            "IV", List.of("thunderlord", "fire aspect", "flaming", "flame"),
-            "V", List.of("vampirism", "combo", "jungle protection", "desert protection", "sea creature protection", "vicious"),
-            "VI", List.of("sea strike", "lifesteal", "freezing", "last life", "critical", "blessed strike", "last stand", "prosperity", "turtle overlord", "lure",
-                    "barbed hook", "luck of the sea", "charm", "sharp hook", "blessed hook"),
-            "VII", List.of("sharpness", "smite", "bane of arthropods", "nether slayer", "looting", "sparking", "power", "protection", "projectile protection",
-                    "undead protection", "nether protection", "fortune"),
-            "X", List.of("boss slayer", "mana saver", "infinite quiver", "piercing", "agility", "wisdom", "efficiency")
+            "II", List.of("knockback"),
+            "III", List.of("depth strider", "thunderlord"),
+            "IV", List.of("fire aspect", "flaming", "flame"),
+            "V", List.of("vampirism", "combo", "jungle protection", "desert protection", "sea creature protection", "vicious"
+                    , "piercing", "freezing", "last life", "bane of arthropods", "nether slayer", "last stand", "nether protection", "projectile protection",
+                    "undead protection", "turtle overlord","barbed hook", "luck of the sea", "charm", "sharp hook", "blessed hook","smite","sea strike"),
+            "VI", List.of("lifesteal",
+                    "critical", "blessed strike", "prosperity", "lure"),
+            "VII", List.of("sharpness", "looting", "sparking", "power", "protection",
+                    "fortune"),
+            "X", List.of("boss slayer", "mana saver", "infinite quiver", "agility", "wisdom", "efficiency")
     );
 
     /**
@@ -67,7 +70,7 @@ public class EnchantmentUtils {
      * @param s The saturation component, ranging from 0.0 to 1.0. Saturation represents the intensity of the color.
      * @param v The value component, ranging from 0.0 to 1.0. Value represents the brightness of the color.
      * @return An integer representing the RGB color, with red in the highest byte, green in the middle byte,
-     *         and blue in the lowest byte.
+     * and blue in the lowest byte.
      */
     public static int hsvToRgb(float h, float s, float v) {
         float c = v * s;
@@ -76,17 +79,29 @@ public class EnchantmentUtils {
         float rPrime = 0, gPrime = 0, bPrime = 0;
 
         if (0 <= h && h < 60) {
-            rPrime = c; gPrime = x; bPrime = 0;
+            rPrime = c;
+            gPrime = x;
+            bPrime = 0;
         } else if (60 <= h && h < 120) {
-            rPrime = x; gPrime = c; bPrime = 0;
+            rPrime = x;
+            gPrime = c;
+            bPrime = 0;
         } else if (120 <= h && h < 180) {
-            rPrime = 0; gPrime = c; bPrime = x;
+            rPrime = 0;
+            gPrime = c;
+            bPrime = x;
         } else if (180 <= h && h < 240) {
-            rPrime = 0; gPrime = x; bPrime = c;
+            rPrime = 0;
+            gPrime = x;
+            bPrime = c;
         } else if (240 <= h && h < 300) {
-            rPrime = x; gPrime = 0; bPrime = c;
+            rPrime = x;
+            gPrime = 0;
+            bPrime = c;
         } else if (300 <= h && h < 360) {
-            rPrime = c; gPrime = 0; bPrime = x;
+            rPrime = c;
+            gPrime = 0;
+            bPrime = x;
         }
 
         int r = (int) ((rPrime + m) * 255);
