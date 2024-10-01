@@ -93,6 +93,7 @@ public abstract class ItemStackMixin {
 
                     if (!EnchantmentUtils.MAX_LEVEL_MAP.containsKey(potentialNumber)) {
                         elementNum++;
+                        newLine.append(Text.literal(enchantment).formatted(dungeonDodgeEnchantmentFormatting));
                         continue;
                     }
 
