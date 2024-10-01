@@ -3,7 +3,6 @@ package io.github.pikibanana.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.pikibanana.CustomModelDataFormats;
 import io.github.pikibanana.Main;
-import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.util.EnchantmentUtils;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import net.minecraft.component.Component;
@@ -66,7 +65,7 @@ public abstract class ItemStackMixin {
             TextColor dungeonDodgeEnchantmentColor = TextColor.fromFormatting(dungeonDodgeEnchantmentFormatting);
 
             // Generate a rainbow gradient dynamically with 256 colors for a smooth animation.
-            int[] rainbowGradient = EnchantmentUtils.generateRainbowGradient(256);
+            int[] rainbowGradient = EnchantmentUtils.generateRainbowGradient(Main.features.colorMaxEnchantments.animationSmoothness);
             // Smaller number in the division results in faster animation
             int rainbowIndex = (int)((System.currentTimeMillis() / Main.features.colorMaxEnchantments.animationSpeed) % rainbowGradient.length);
 
@@ -75,6 +74,7 @@ public abstract class ItemStackMixin {
 
             // Iterate over the original lore lines
             for (int i = 0; i < original.size(); i++) {
+                int rainbowI = rainbowIndex;
                 Text text = original.get(i);
 
                 // Check if the current line matches the enchantment color style
@@ -91,13 +91,16 @@ public abstract class ItemStackMixin {
                     String[] potentialNumbers = enchantment.toUpperCase().split(" ");
                     String potentialNumber = potentialNumbers[potentialNumbers.length - 1];
 
+                    if (!EnchantmentUtils.MAX_LEVEL_MAP.containsKey(potentialNumber)) {
+                        elementNum++;
+                        continue;
+                    }
+
                     boolean hasMatched = false;
-                    if (EnchantmentUtils.MAX_LEVEL_MAP.containsKey(potentialNumber)) {
-                        for (String match : EnchantmentUtils.MAX_LEVEL_MAP.get(potentialNumber)) {
-                            if (enchantmentName.contains(match)) {
-                                hasMatched = true;
-                                break;
-                            }
+                    for (String match : EnchantmentUtils.MAX_LEVEL_MAP.get(potentialNumber)) {
+                        if (enchantmentName.contains(match)) {
+                            hasMatched = true;
+                            break;
                         }
                     }
 
@@ -110,8 +113,8 @@ public abstract class ItemStackMixin {
                             MutableText rainbowText = Text.empty();
 
                             for (char c : enchantment.toCharArray()) {
-                                rainbowIndex = (rainbowIndex + 1) % rainbowGradient.length;
-                                int color = rainbowGradient[rainbowIndex];
+                                rainbowI = (rainbowI + 1) % rainbowGradient.length;
+                                int color = rainbowGradient[rainbowI];
                                 rainbowText.append(Text.literal(c + "").setStyle(text.getStyle().withColor(TextColor.fromRgb(color))));
                             }
 

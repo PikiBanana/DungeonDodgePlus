@@ -220,6 +220,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.Gui.PrefixText
             @ConfigEntry.BoundedDiscrete(min = 10, max = 100)
             public int animationSpeed = 50;
+
+            @ConfigEntry.BoundedDiscrete(min = 32, max = 256)
+            public int animationSmoothness = 256;
         }
 
         public static class FishingAnnouncement {
