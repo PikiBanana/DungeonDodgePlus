@@ -1,6 +1,15 @@
 package io.github.pikibanana.util;
 
-import java.util.List;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import io.github.pikibanana.Main;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Map;
 
 /**
@@ -9,41 +18,93 @@ import java.util.Map;
  */
 public class EnchantmentUtils {
 
-    // I need to learn a better way to do this without hard-coding -Wyndev
-    /**
-     * Array of colors that are used to create the max-level enchantment rainbow text.
-     */
-    public static final int[] RAINBOW_GRADIENT = new int[]{
-            0xFF0000, 0xFF001E, 0xFF002B, 0xFF0044, 0xFF0055, 0xFF0066, 0xFF007B, 0xFF0099,
-            0xFF00BB, 0xFF00DD, 0xFF00FF, 0xEA00FF, 0xC800FF, 0xAE00FF, 0x9900FF, 0x8400FF,
-            0x6F00FF, 0x5500FF, 0x4000FF, 0x3300FF, 0x1900FF, 0x0000FF, 0x001AFF, 0x003CFF,
-            0x005EFF, 0x007BFF, 0x0099FF, 0x00B3FF, 0x00D5FF, 0x00F2FF, 0x00FFEA, 0x00FFCC,
-            0x00FFA6, 0x00FF80, 0x00FF5E, 0x00FF2F, 0x00FF11, 0x08FF00, 0x26FF00, 0x44FF00,
-            0x6AFF00, 0x8CFF00, 0xA6FF00, 0xBBFF00, 0xD4FF00, 0xEAFF00, 0xFFFB00, 0xFFE600,
-            0xFFD000, 0xFFBB00, 0xFFA200, 0xFF8400, 0xFF6F00, 0xFF5E00, 0xFF4000, 0xFF2A00,
-            0xFF1E00
-    };
+    private static final String ENCHANTMENTS_URL = "https://raw.githubusercontent.com/PikiBanana/DungeonDodgePlus/refs/heads/master/src/main/resources/encnhantments.json";
+    private static final Gson gson = new Gson();
+    private static final long UPDATE_INTERVAL = 5 * 60 * 1000;
+    private static Map<String, String> maxLevelMap;
+    private static long lastFetchTime = 0;
 
     /**
-     * Map of all max levels corresponding to a list of enchantments that match that max level.
-     * Note that the level keys are Strings corresponding to the roman numeral equivalent of the
-     * max level.
-     * This is currently hard-coded but should be moved to the API eventually.
+     * Returns the loaded max level map, fetching data if not already loaded.
+     *
+     * @return A map of enchantment names to their corresponding max levels.
      */
-    public static final Map<String, List<String>> MAX_LEVEL_MAP = Map.of(
-            "I", List.of("chicken slayer", "homing", "tough rod", "fish streak", "treasure streak"),
-            "II", List.of("knockback"),
-            "III", List.of("depth strider", "thunderlord"),
-            "IV", List.of("fire aspect", "flaming", "flame"),
-            "V", List.of("vampirism", "combo", "jungle protection", "desert protection", "sea creature protection", "vicious"
-                    , "piercing", "freezing", "last life", "bane of arthropods", "nether slayer", "last stand", "nether protection", "projectile protection",
-                    "undead protection", "turtle overlord","barbed hook", "luck of the sea", "charm", "sharp hook", "blessed hook","smite","sea strike"),
-            "VI", List.of("lifesteal",
-                    "critical", "blessed strike", "prosperity", "lure"),
-            "VII", List.of("sharpness", "looting", "sparking", "power", "protection",
-                    "fortune"),
-            "X", List.of("boss slayer", "mana saver", "infinite quiver", "agility", "wisdom", "efficiency")
-    );
+    public static Map<String, String> getMaxLevelMap() {
+        long currentTime = System.currentTimeMillis();
+
+        if (maxLevelMap == null || (currentTime - lastFetchTime) > UPDATE_INTERVAL) {
+            maxLevelMap = fetchEnchantments();
+            lastFetchTime = currentTime;
+        }
+
+        return maxLevelMap;
+    }
+
+
+    /**
+     * Fetches enchantment data from the given URL and parses it into a Map.
+     *
+     * @return A Map where keys are enchantment names and values are their corresponding max levels.
+     */
+    private static Map<String, String> fetchEnchantments() {
+        try {
+            String json = sendGetRequest();
+            return parseJsonToMap(json);
+        } catch (Exception e) {
+            Main.LOGGER.error("Failed to fetch enchantments: {}", e.getMessage());
+            e.printStackTrace();
+            return Map.of();
+        }
+    }
+
+    /**
+     * Sends a GET request to the specified URL and returns the response body as a String.
+     *
+     * @return The response body as a String, or null if an error occurs.
+     */
+    private static String sendGetRequest() {
+        try (HttpClient client = HttpClient.newHttpClient()) {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(ENCHANTMENTS_URL))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else {
+                System.err.println("Error fetching data: HTTP status code " + response.statusCode());
+                return null;
+            }
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Exception while sending GET request: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Parses the JSON string into a Map using Gson.
+     *
+     * @param json The JSON string to parse.
+     * @return A Map representing the parsed JSON, or an empty map if parsing fails.
+     */
+    private static Map<String, String> parseJsonToMap(String json) {
+        if (json == null || json.isEmpty()) {
+            System.err.println("Received null or empty JSON string.");
+            return Map.of();
+        }
+
+        try {
+            Type type = new TypeToken<Map<String, String>>() {
+            }.getType();
+            return gson.fromJson(json, type);
+        } catch (Exception e) {
+            System.err.println("Failed to parse JSON: " + e.getMessage());
+            e.printStackTrace();
+            return Map.of();
+        }
+    }
+
 
     /**
      * Generates an array of colors that form a rainbow gradient.
@@ -110,6 +171,4 @@ public class EnchantmentUtils {
 
         return (r << 16) | (g << 8) | b;
     }
-
-
 }

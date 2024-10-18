@@ -3,9 +3,8 @@ package io.github.pikibanana.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.pikibanana.CustomModelDataFormats;
 import io.github.pikibanana.Main;
-import io.github.pikibanana.data.DungeonData;
-import io.github.pikibanana.util.EnchantmentUtils;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.util.EnchantmentUtils;
 import net.minecraft.component.Component;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentMapImpl;
@@ -19,9 +18,11 @@ import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
+import java.util.Map;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
@@ -30,6 +31,42 @@ public abstract class ItemStackMixin {
     @Shadow
     @Final
     private ComponentMapImpl components;
+
+    @Unique
+    private static boolean isHasMatched(String enchantment) {
+        String enchantmentName = enchantment.toLowerCase().trim();
+
+        String[] enchantmentParts = enchantmentName.split(" ");
+        String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
+        String potentialEnchantmentName = enchantmentName.substring(0, enchantmentName.lastIndexOf(' ')).replace(" ", "_").trim();
+
+        boolean hasMatched = false;
+        Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
+
+        if (maxLevelMap.containsKey(potentialEnchantmentName)) {
+            String enchantmentLevel = maxLevelMap.get(potentialEnchantmentName);
+            if (enchantmentLevel != null && enchantmentLevel.equals(potentialNumber)) {
+                hasMatched = true;
+            }
+        }
+
+        if (!hasMatched && maxLevelMap.containsKey("")) {
+            String noLevelEnchant = maxLevelMap.get("");
+            if (noLevelEnchant != null && !noLevelEnchant.isEmpty()) {
+                hasMatched = enchantmentName.contains(noLevelEnchant);
+            }
+        }
+
+        if (!hasMatched) {
+            String enchantmentWithoutNumber = enchantmentName.replaceAll("[0-9]", "").trim().replace(" ", "_");
+
+            if (maxLevelMap.containsKey(enchantmentWithoutNumber)) {
+                hasMatched = true;
+            }
+        }
+
+        return hasMatched;
+    }
 
     @ModifyReturnValue(method = "getTooltip", at = @At("RETURN"))
     private List<Text> showCustomModelData(List<Text> original) {
@@ -68,7 +105,7 @@ public abstract class ItemStackMixin {
             // Generate a rainbow gradient dynamically with 256 colors for a smooth animation.
             int[] rainbowGradient = EnchantmentUtils.generateRainbowGradient(256);
             // Smaller number in the division results in faster animation
-            int rainbowIndex = (int)((System.currentTimeMillis() / Main.features.colorMaxEnchantments.animationSpeed) % rainbowGradient.length);
+            int rainbowIndex = (int) ((System.currentTimeMillis() / Main.features.colorMaxEnchantments.animationSpeed) % rainbowGradient.length);
 
             // Define the base color for non-rainbow max enchantments
             int baseColor = DungeonDodgePlusConfig.get().features.colorMaxEnchantments.enchantmentColor;
@@ -87,19 +124,8 @@ public abstract class ItemStackMixin {
                 // Loop over each enchantment in the current line
                 int elementNum = 1;
                 for (String enchantment : enchantments) {
-                    String enchantmentName = enchantment.toLowerCase().replaceAll("/[0-9]/g", "");
-                    String[] potentialNumbers = enchantment.toUpperCase().split(" ");
-                    String potentialNumber = potentialNumbers[potentialNumbers.length - 1];
+                    boolean hasMatched = isHasMatched(enchantment);
 
-                    boolean hasMatched = false;
-                    if (EnchantmentUtils.MAX_LEVEL_MAP.containsKey(potentialNumber)) {
-                        for (String match : EnchantmentUtils.MAX_LEVEL_MAP.get(potentialNumber)) {
-                            if (enchantmentName.contains(match)) {
-                                hasMatched = true;
-                                break;
-                            }
-                        }
-                    }
 
                     boolean noComma = ((i + 1 < original.size() && original.get(i + 1).getStyle().getColor() != dungeonDodgeEnchantmentColor)
                             && elementNum++ == enchantments.length);
@@ -128,6 +154,7 @@ public abstract class ItemStackMixin {
                 // Replace the original line with the updated one
                 original.set(i, newLine);
             }
+
         }
         return original;
     }
