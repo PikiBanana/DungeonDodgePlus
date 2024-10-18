@@ -19,29 +19,30 @@ public class DungeonUtils {
     public List<String> getDungeonMembers() {
         if (DungeonTracker.inDungeon()) {
             List<Team> teams = getScoreboardTeams();
-            List<String> dungeonMembers = new ArrayList<>();
+            if (teams != null) {
+                List<String> dungeonMembers = new ArrayList<>();
 
-            boolean playersSectionFound = false;
-            Pattern playerPattern = Pattern.compile("- \\[\\d+] (\\S+) \\d+%");
+                boolean playersSectionFound = false;
+                Pattern playerPattern = Pattern.compile("- \\[\\d+] (\\S+) \\d+%");
 
-            for (Team team : teams) {
-                String prefix = team.getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim();
+                for (Team team : teams) {
+                    String prefix = team.getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim();
 
-                if (prefix.contains("Players:")) {
-                    playersSectionFound = true;
-                } else if (playersSectionFound) {
-                    if (prefix.isEmpty()) {
-                        break;
-                    }
-                    Matcher matcher = playerPattern.matcher(prefix);
-                    if (matcher.matches()) {
-                        String playerName = matcher.group(1).trim();
-                        dungeonMembers.add(playerName);
+                    if (prefix.contains("Players:")) {
+                        playersSectionFound = true;
+                    } else if (playersSectionFound) {
+                        if (prefix.isEmpty()) {
+                            break;
+                        }
+                        Matcher matcher = playerPattern.matcher(prefix);
+                        if (matcher.matches()) {
+                            String playerName = matcher.group(1).trim();
+                            dungeonMembers.add(playerName);
+                        }
                     }
                 }
+                return dungeonMembers;
             }
-
-            return dungeonMembers;
         }
         return List.of();
     }
