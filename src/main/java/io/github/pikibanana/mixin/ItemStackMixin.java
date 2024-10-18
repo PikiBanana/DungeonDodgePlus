@@ -30,43 +30,7 @@ public abstract class ItemStackMixin {
 
     @Shadow
     @Final
-    private ComponentMapImpl components;
-
-    @Unique
-    private static boolean isHasMatched(String enchantment) {
-        String enchantmentName = enchantment.toLowerCase().trim();
-
-        String[] enchantmentParts = enchantmentName.split(" ");
-        String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
-        String potentialEnchantmentName = enchantmentName.substring(0, enchantmentName.lastIndexOf(' ')).replace(" ", "_").trim();
-
-        boolean hasMatched = false;
-        Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
-
-        if (maxLevelMap.containsKey(potentialEnchantmentName)) {
-            String enchantmentLevel = maxLevelMap.get(potentialEnchantmentName);
-            if (enchantmentLevel != null && enchantmentLevel.equals(potentialNumber)) {
-                hasMatched = true;
-            }
-        }
-
-        if (!hasMatched && maxLevelMap.containsKey("")) {
-            String noLevelEnchant = maxLevelMap.get("");
-            if (noLevelEnchant != null && !noLevelEnchant.isEmpty()) {
-                hasMatched = enchantmentName.contains(noLevelEnchant);
-            }
-        }
-
-        if (!hasMatched) {
-            String enchantmentWithoutNumber = enchantmentName.replaceAll("[0-9]", "").trim().replace(" ", "_");
-
-            if (maxLevelMap.containsKey(enchantmentWithoutNumber)) {
-                hasMatched = true;
-            }
-        }
-
-        return hasMatched;
-    }
+    ComponentMapImpl components;
 
     @ModifyReturnValue(method = "getTooltip", at = @At("RETURN"))
     private List<Text> showCustomModelData(List<Text> original) {
@@ -157,6 +121,42 @@ public abstract class ItemStackMixin {
 
         }
         return original;
+    }
+
+    @Unique
+    private static boolean isHasMatched(String enchantment) {
+        String enchantmentName = enchantment.toLowerCase().trim();
+
+        String[] enchantmentParts = enchantmentName.split(" ");
+        String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
+        String potentialEnchantmentName = enchantmentName.substring(0, enchantmentName.lastIndexOf(' ')).replace(" ", "_").trim();
+
+        boolean hasMatched = false;
+        Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
+
+        if (maxLevelMap.containsKey(potentialEnchantmentName)) {
+            String enchantmentLevel = maxLevelMap.get(potentialEnchantmentName);
+            if (enchantmentLevel != null && enchantmentLevel.equals(potentialNumber)) {
+                hasMatched = true;
+            }
+        }
+
+        if (!hasMatched && maxLevelMap.containsKey("")) {
+            String noLevelEnchant = maxLevelMap.get("");
+            if (noLevelEnchant != null && !noLevelEnchant.isEmpty()) {
+                hasMatched = enchantmentName.contains(noLevelEnchant);
+            }
+        }
+
+        if (!hasMatched) {
+            String enchantmentWithoutNumber = enchantmentName.replaceAll("[0-9]", "").trim().replace(" ", "_");
+
+            if (maxLevelMap.containsKey(enchantmentWithoutNumber)) {
+                hasMatched = true;
+            }
+        }
+
+        return hasMatched;
     }
 
 
