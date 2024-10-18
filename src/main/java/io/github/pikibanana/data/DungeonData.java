@@ -22,6 +22,7 @@ public class DungeonData {
 
     // Default values for each data type
     private static final int DEFAULT_INT = 0;
+    private static final long DEFAULT_LONG = 0L;
     private static final String DEFAULT_STRING = "";
     private static final boolean DEFAULT_BOOLEAN = false;
     private static final double DEFAULT_DOUBLE = 0.0;
@@ -52,6 +53,11 @@ public class DungeonData {
     // Methods for setting data
 
     public void setInt(String name, int value) {
+        dataMap.put(name, value);
+        saveData();
+    }
+
+    public void setLong(String name, long value) {
         dataMap.put(name, value);
         saveData();
     }
@@ -95,6 +101,15 @@ public class DungeonData {
     public int getInt(String name, int defaultValue) {
         Object value = dataMap.get(name);
         return (value instanceof Number) ? ((Number) value).intValue() : defaultValue;
+    }
+
+    public long getLong(String name) {
+        return getLong(name, DEFAULT_LONG);
+    }
+
+    public long getLong(String name, long defaultValue) {
+        Object value = dataMap.get(name);
+        return (value instanceof Number) ? ((Number) value).longValue() : defaultValue;
     }
 
     public String getString(String name) {
