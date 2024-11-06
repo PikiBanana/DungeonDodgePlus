@@ -30,7 +30,45 @@ public abstract class ItemStackMixin {
 
     @Shadow
     @Final
-    ComponentMapImpl components;
+    private ComponentMapImpl components;
+
+    @Unique
+    private static boolean isHasMatched(String enchantment) {
+        String enchantmentName = enchantment.toLowerCase().trim();
+
+        String[] enchantmentParts = enchantmentName.split(" ");
+        String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
+        int lastSpaceIndex = enchantmentName.lastIndexOf(' ');
+        String potentialEnchantmentName = enchantmentName.substring(0, lastSpaceIndex != -1 ? lastSpaceIndex : enchantmentName.length() - 1)
+                .replace(" ", "_").trim();
+
+        boolean hasMatched = false;
+        Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
+
+        if (maxLevelMap.containsKey(potentialEnchantmentName)) {
+            String enchantmentLevel = maxLevelMap.get(potentialEnchantmentName);
+            if (enchantmentLevel != null && enchantmentLevel.equals(potentialNumber)) {
+                hasMatched = true;
+            }
+        }
+
+        if (!hasMatched && maxLevelMap.containsKey("")) {
+            String noLevelEnchant = maxLevelMap.get("");
+            if (noLevelEnchant != null && !noLevelEnchant.isEmpty()) {
+                hasMatched = enchantmentName.contains(noLevelEnchant);
+            }
+        }
+
+        if (!hasMatched) {
+            String enchantmentWithoutNumber = enchantmentName.replaceAll("[0-9]", "").trim().replace(" ", "_");
+
+            if (maxLevelMap.containsKey(enchantmentWithoutNumber)) {
+                hasMatched = true;
+            }
+        }
+
+        return hasMatched;
+    }
 
     @ModifyReturnValue(method = "getTooltip", at = @At("RETURN"))
     private List<Text> showCustomModelData(List<Text> original) {
@@ -67,7 +105,7 @@ public abstract class ItemStackMixin {
             TextColor dungeonDodgeEnchantmentColor = TextColor.fromFormatting(dungeonDodgeEnchantmentFormatting);
 
             // Generate a rainbow gradient dynamically with 256 colors for a smooth animation.
-            int[] rainbowGradient = EnchantmentUtils.generateRainbowGradient(256);
+            int[] rainbowGradient = EnchantmentUtils.generateRainbowGradient(Main.features.colorMaxEnchantments.animationSmoothness);
             // Smaller number in the division results in faster animation
             int rainbowIndex = (int) ((System.currentTimeMillis() / Main.features.colorMaxEnchantments.animationSpeed) % rainbowGradient.length);
 
@@ -76,6 +114,7 @@ public abstract class ItemStackMixin {
 
             // Iterate over the original lore lines
             for (int i = 0; i < original.size(); i++) {
+                int rainbowI = rainbowIndex;
                 Text text = original.get(i);
 
                 // Check if the current line matches the enchantment color style
@@ -90,29 +129,30 @@ public abstract class ItemStackMixin {
                 for (String enchantment : enchantments) {
                     boolean hasMatched = isHasMatched(enchantment);
 
+                    if (!hasMatched) {
+                        elementNum++;
+                        newLine.append(Text.literal(enchantment).formatted(dungeonDodgeEnchantmentFormatting));
+                        continue;
+                    }
 
                     boolean noComma = ((i + 1 < original.size() && original.get(i + 1).getStyle().getColor() != dungeonDodgeEnchantmentColor)
                             && elementNum++ == enchantments.length);
 
                     // If it matches a max-level enchantment, apply the rainbow or base color
-                    if (hasMatched) {
-                        if (DungeonDodgePlusConfig.get().features.colorMaxEnchantments.isRainbow) {
-                            MutableText rainbowText = Text.empty();
+                    if (DungeonDodgePlusConfig.get().features.colorMaxEnchantments.isRainbow) {
+                        MutableText rainbowText = Text.empty();
 
-                            for (char c : enchantment.toCharArray()) {
-                                rainbowIndex = (rainbowIndex + 1) % rainbowGradient.length;
-                                int color = rainbowGradient[rainbowIndex];
-                                rainbowText.append(Text.literal(c + "").setStyle(text.getStyle().withColor(TextColor.fromRgb(color))));
-                            }
-
-                            newLine.append(rainbowText);
-                        } else {
-                            newLine.append(Text.literal(enchantment).setStyle(text.getStyle().withColor(TextColor.fromRgb(baseColor))));
+                        for (char c : enchantment.toCharArray()) {
+                            rainbowI = (rainbowI + 1) % rainbowGradient.length;
+                            int color = rainbowGradient[rainbowI];
+                            rainbowText.append(Text.literal(c + "").setStyle(text.getStyle().withColor(TextColor.fromRgb(color))));
                         }
-                        if (!noComma) newLine.append(Text.literal(",").formatted(dungeonDodgeEnchantmentFormatting));
+
+                        newLine.append(rainbowText);
                     } else {
-                        newLine.append(Text.literal(enchantment + (noComma ? "" : ",")).formatted(dungeonDodgeEnchantmentFormatting));
+                        newLine.append(Text.literal(enchantment).setStyle(text.getStyle().withColor(TextColor.fromRgb(baseColor))));
                     }
+                    if (!noComma) newLine.append(Text.literal(",").formatted(dungeonDodgeEnchantmentFormatting));
                 }
 
                 // Replace the original line with the updated one
@@ -121,42 +161,6 @@ public abstract class ItemStackMixin {
 
         }
         return original;
-    }
-
-    @Unique
-    private static boolean isHasMatched(String enchantment) {
-        String enchantmentName = enchantment.toLowerCase().trim();
-
-        String[] enchantmentParts = enchantmentName.split(" ");
-        String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
-        String potentialEnchantmentName = enchantmentName.substring(0, enchantmentName.lastIndexOf(' ')).replace(" ", "_").trim();
-
-        boolean hasMatched = false;
-        Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
-
-        if (maxLevelMap.containsKey(potentialEnchantmentName)) {
-            String enchantmentLevel = maxLevelMap.get(potentialEnchantmentName);
-            if (enchantmentLevel != null && enchantmentLevel.equals(potentialNumber)) {
-                hasMatched = true;
-            }
-        }
-
-        if (!hasMatched && maxLevelMap.containsKey("")) {
-            String noLevelEnchant = maxLevelMap.get("");
-            if (noLevelEnchant != null && !noLevelEnchant.isEmpty()) {
-                hasMatched = enchantmentName.contains(noLevelEnchant);
-            }
-        }
-
-        if (!hasMatched) {
-            String enchantmentWithoutNumber = enchantmentName.replaceAll("[0-9]", "").trim().replace(" ", "_");
-
-            if (maxLevelMap.containsKey(enchantmentWithoutNumber)) {
-                hasMatched = true;
-            }
-        }
-
-        return hasMatched;
     }
 
 

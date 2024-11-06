@@ -47,6 +47,7 @@
   "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.enchantmentColor": "If the rainbow effect is disabled, maximum-level enchantments will appear with this color.",
   "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.animationSpeed.@PrefixText": "Adjust the speed of the rainbow enchant animation. A lower value makes the animation faster, while a higher value slows it down.",
   "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.animationSpeed": "The animation speed of the rainbow enchants.",
+  "text.autoconfig.DungeonDodgePlus.option.features.colorMaxEnchantments.animationSmoothness": "The smoothness of the rainbow enchantment glint (how many colors are in the gradient).",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement": "Fish Caught Announcement",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.enabled": "Enable Fish Caught Announcement",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.bold": "Bold Text",
