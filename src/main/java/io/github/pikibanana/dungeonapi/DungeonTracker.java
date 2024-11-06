@@ -88,12 +88,14 @@ public class DungeonTracker {
         isInDungeon = false;
     }
 
-    public static void handleClear(Text message){
-        FormattingUtils.sendSubtitles(
-                Main.features.roomCleared.text,
-                Main.features.roomCleared.announcementColor,
-                Main.features.roomCleared.bold
-        );
+    public static void handleClear(Text message) {
+        if (Main.features.roomCleared.enabled) {
+            FormattingUtils.sendSubtitles(
+                    Main.features.roomCleared.text,
+                    Main.features.roomCleared.announcementColor,
+                    Main.features.roomCleared.bold
+            );
+        }
     }
 
     public static void handleLeave(Text message) {
