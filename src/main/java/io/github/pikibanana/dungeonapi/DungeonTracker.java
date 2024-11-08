@@ -7,7 +7,6 @@ import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import io.github.pikibanana.util.FormattingUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +18,6 @@ public class DungeonTracker {
     public static final EssenceCounter essenceCounter = EssenceCounter.getInstance();
     private static final Pattern dungeonEntryRegex = Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*");
     private static final Pattern dungeonDifficultyRegex = Pattern.compile("\\[!] Notice! Your dungeon difficulty is set to (\\w*)!");
-    private static final Logger LOGGER = Main.LOGGER;
     private static final Map<Pattern, DungeonMessage> MESSAGE_MAP = new HashMap<>();
     private static final DungeonData dungeonData = DungeonData.getInstance();
     private static boolean isInDungeon = false;
@@ -128,8 +126,7 @@ public class DungeonTracker {
                     case DEATH:
                         handleDeath(text);
                         break;
-                    case LEAVE:
-                    case TELEPORTING:
+                    case LEAVE, TELEPORTING:
                         handleLeave(text);
                         break;
                     case DIFFICULTY:

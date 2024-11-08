@@ -4,21 +4,16 @@ import io.github.pikibanana.Main;
 import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
+import io.github.pikibanana.gui.screens.BaseReturnableScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 
-public class DungeonDodgePlusScreen extends Screen {
+public class DungeonDodgePlusScreen extends BaseReturnableScreen {
     private static final Identifier ESSENCE_TEXTURE = Identifier.of(Main.MOD_ID, "textures/gui/essence.png");
     private static final Identifier SHEEP_TEXTURE = EssenceCounter.SHEEP_TEXTURE;
     private static final int MIN_ESSENCE_SIZE = 35;
@@ -41,7 +36,7 @@ public class DungeonDodgePlusScreen extends Screen {
     private int dragOffsetX;
     private int dragOffsetY;
 
-    protected DungeonDodgePlusScreen() {
+    public DungeonDodgePlusScreen() {
         super(Text.of("DungeonDodge+ Configuration"));
         essenceX = dungeonData.getInt("essenceX", 10);
         essenceY = dungeonData.getInt("essenceY", 50);
@@ -56,26 +51,6 @@ public class DungeonDodgePlusScreen extends Screen {
 
         fpsWidth = fpsX + 10 + renderer.getWidth(fpsText);
         fpsHeight = fpsY + 10 + renderer.fontHeight;
-    }
-
-    public static void register() {
-        KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.dungeondodgeplus.configScreen",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
-                "category.dungeondodgeplus"
-        ));
-
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (keyBinding.wasPressed()) {
-                if (client.currentScreen != null) client.currentScreen.close();
-                client.execute(() -> {
-                    DungeonDodgePlusScreen screen = new DungeonDodgePlusScreen();
-                    client.setScreen(screen);
-                    ScreenMouseEvents.afterMouseScroll(screen).register(screen::afterMouseScroll);
-                });
-            }
-        });
     }
 
     @Override
