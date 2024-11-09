@@ -5,6 +5,7 @@ import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import io.github.pikibanana.util.FormattingUtils;
+import io.github.pikibanana.util.TaskScheduler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -28,7 +29,7 @@ public class DungeonTracker {
         MESSAGE_MAP.put(Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*"), DungeonMessage.ENTER);
         MESSAGE_MAP.put(Pattern.compile("Dungeon failed! The whole team died!"), DungeonMessage.DEATH);
         MESSAGE_MAP.put(Pattern.compile("Teleported you to spawn!"), DungeonMessage.LEAVE);
-        MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will end in (\\d+) seconds!"), DungeonMessage.LEAVE);
+        MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will close in (\\d+) seconds!"), DungeonMessage.END);
         MESSAGE_MAP.put(Pattern.compile("Teleporting..."), DungeonMessage.TELEPORTING);
         MESSAGE_MAP.put(dungeonDifficultyRegex, DungeonMessage.DIFFICULTY);
         MESSAGE_MAP.put(Pattern.compile("The current room has been completed!*"), DungeonMessage.CLEAR);
@@ -96,6 +97,34 @@ public class DungeonTracker {
         }
     }
 
+    public static void handleEnd(Text message) {
+        DungeonDodgePlusConfig.Features.AutoDungeon autoDungeon = Main.features.autoDungeon;
+
+        if (autoDungeon.autoLeave) {
+            TaskScheduler.scheduleDelayedTask(autoDungeon.amountOfTimeBeforeLeave * 20,
+                    () -> {
+                        MinecraftClient client = MinecraftClient.getInstance();
+                        if (client.player != null) {
+                            client.player.networkHandler.sendCommand("spawn");
+                        }
+                    });
+
+            if (autoDungeon.autoQuickDungeon) {
+                TaskScheduler.scheduleDelayedTask((autoDungeon.amountOfTimeBeforeAutoDungeon * 20) + 5,
+                        () -> {
+                            MinecraftClient client = MinecraftClient.getInstance();
+                            if (client.player != null && autoDungeon.dungeonType != DungeonType.UNKNOWN) {
+                                String quickDungeonCommand = "quickdungeon" + " " + autoDungeon.dungeonType.name().toLowerCase() + " "
+                                        + autoDungeon.dungeonDifficulty.name().toLowerCase();
+                                Main.LOGGER.info("Command String {}", quickDungeonCommand);
+                                client.player.networkHandler.sendCommand(quickDungeonCommand);
+                            }
+                        });
+            }
+        }
+    }
+
+
     public static void handleLeave(Text message) {
         isInDungeon = false;
         int essence = essenceCounter.getEssence();
@@ -106,6 +135,27 @@ public class DungeonTracker {
             MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
         }
     }
+
+    public static void handleTeleport(Text message) {
+        MinecraftClient client = MinecraftClient.getInstance();
+
+        if (client.player != null && client.player.getWorld() != null) {
+            String worldName = client.player.getWorld().getRegistryKey().getValue().getPath();
+
+            if (!worldName.contains("dungeon")) {
+                isInDungeon = false;
+                int essence = essenceCounter.getEssence();
+                dungeonData.addInt("totalEssence", essence);
+                essenceCounter.setEssence(0);
+                dungeonType = DungeonType.UNKNOWN;
+
+                if (DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
+                    client.player.networkHandler.sendCommand("togglepet");
+                }
+            }
+        }
+    }
+
 
     public static DungeonDifficulty getDungeonDifficulty() {
         return dungeonDifficulty;
@@ -126,9 +176,14 @@ public class DungeonTracker {
                     case DEATH:
                         handleDeath(text);
                         break;
-                    case LEAVE, TELEPORTING:
+                    case LEAVE:
                         handleLeave(text);
                         break;
+                    case TELEPORTING:
+                        handleTeleport(text);
+                        break;
+                    case END:
+                        handleEnd(text);
                     case DIFFICULTY:
                         handleDifficulty(text);
                         break;
@@ -144,6 +199,6 @@ public class DungeonTracker {
     }
 
     private enum DungeonMessage {
-        ENTER, DEATH, LEAVE, TELEPORTING, DIFFICULTY, CLEAR
+        ENTER, DEATH, LEAVE, TELEPORTING, DIFFICULTY, CLEAR, END
     }
 }

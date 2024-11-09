@@ -182,6 +182,12 @@ public class DungeonDodgePlusScreen extends BaseReturnableScreen {
         }
     }
 
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        afterMouseScroll(this, mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    }
+
     private void afterMouseScroll(Screen screen, double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (isMouseOverSheep(mouseX, mouseY)) {
             int scaleAmount = (int) verticalAmount;

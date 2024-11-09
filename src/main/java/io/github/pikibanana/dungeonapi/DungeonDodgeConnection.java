@@ -1,24 +1,17 @@
 package io.github.pikibanana.dungeonapi;
 
-import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.util.TaskScheduler;
 import io.github.pikibanana.util.UpdateChecker;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
-import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.Comparator;
-import java.util.List;
 
 public class DungeonDodgeConnection {
 
@@ -30,21 +23,29 @@ public class DungeonDodgeConnection {
         return isConnected;
     }
 
-    public void handleMessage(Text text, boolean b) {
-        if (isDungeonDodgeSidebar2())
+    public void onJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+        if (handler.getServerInfo() != null && handler.getServerInfo().address.contains("dungeondodge")) {
             isConnected = true;
 
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null && isConnected && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled && !isToggled) {
-            player.networkHandler.sendCommand("togglepet");
-            isToggled = true;
+            ClientPlayerEntity player = MinecraftClient.getInstance().player;
+            if (player != null && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled && !isToggled) {
+                player.networkHandler.sendCommand("togglepet");
+                isToggled = true;
 
-            UpdateChecker updateChecker = new UpdateChecker();
-            boolean isUpdateAvailable = updateChecker.isNewVersionAvailable(UpdateChecker.latestVersionNumber);
+                UpdateChecker updateChecker = new UpdateChecker();
+                boolean isUpdateAvailable = updateChecker.isNewVersionAvailable(UpdateChecker.latestVersionNumber);
 
-            if (isUpdateAvailable) {
-                TaskScheduler.scheduleDelayedTask(100, this::sendUpdateMessageToChat);
+                if (isUpdateAvailable) {
+                    TaskScheduler.scheduleDelayedTask(100, this::sendUpdateMessageToChat);
+                }
             }
+        }
+    }
+
+    public void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient minecraftClient) {
+        if (isConnected) {
+            isConnected = false;
+            isToggled = false;
         }
     }
 
@@ -68,58 +69,6 @@ public class DungeonDodgeConnection {
         chatHud.addMessage(Text.literal(" "));
         chatHud.addMessage(Text.literal("⚠ Update now to experience the newest features and improvements!")
                 .setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)));
-    }
-
-    public boolean isDungeonDodgeSidebar2() {
-        ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (networkHandler == null) return false;
-
-        Scoreboard scoreboardObJ = networkHandler.getScoreboard();
-        ScoreboardObjective sidebarObjective = null;
-
-        for (ScoreboardObjective objective : scoreboardObJ.getObjectives()) {
-            if (scoreboardObJ.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) == objective) {
-                sidebarObjective = objective;
-                break;
-            }
-        }
-
-        if (sidebarObjective == null) return false;
-
-        Scoreboard scoreboard = sidebarObjective.getScoreboard();
-
-        List<Team> teams = scoreboard.getTeams().stream()
-                .filter(team -> team.getName().startsWith("TAB-Sidebar-"))
-                .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
-                .toList();
-
-        return !teams.isEmpty() && teams.getLast().getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim().contains("dungeondodge.net");
-    }
-
-
-    public boolean isDungeonDodgeSidebar() {
-        if (!isConnected) {
-            ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-            if (networkHandler == null) return false;
-
-            Scoreboard scoreboard = networkHandler.getScoreboard();
-            ScoreboardObjective sidebarObjective = null;
-
-            for (ScoreboardObjective objective : scoreboard.getObjectives()) {
-                if (scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR) == objective) {
-                    sidebarObjective = objective;
-                    break;
-                }
-            }
-            if (sidebarObjective != null) {
-                String displayName = sidebarObjective.getDisplayName().getString();
-                Main.LOGGER.info("Display Name: {}", displayName);
-                String displayNameColorless = displayName.replaceAll("§[0-9a-fk-or]", "").trim();
-                Main.LOGGER.info("Colorless Display Name: {}", displayNameColorless);
-                return displayNameColorless.contains("Dungeon Dodge");
-            }
-        }
-        return false;
     }
 
     public boolean allowMessage(Text text, boolean b) {

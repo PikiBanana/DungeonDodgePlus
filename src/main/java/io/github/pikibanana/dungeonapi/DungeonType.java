@@ -2,7 +2,6 @@ package io.github.pikibanana.dungeonapi;
 
 public enum DungeonType {
 
-
     UNKNOWN(-1),
     CASTLE(0),
     ICE(1),

@@ -1,6 +1,8 @@
 package io.github.pikibanana.data.config;
 
 import io.github.pikibanana.CustomModelDataFormats;
+import io.github.pikibanana.dungeonapi.DungeonDifficulty;
+import io.github.pikibanana.dungeonapi.DungeonType;
 import io.github.pikibanana.misc.Color;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
@@ -71,6 +73,12 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
         @ConfigEntry.Gui.CollapsibleObject
         public RoomCleared roomCleared = new RoomCleared();
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public AutoDungeon autoDungeon = new AutoDungeon();
+
+        @ConfigEntry.Gui.CollapsibleObject
+        public QuickDungeonHotkeys quickDungeon = new QuickDungeonHotkeys();
 
 
         public static class EssenceFinder {
@@ -252,5 +260,47 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.ColorPicker
             public int announcementColor = 0xDC143C;
         }
+
+        public static class AutoDungeon {
+
+            public boolean autoLeave = false;
+
+            @ConfigEntry.BoundedDiscrete(min = 0, max = 20) // In Seconds
+            public int amountOfTimeBeforeLeave = 0;
+
+            public boolean autoQuickDungeon = false;
+
+            @ConfigEntry.BoundedDiscrete(min = 0, max = 20) // In Seconds
+            public int amountOfTimeBeforeAutoDungeon = 0;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonType dungeonType = DungeonType.UNKNOWN;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonDifficulty dungeonDifficulty = DungeonDifficulty.NORMAL;
+        }
+
+        public static class QuickDungeonHotkeys {
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonType dungeonType = DungeonType.UNKNOWN;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonDifficulty dungeonDifficulty = DungeonDifficulty.NORMAL;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonType dungeonType2 = DungeonType.UNKNOWN;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonDifficulty dungeonDifficulty2 = DungeonDifficulty.NORMAL;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonType dungeonType3 = DungeonType.UNKNOWN;
+
+            @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+            public DungeonDifficulty dungeonDifficulty3 = DungeonDifficulty.NORMAL;
+        }
+
+
     }
 }

@@ -1,4 +1,4 @@
-package io.github.pikibanana.data.config;
+package io.github.pikibanana.keybinds;
 
 import io.github.pikibanana.data.DungeonData;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

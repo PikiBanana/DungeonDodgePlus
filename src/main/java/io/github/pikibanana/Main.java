@@ -1,7 +1,7 @@
 package io.github.pikibanana;
 
 import io.github.pikibanana.chat.ChatMessageHandlerImpl;
-import io.github.pikibanana.data.config.Keybinds;
+import io.github.pikibanana.keybinds.Keybinds;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
 import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
@@ -10,21 +10,16 @@ import io.github.pikibanana.dungeonapi.PlayerStats;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import io.github.pikibanana.dungeonapi.essence.EssenceTracker;
 import io.github.pikibanana.hud.FPSRenderer;
+import io.github.pikibanana.keybinds.QuickDungeon;
 import io.github.pikibanana.keybinds.QuickWardrobe;
 import io.github.pikibanana.misc.SheepRandomizer;
 import io.github.pikibanana.util.UpdateChecker;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
@@ -56,7 +51,7 @@ public class Main implements ModInitializer {
             ClientReceiveMessageEvents.GAME.register(dungeonTracker::handleMessage);
 
             DungeonDodgeConnection connectionTracker = new DungeonDodgeConnection();
-            ClientReceiveMessageEvents.GAME.register(connectionTracker::handleMessage);
+//            ClientReceiveMessageEvents.GAME.register(connectionTracker::handleMessage);
             ClientReceiveMessageEvents.ALLOW_GAME.register(connectionTracker::allowMessage);
 
             EssenceTracker essenceTracker = new EssenceTracker();
@@ -69,6 +64,7 @@ public class Main implements ModInitializer {
         BlessingFinderData.init();
         Keybinds.register();
         QuickWardrobe.register();
+        QuickDungeon.register();
         PlayerStats.init();
 
         EssenceCounter essenceCounter = EssenceCounter.getInstance();
@@ -78,6 +74,9 @@ public class Main implements ModInitializer {
         SheepRandomizer.registerSheepCommand();
         UpdateChecker updateChecker = new UpdateChecker();
         updateChecker.checkForUpdates();
+        DungeonDodgeConnection dungeonDodgeConnection = new DungeonDodgeConnection();
+        ClientPlayConnectionEvents.JOIN.register(dungeonDodgeConnection::onJoin);
+        ClientPlayConnectionEvents.DISCONNECT.register(dungeonDodgeConnection::onDisconnect);
 
         LOGGER.info("DungeonDodge+ is ready!");
     }
