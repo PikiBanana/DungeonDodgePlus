@@ -80,6 +80,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public QuickDungeonHotkeys quickDungeon = new QuickDungeonHotkeys();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public Visual visual = new Visual();
+
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -299,6 +302,15 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
             public DungeonDifficulty dungeonDifficulty3 = DungeonDifficulty.NORMAL;
+        }
+
+        public static class Visual {
+            public boolean disableBlindness = true;
+            public boolean disableDarkness = true;
+            public boolean disableNausea = true;
+            public boolean disableInvisibility = true;
+            public boolean disableArmorBar = true;
+            public boolean fullBright = true;
         }
 
 

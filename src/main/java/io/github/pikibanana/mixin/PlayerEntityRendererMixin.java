@@ -1,5 +1,6 @@
 package io.github.pikibanana.mixin;
 
+import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import io.github.pikibanana.dungeonapi.DungeonUtils;
@@ -9,6 +10,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,6 +50,13 @@ public abstract class PlayerEntityRendererMixin {
                 textRenderer.draw(health, nameTagTextOffsetX, 0, DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.color, false, matrixStack.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.SEE_THROUGH, 0x000000, 15);
 
                 matrixStack.pop();
+            }
+        }
+
+        if ((Main.features.visual.disableInvisibility)) {
+            assert player != null;
+            if (player.isInvisible()) {
+                player.setInvisible(false);
             }
         }
     }

@@ -20,6 +20,7 @@
     "FishingBobberEntityRendererMixin",
     "GameMenuScreenMixin",
     "InGameHudMixin",
+    "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "ParticleManagerMixin",
