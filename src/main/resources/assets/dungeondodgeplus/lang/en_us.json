@@ -75,5 +75,32 @@
   "key.dungeondodgeplus.wardrobe.6": "Equip Slot 6",
   "key.dungeondodgeplus.wardrobe.7": "Equip Slot 7",
   "key.dungeondodgeplus.wardrobe.8": "Equip Slot 8",
-  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9"
+  "key.dungeondodgeplus.wardrobe.9": "Equip Slot 9",
+
+  "key.dungeondodgeplus.quickDungeon.1": "Quick Dungeon Slot 1",
+  "key.dungeondodgeplus.quickDungeon.2": "Quick Dungeon Slot 2",
+  "key.dungeondodgeplus.quickDungeon.3": "Quick Dungeon Slot 3",
+
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon": "Auto Dungeon",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.autoLeave": "Auto Leave Dungeon",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.amountOfTimeBeforeLeave": "Time Before Auto Leave (Seconds)",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.autoQuickDungeon": "Enable Auto Quick Dungeon (Legend Rank+)",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.amountOfTimeBeforeAutoDungeon": "Time Before Auto Dungeon (Seconds)",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.dungeonType": "Dungeon Type",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.dungeonDifficulty": "Dungeon Difficulty",
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon": "Quick Dungeon (Legend Rank+)" ,
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon.dungeonType": "Quick Dungeon Type",
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon.dungeonDifficulty": "Quick Dungeon Difficulty",
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon.dungeonType2": "Quick Dungeon Type 2",
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon.dungeonDifficulty2": "Quick Dungeon Difficulty 2",
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon.dungeonType3": "Quick Dungeon Type 3",
+  "text.autoconfig.DungeonDodgePlus.option.features.quickDungeon.dungeonDifficulty3": "Quick Dungeon Difficulty 3",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual": "Visual Settings",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.disableBlindness": "Disable Blindness Effect",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.disableDarkness": "Disable Darkness Effect",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.disableNausea": "Disable Nausea Effect",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.disableInvisibility": "Disable Invisibility Effect",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.disableArmorBar": "Hide Armor Bar",
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.fullBright": "Enable Full Bright"
+
 }
