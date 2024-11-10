@@ -45,7 +45,7 @@ public abstract class TitleScreenMixin extends Screen {
                             })
                             .dimensions(this.width / 2 - 100, this.height / 4 + 24  , 200, 20)
                             .build());
-                    break; // Once replaced, exit the loop
+                    break;
                 }
             }
         }
