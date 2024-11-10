@@ -24,6 +24,7 @@
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "ParticleManagerMixin",
-    "PlayerEntityRendererMixin"
+    "PlayerEntityRendererMixin",
+    "ScreenMixin"
   ]
 }

@@ -1,7 +1,6 @@
 package io.github.pikibanana;
 
 import io.github.pikibanana.chat.ChatMessageHandlerImpl;
-import io.github.pikibanana.keybinds.Keybinds;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.BlessingFinderData;
 import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
@@ -10,6 +9,7 @@ import io.github.pikibanana.dungeonapi.PlayerStats;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
 import io.github.pikibanana.dungeonapi.essence.EssenceTracker;
 import io.github.pikibanana.hud.FPSRenderer;
+import io.github.pikibanana.keybinds.Keybinds;
 import io.github.pikibanana.keybinds.QuickDungeon;
 import io.github.pikibanana.keybinds.QuickWardrobe;
 import io.github.pikibanana.misc.SheepRandomizer;
@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
     public static final String MOD_ID = "dungeondodgeplus";
+    public static final String MOD_VERSION = "0.6";
     public static DungeonDodgePlusConfig.Features features;
-    public static final String MOD_VERSION = "0.0.5.1";
 
     @Override
     public void onInitialize() {

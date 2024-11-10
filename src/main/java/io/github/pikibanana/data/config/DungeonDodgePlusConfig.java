@@ -313,6 +313,5 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public boolean fullBright = true;
         }
 
-
     }
 }
