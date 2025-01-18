@@ -40,7 +40,7 @@ public abstract class ItemStackMixin {
         String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
         int lastSpaceIndex = enchantmentName.lastIndexOf(' ');
         String potentialEnchantmentName = enchantmentName.substring(0, lastSpaceIndex != -1 ? lastSpaceIndex : enchantmentName.length() - 1)
-                .replace(" ", "_").trim();
+                .replace(" ", "_").replaceAll("magic_", "").replaceAll("ranged_", "").trim();
 
         boolean hasMatched = false;
         Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
