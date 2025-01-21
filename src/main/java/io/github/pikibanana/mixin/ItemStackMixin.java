@@ -40,7 +40,7 @@ public abstract class ItemStackMixin {
         String potentialNumber = enchantmentParts[enchantmentParts.length - 1].toUpperCase();
         int lastSpaceIndex = enchantmentName.lastIndexOf(' ');
         String potentialEnchantmentName = enchantmentName.substring(0, lastSpaceIndex != -1 ? lastSpaceIndex : enchantmentName.length() - 1)
-                .replace(" ", "_").trim();
+                .replace(" ", "_").replaceAll("magic_", "").replaceAll("ranged_", "").trim();
 
         boolean hasMatched = false;
         Map<String, String> maxLevelMap = EnchantmentUtils.getMaxLevelMap();
@@ -129,29 +129,28 @@ public abstract class ItemStackMixin {
                 for (String enchantment : enchantments) {
                     boolean hasMatched = isHasMatched(enchantment);
 
-                    if (!hasMatched) {
-                        elementNum++;
-                        newLine.append(Text.literal(enchantment).formatted(dungeonDodgeEnchantmentFormatting));
-                        continue;
-                    }
-
                     boolean noComma = ((i + 1 < original.size() && original.get(i + 1).getStyle().getColor() != dungeonDodgeEnchantmentColor)
                             && elementNum++ == enchantments.length);
 
-                    // If it matches a max-level enchantment, apply the rainbow or base color
-                    if (DungeonDodgePlusConfig.get().features.colorMaxEnchantments.isRainbow) {
-                        MutableText rainbowText = Text.empty();
-
-                        for (char c : enchantment.toCharArray()) {
-                            rainbowI = (rainbowI + 1) % rainbowGradient.length;
-                            int color = rainbowGradient[rainbowI];
-                            rainbowText.append(Text.literal(c + "").setStyle(text.getStyle().withColor(TextColor.fromRgb(color))));
-                        }
-
-                        newLine.append(rainbowText);
+                    if (!hasMatched) {
+                        newLine.append(Text.literal(enchantment).formatted(dungeonDodgeEnchantmentFormatting));
                     } else {
-                        newLine.append(Text.literal(enchantment).setStyle(text.getStyle().withColor(TextColor.fromRgb(baseColor))));
+                        // If it matches a max-level enchantment, apply the rainbow or base color
+                        if (DungeonDodgePlusConfig.get().features.colorMaxEnchantments.isRainbow) {
+                            MutableText rainbowText = Text.empty();
+
+                            for (char c : enchantment.toCharArray()) {
+                                rainbowI = (rainbowI + 1) % rainbowGradient.length;
+                                int color = rainbowGradient[rainbowI];
+                                rainbowText.append(Text.literal(c + "").setStyle(text.getStyle().withColor(TextColor.fromRgb(color))));
+                            }
+
+                            newLine.append(rainbowText);
+                        } else {
+                            newLine.append(Text.literal(enchantment).setStyle(text.getStyle().withColor(TextColor.fromRgb(baseColor))));
+                        }
                     }
+
                     if (!noComma) newLine.append(Text.literal(",").formatted(dungeonDodgeEnchantmentFormatting));
                 }
 

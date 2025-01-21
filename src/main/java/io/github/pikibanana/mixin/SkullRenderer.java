@@ -2,9 +2,11 @@ package io.github.pikibanana.mixin;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.mojang.authlib.properties.Property;
+import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import net.fabricmc.api.EnvType;
@@ -110,10 +112,26 @@ public abstract class SkullRenderer {
 
         Property textureProperty = textures.iterator().next();
         String texture = textureProperty.value();
-        JsonObject json = JsonParser.parseString(new String(Base64.getDecoder().decode(texture))).getAsJsonObject();
-        String url = json.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+        try {
+            String skullData = new String(Base64.getDecoder().decode(texture));
 
-        return textureURL.equals(url);
+            try {
+                JsonObject json = JsonParser.parseString(skullData).getAsJsonObject();
+                String url = json.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+
+                return textureURL.equals(url);
+            } catch (JsonSyntaxException e) {
+                //skull JSON is not correct (I crashed on Hypixel due to this as well)
+                Main.LOGGER.warn("The JSON data {} of this skull is malformed and cannot be read properly!", skullData);
+                e.printStackTrace();
+                return false;
+            }
+        } catch (IllegalArgumentException e) {
+            //skull is not in Base64 format (I assume this is why I crashed on Hypixel - maybe 1.7.10 Minecraft skull data is formatted in another base?)
+            Main.LOGGER.warn("Skull with texture property {} is not encoded with Base64 and thus cannot be read properly!", texture);
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 
