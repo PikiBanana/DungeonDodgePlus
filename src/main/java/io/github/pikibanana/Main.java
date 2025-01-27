@@ -13,8 +13,12 @@ import io.github.pikibanana.keybinds.Keybinds;
 import io.github.pikibanana.keybinds.QuickDungeon;
 import io.github.pikibanana.keybinds.QuickWardrobe;
 import io.github.pikibanana.misc.SheepRandomizer;
+import io.github.pikibanana.music.MusicManager;
+import io.github.pikibanana.music.SoundRegistry;
+import io.github.pikibanana.util.ArmorColorCache;
 import io.github.pikibanana.util.UpdateChecker;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -79,5 +83,7 @@ public class Main implements ModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register(dungeonDodgeConnection::onDisconnect);
 
         LOGGER.info("DungeonDodge+ is ready!");
+        SoundRegistry.registerAll();
+        ClientTickEvents.END_CLIENT_TICK.register(MusicManager::tick);
     }
 }

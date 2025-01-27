@@ -7,8 +7,7 @@ public class DataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
-        FabricDataGenerator.Pack pack = generator.createPack();
-        pack.addProvider(LangProvider::new);
+//        FabricDataGenerator.Pack pack = generator.createPack();
     }
 
 }

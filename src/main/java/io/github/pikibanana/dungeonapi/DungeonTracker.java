@@ -4,6 +4,7 @@ import io.github.pikibanana.Main;
 import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
+import io.github.pikibanana.music.MusicManager;
 import io.github.pikibanana.util.FormattingUtils;
 import io.github.pikibanana.util.TaskScheduler;
 import net.minecraft.client.MinecraftClient;
@@ -59,6 +60,7 @@ public class DungeonTracker {
             if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
                 MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
             }
+            MusicManager.playRandomMusic();
         }
     }
 
@@ -122,6 +124,7 @@ public class DungeonTracker {
                         });
             }
         }
+        MusicManager.stopMusic();
     }
 
 
@@ -134,6 +137,7 @@ public class DungeonTracker {
         if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
             MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
         }
+        MusicManager.stopMusic();
     }
 
     public static void handleTeleport(Text message) {
@@ -154,6 +158,7 @@ public class DungeonTracker {
                 }
             }
         }
+        MusicManager.stopMusic();
     }
 
 

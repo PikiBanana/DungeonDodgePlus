@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,10 +17,7 @@ public class DungeonData {
     private static final String CONFIG_DIRECTORY = "config" + File.separator + "dungeondodge";
     private static final String FILE_NAME = "dungeonData.json";
     private static final String FILE_PATH = CONFIG_DIRECTORY + File.separator + FILE_NAME;
-
-    private Map<String, Object> dataMap = new HashMap<>();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
     // Default values for each data type
     private static final int DEFAULT_INT = 0;
     private static final long DEFAULT_LONG = 0L;
@@ -29,15 +27,16 @@ public class DungeonData {
     private static final List<Object> DEFAULT_LIST = new ArrayList<>();
     private static final Set<Object> DEFAULT_SET = new HashSet<>();
     private static final Map<String, Object> DEFAULT_MAP = new HashMap<>();
-
     private static final DungeonData instance;
-
-    private DungeonData() {
-        init();
-    }
 
     static {
         instance = new DungeonData();
+    }
+
+    private Map<String, Object> dataMap = new HashMap<>();
+
+    private DungeonData() {
+        init();
     }
 
     public static DungeonData getInstance() {

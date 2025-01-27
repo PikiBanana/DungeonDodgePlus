@@ -1,0 +1,119 @@
+{
+  "music.jazz.by_the_sea": {
+    "subtitle": "dungeondodgeplus:music.jazz.by_the_sea.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/jazz/by_the_sea",
+        "stream": true
+      }
+    ]
+  },
+  "music.jazz.funk_groove": {
+    "subtitle": "dungeondodgeplus:music.jazz.funk_groove.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/jazz/funk_groove",
+        "stream": true
+      }
+    ]
+  },
+  "music.jazz.mug_full_of_tunes": {
+    "subtitle": "dungeondodgeplus:music.jazz.mug_full_of_tunes.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/jazz/mug_full_of_tunes",
+        "stream": true
+      }
+    ]
+  },
+  "music.jazz.relaxing": {
+    "subtitle": "dungeondodgeplus:music.jazz.relaxing.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/jazz/relaxing",
+        "stream": true
+      }
+    ]
+  },
+  "music.jazz.theme": {
+    "subtitle": "dungeondodgeplus:music.jazz.theme.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/jazz/theme",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.tokyo_cafe": {
+    "subtitle": "dungeondodgeplus:music.lofi.tokyo_cafe.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/tokyo_cafe",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.backyard": {
+    "subtitle": "dungeondodgeplus:music.lofi.backyard.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/backyard",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.good_night": {
+    "subtitle": "dungeondodgeplus:music.lofi.good_night.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/good_night",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.hip_hop": {
+    "subtitle": "dungeondodgeplus:music.lofi.hip_hop.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/hip_hop",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.interior_lounge": {
+    "subtitle": "dungeondodgeplus:music.lofi.interior_lounge.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/interior_lounge",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.room": {
+    "subtitle": "dungeondodgeplus:music.lofi.room.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/room",
+        "stream": true
+      }
+    ]
+  },
+  "music.lofi.whispering": {
+    "subtitle": "dungeondodgeplus:music.lofi.whispering.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/lofi/whispering",
+        "stream": true
+      }
+    ]
+  },
+  "music.test": {
+    "subtitle": "dungeondodgeplus:music.test.subtitle",
+    "sounds": [
+      {
+        "name": "dungeondodgeplus:music/test",
+        "stream": true
+      }
+    ]
+  }
+}

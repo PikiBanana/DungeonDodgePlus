@@ -101,6 +101,21 @@
   "text.autoconfig.DungeonDodgePlus.option.features.visual.disableNausea": "Disable Nausea Effect",
   "text.autoconfig.DungeonDodgePlus.option.features.visual.disableInvisibility": "Disable Invisibility Effect",
   "text.autoconfig.DungeonDodgePlus.option.features.visual.disableArmorBar": "Hide Armor Bar",
-  "text.autoconfig.DungeonDodgePlus.option.features.visual.fullBright": "Enable Full Bright"
+  "text.autoconfig.DungeonDodgePlus.option.features.visual.fullBright": "Enable Full Bright",
+
+
+  "dungeondodgeplus:music.lofi.tokyo_cafe.subtitle": "Tokyo Cafe started playing...",
+  "dungeondodgeplus:music.jazz.by_the_sea.subtitle": "By the Sea started playing...",
+  "dungeondodgeplus:music.jazz.funk_groove.subtitle": "Funk Groove started playing...",
+  "dungeondodgeplus:music.jazz.mug_full_of_tunes.subtitle": "Mug Full of Tunes started playing...",
+  "dungeondodgeplus:music.jazz.relaxing.subtitle": "Relaxing started playing...",
+  "dungeondodgeplus:music.jazz.theme.subtitle": "Theme started playing...",
+  "dungeondodgeplus:music.lofi.backyard.subtitle": "Backyard started playing...",
+  "dungeondodgeplus:music.lofi.good_night.subtitle": "Good Night started playing...",
+  "dungeondodgeplus:music.lofi.hip_hop.subtitle": "Hip Hop started playing...",
+  "dungeondodgeplus:music.lofi.interior_lounge.subtitle": "Interior Lounge started playing...",
+  "dungeondodgeplus:music.lofi.room.subtitle": "Room started playing...",
+  "dungeondodgeplus:music.lofi.whispering.subtitle": "Whispering started playing..."
+
 
 }

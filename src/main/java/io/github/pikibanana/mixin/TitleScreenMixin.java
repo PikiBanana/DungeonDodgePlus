@@ -23,7 +23,7 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("HEAD"))
     private void dungeondodgeplusButton(CallbackInfo ci) {
-        addDrawableChild(DungeonDodgePlusMenu.getDungeonDodgePlusButton(this.width,this.height));
+        addDrawableChild(DungeonDodgePlusMenu.getDungeonDodgePlusButton(this.width, this.height));
     }
 
     @Inject(method = "init", at = @At("TAIL"))
