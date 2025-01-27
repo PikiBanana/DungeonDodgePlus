@@ -15,7 +15,6 @@ import io.github.pikibanana.keybinds.QuickWardrobe;
 import io.github.pikibanana.misc.SheepRandomizer;
 import io.github.pikibanana.music.MusicManager;
 import io.github.pikibanana.music.SoundRegistry;
-import io.github.pikibanana.util.ArmorColorCache;
 import io.github.pikibanana.util.UpdateChecker;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

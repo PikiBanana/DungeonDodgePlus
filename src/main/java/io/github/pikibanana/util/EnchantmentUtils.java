@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class EnchantmentUtils {
 
-    private static final String ENCHANTMENTS_URL = "https://raw.githubusercontent.com/PikiBanana/DungeonDodgePlus/refs/heads/master/src/main/resources/encnhantments.json";
+    private static final String ENCHANTMENTS_URL = "https://raw.githubusercontent.com/PikiBanana/DungeonDodgePlus/refs/heads/master/src/main/resources/enchantments.json";
     private static final Gson gson = new Gson();
     private static final long UPDATE_INTERVAL = 5 * 60 * 1000;
     private static Map<String, String> maxLevelMap;

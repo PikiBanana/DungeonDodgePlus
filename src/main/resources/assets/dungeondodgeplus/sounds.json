@@ -106,14 +106,5 @@
         "stream": true
       }
     ]
-  },
-  "music.test": {
-    "subtitle": "dungeondodgeplus:music.test.subtitle",
-    "sounds": [
-      {
-        "name": "dungeondodgeplus:music/test",
-        "stream": true
-      }
-    ]
   }
 }
