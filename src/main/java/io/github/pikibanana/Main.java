@@ -27,23 +27,26 @@ import org.slf4j.LoggerFactory;
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
     public static final String MOD_ID = "dungeondodgeplus";
-    public static final String MOD_VERSION = "0.6";
+    public static final String MOD_VERSION = "0.7";
     public static DungeonDodgePlusConfig.Features features;
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Initiating...");
-        LOGGER.info("Loading config...");
+        LOGGER.info("Initializing DungeonDodge+...");
+
+        // Load Config
+        LOGGER.info("Loading configuration...");
         try {
             DungeonDodgePlusConfig.register();
             DungeonDodgePlusConfig.get();
             features = DungeonDodgePlusConfig.get().features;
-            LOGGER.info("Config loaded correctly!");
+            LOGGER.info("Configuration loaded successfully!");
         } catch (Exception e) {
-            LOGGER.warn("Config did not load correctly!");
-            LOGGER.error(e.toString());
+            LOGGER.error("Failed to load configuration!", e);
         }
-        LOGGER.info("Registering chat listeners and event handlers...");
+
+        // Register Event Handlers
+        LOGGER.info("Registering event handlers...");
         try {
             ChatMessageHandlerImpl chatHandler = new ChatMessageHandlerImpl();
             ClientReceiveMessageEvents.ALLOW_CHAT.register(chatHandler::allowReceiveChatMessage);
@@ -54,35 +57,56 @@ public class Main implements ModInitializer {
             ClientReceiveMessageEvents.GAME.register(dungeonTracker::handleMessage);
 
             DungeonDodgeConnection connectionTracker = new DungeonDodgeConnection();
-//            ClientReceiveMessageEvents.GAME.register(connectionTracker::handleMessage);
             ClientReceiveMessageEvents.ALLOW_GAME.register(connectionTracker::allowMessage);
 
             EssenceTracker essenceTracker = new EssenceTracker();
             ClientReceiveMessageEvents.GAME.register(essenceTracker::handleMessage);
 
+            LOGGER.info("Event handlers registered successfully!");
         } catch (Exception e) {
-            LOGGER.warn("Event listeners did not register correctly!");
-            LOGGER.error(e.toString());
+            LOGGER.error("Failed to register event handlers!", e);
         }
+
+        // Initialize Game Features
+        LOGGER.info("Initializing game features...");
         BlessingFinderData.init();
         Keybinds.register();
         QuickWardrobe.register();
         QuickDungeon.register();
         PlayerStats.init();
+        LOGGER.info("Game features initialized successfully!");
 
+        // Register HUD Elements
+        LOGGER.info("Registering HUD elements...");
         EssenceCounter essenceCounter = EssenceCounter.getInstance();
         HudRenderCallback.EVENT.register(essenceCounter::render);
         HudRenderCallback.EVENT.register(FPSRenderer::renderFPS);
+        LOGGER.info("HUD elements registered!");
 
+        // Register Music Features
+        LOGGER.info("Registering music features...");
+        SoundRegistry.registerAll();
+        ClientTickEvents.END_CLIENT_TICK.register(MusicManager::tick);
+        LOGGER.info("Music features registered!");
+
+        // Register Additional Features
+        LOGGER.info("Registering additional features...");
         SheepRandomizer.registerSheepCommand();
+        LOGGER.info("Additional features registered!");
+
+        // Check for Updates
+        LOGGER.info("Checking for updates...");
         UpdateChecker updateChecker = new UpdateChecker();
         updateChecker.checkForUpdates();
+
+        // Register Connection Events
+        LOGGER.info("Registering connection events...");
         DungeonDodgeConnection dungeonDodgeConnection = new DungeonDodgeConnection();
         ClientPlayConnectionEvents.JOIN.register(dungeonDodgeConnection::onJoin);
         ClientPlayConnectionEvents.DISCONNECT.register(dungeonDodgeConnection::onDisconnect);
+        LOGGER.info("Connection events registered!");
 
-        LOGGER.info("DungeonDodge+ is ready!");
-        SoundRegistry.registerAll();
-        ClientTickEvents.END_CLIENT_TICK.register(MusicManager::tick);
+        LOGGER.info("DungeonDodge+ has been successfully initialized!");
     }
+
 }
