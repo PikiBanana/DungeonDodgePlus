@@ -14,12 +14,12 @@ public enum Color {
     PINK(255, 155, 182, Formatting.LIGHT_PURPLE),
     ;
 
-    public int red;
-    public int green;
-    public int blue;
+    public final int red;
+    public final int green;
+    public final int blue;
     public final Formatting color;
 
-    private static Color[] colors = Color.values();
+    private static final Color[] colors = Color.values();
 
     public Formatting getColor() {
         return color;

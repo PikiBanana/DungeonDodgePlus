@@ -60,7 +60,7 @@ public class DungeonTracker {
             if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
                 MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
             }
-            MusicManager.playRandomMusic();
+            if (Main.features.music.musicInDungeon) MusicManager.playRandomMusic();
         }
     }
 
@@ -130,9 +130,9 @@ public class DungeonTracker {
 
     public static void handleLeave(Text message) {
         isInDungeon = false;
-        int essence = essenceCounter.getEssence();
+        int essence = essenceCounter.getCurrentEssence();
         dungeonData.addInt("totalEssence", essence);
-        essenceCounter.setEssence(0);
+        essenceCounter.setCurrentEssence(0);
         dungeonType = DungeonType.UNKNOWN;
         if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
             MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
@@ -148,9 +148,9 @@ public class DungeonTracker {
 
             if (!worldName.contains("dungeon")) {
                 isInDungeon = false;
-                int essence = essenceCounter.getEssence();
+                int essence = essenceCounter.getCurrentEssence();
                 dungeonData.addInt("totalEssence", essence);
-                essenceCounter.setEssence(0);
+                essenceCounter.setCurrentEssence(0);
                 dungeonType = DungeonType.UNKNOWN;
 
                 if (DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {

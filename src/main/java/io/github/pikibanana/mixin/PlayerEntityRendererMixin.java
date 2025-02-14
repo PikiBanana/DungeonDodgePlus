@@ -1,6 +1,5 @@
 package io.github.pikibanana.mixin;
 
-import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import io.github.pikibanana.dungeonapi.DungeonUtils;
@@ -11,52 +10,75 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin {
+    @Unique
+    private static final DungeonUtils DUNGEON_UTILS = new DungeonUtils();
+    @Unique
+    private static final float TEXT_SCALE = 0.025f;
+    @Unique
+    private static final float VERTICAL_OFFSET = 2.15f;
+    @Unique
+    private static final int BACKGROUND_COLOR = 0x40000000; // Semi-transparent black
 
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("TAIL"))
-    private void renderText(AbstractClientPlayerEntity player, float entityYaw, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (player != null && DungeonTracker.inDungeon()) {
-            PlayerEntity playerEntity;
-            playerEntity = player;
+    private void onRender(AbstractClientPlayerEntity player, float entityYaw, float partialTicks,
+                          MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light,
+                          CallbackInfo ci) {
+        MinecraftClient client = MinecraftClient.getInstance();
 
-            DungeonUtils dungeonUtils = new DungeonUtils();
+        if (!validateRenderConditions(player, client)) return;
 
-            if (dungeonUtils.isParticipating(player.getName().getString()) && DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.enabled) {
+        renderHealthDisplay(player, client, matrixStack, vertexConsumers);
+    }
 
-                String health = Math.round((playerEntity.getHealth() / playerEntity.getMaxHealth()) * 100) + "%";
+    @Unique
+    private boolean validateRenderConditions(AbstractClientPlayerEntity player, MinecraftClient client) {
+        return player != null &&
+                DungeonTracker.inDungeon() &&
+                DUNGEON_UTILS.isParticipating(player.getName().getString()) &&
+                DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.enabled &&
+                client.player != player;
+    }
 
-                float nameTagTextOffsetY = 2.75f;
-                float nameTagTextOffsetX = -MinecraftClient.getInstance().textRenderer.getWidth(health) / 2.0f;
+    @Unique
+    private void renderHealthDisplay(AbstractClientPlayerEntity player, MinecraftClient client,
+                                     MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
+        TextRenderer textRenderer = client.textRenderer;
+        String healthText = getHealthText(player);
+        int color = DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.color;
 
-                matrixStack.push();
+        matrixStack.push();
+        try {
+            // Position above player's head
+            matrixStack.translate(0, player.getHeight() + VERTICAL_OFFSET, 0);
 
-                matrixStack.translate(0.0D, nameTagTextOffsetY, 0.0D);
+            // Billboard effect - always face camera
+            matrixStack.multiply(client.getEntityRenderDispatcher().getRotation());
+            matrixStack.scale(-TEXT_SCALE, -TEXT_SCALE, TEXT_SCALE);
 
-                matrixStack.scale(0.035f, -0.035f, 0.035f);
+            // Center text
+            float textWidth = textRenderer.getWidth(healthText);
+            matrixStack.translate(-textWidth / 2, 0, 0);
 
-                Quaternionf playerRotation = MinecraftClient.getInstance().getEntityRenderDispatcher().getRotation().mul(-1);
-
-                matrixStack.multiply(playerRotation);
-
-                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-                textRenderer.draw(health, nameTagTextOffsetX, 0, DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.color, false, matrixStack.peek().getPositionMatrix(), vertexConsumers, TextRenderer.TextLayerType.SEE_THROUGH, 0x000000, 15);
-
-                matrixStack.pop();
-            }
+            // Actual text rendering
+            textRenderer.draw(healthText, 0, 0, color, false,
+                    matrixStack.peek().getPositionMatrix(), vertexConsumers,
+                    TextRenderer.TextLayerType.NORMAL, BACKGROUND_COLOR, 0xF000F0);
+        } finally {
+            matrixStack.pop();
         }
+    }
 
-        if ((Main.features.visual.disableInvisibility)) {
-            assert player != null;
-            if (player.isInvisible()) {
-                player.setInvisible(false);
-            }
-        }
+    @Unique
+    private String getHealthText(PlayerEntity player) {
+        float healthPercent = (player.getHealth() / player.getMaxHealth()) * 100;
+        return String.format("%.0f%%", healthPercent);
     }
 }

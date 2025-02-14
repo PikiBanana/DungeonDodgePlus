@@ -2,9 +2,11 @@ package io.github.pikibanana.music;
 
 import io.github.pikibanana.Main;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.SoundSystem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.MusicSound;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -23,7 +25,7 @@ public class MusicManager {
 
     public static void playRandomMusic() {
         if (ACTIVE_GENRES.isEmpty()) {
-            Main.LOGGER.warn("No active genres to play music from!");
+//            Main.LOGGER.warn("No active genres to play music from!");
             return;
         }
 
@@ -40,7 +42,7 @@ public class MusicManager {
         SoundEvent currentTrack = SoundRegistry.getSoundEvent(genre, randomTrackId);
 
         if (currentTrack == null) {
-            Main.LOGGER.error("SoundEvent for {} not found!", randomTrackId);
+//            Main.LOGGER.error("SoundEvent for {} not found!", randomTrackId);
             return;
         }
 
@@ -55,8 +57,9 @@ public class MusicManager {
 
 
     private static void playNextTrack() {
+        if (MinecraftClient.getInstance().world == null) return;
         if (musicQueue.isEmpty()) {
-            Main.LOGGER.warn("No tracks in the queue to play!");
+//            Main.LOGGER.warn("No tracks in the queue to play!");
             playRandomMusic(); // Automatically queue a new song if the queue is empty
             return;
         }
@@ -68,7 +71,7 @@ public class MusicManager {
         RegistryEntry<SoundEvent> soundEventEntry = Registries.SOUND_EVENT.getEntry(soundEvent);
 
         if (soundEventEntry == null) {
-            Main.LOGGER.error("RegistryEntry for {} not found!", soundEvent);
+//            Main.LOGGER.error("RegistryEntry for {} not found!", soundEvent);
             return;
         }
 
@@ -100,8 +103,9 @@ public class MusicManager {
     }
 
     public static void tick(MinecraftClient minecraftClient) {
-        if (currentMusic != null) { // If music exists
-            if (isPlaying && !CLIENT.getMusicTracker().isPlayingType(currentMusic)) { // If playing but currentMusic ended play next track.
+        if (currentMusic != null) {
+            if (isPlaying && !CLIENT.getMusicTracker().isPlayingType(currentMusic) && CLIENT.options.getSoundVolume(SoundCategory.MASTER) > 0) { // If playing but currentMusic ended play next track.
+//                Main.LOGGER.info("Track ended!");
                 isPlaying = false;
                 playNextTrack();
             }

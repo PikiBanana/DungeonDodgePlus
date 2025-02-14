@@ -1,5 +1,6 @@
 package io.github.pikibanana.mixin;
 
+import io.github.pikibanana.Main;
 import io.github.pikibanana.gui.screens.DungeonDodgePlusMenu;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -28,24 +29,26 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo ci) {
-        assert client != null;
+        if (Main.features.visual.playDungeonDodgeButtonReplaceSingleplayer) {
+            assert client != null;
 
-        for (int i = 0; i < this.children().size(); i++) {
-            if (this.children().get(i) instanceof ButtonWidget button) {
-                if (button.getMessage().getString().equalsIgnoreCase("Singleplayer")) {
-                    this.remove(button);
+            for (int i = 0; i < this.children().size(); i++) {
+                if (this.children().get(i) instanceof ButtonWidget button) {
+                    if (button.getMessage().getString().equalsIgnoreCase("Singleplayer")) {
+                        this.remove(button);
 
-                    ServerAddress serverAddress = new ServerAddress("mc.dungeondodge.net", 25565);
-                    ServerInfo serverInfo = new ServerInfo("DungeonDodge", serverAddress.getAddress(), ServerInfo.ServerType.OTHER);
-                    serverInfo.setResourcePackPolicy(ServerInfo.ResourcePackPolicy.ENABLED);
+                        ServerAddress serverAddress = new ServerAddress("mc.dungeondodge.net", 25565);
+                        ServerInfo serverInfo = new ServerInfo("DungeonDodge", serverAddress.getAddress(), ServerInfo.ServerType.OTHER);
+                        serverInfo.setResourcePackPolicy(ServerInfo.ResourcePackPolicy.ENABLED);
 
-                    addDrawableChild(ButtonWidget.builder(Text.of("Play DungeonDodge"), action -> {
-                                action.active = false;
-                                ConnectScreen.connect(this, client, serverAddress, serverInfo, false, null);
-                            })
-                            .dimensions(this.width / 2 - 100, this.height / 4 + 24  , 200, 20)
-                            .build());
-                    break;
+                        addDrawableChild(ButtonWidget.builder(Text.of("Play DungeonDodge"), action -> {
+                                    action.active = false;
+                                    ConnectScreen.connect(this, client, serverAddress, serverInfo, false, null);
+                                })
+                                .dimensions(this.width / 2 - 100, this.height / 4 + 24, 200, 20)
+                                .build());
+                        break;
+                    }
                 }
             }
         }

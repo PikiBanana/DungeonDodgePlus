@@ -83,6 +83,8 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public Visual visual = new Visual();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public Music music = new Music();
 
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
@@ -311,6 +313,11 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public boolean disableInvisibility = true;
             public boolean disableArmorBar = true;
             public boolean fullBright = true;
+            public boolean playDungeonDodgeButtonReplaceSingleplayer = true;
+        }
+
+        public static class Music {
+            public boolean musicInDungeon = true;
         }
 
     }

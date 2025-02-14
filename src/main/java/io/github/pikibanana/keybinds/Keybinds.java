@@ -1,7 +1,6 @@
 package io.github.pikibanana.keybinds;
 
 import io.github.pikibanana.data.DungeonData;
-import io.github.pikibanana.gui.screens.ScreenManager;
 import io.github.pikibanana.music.MusicManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;

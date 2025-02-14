@@ -2,13 +2,9 @@ package io.github.pikibanana;
 
 import io.github.pikibanana.chat.ChatMessageHandlerImpl;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
-import io.github.pikibanana.dungeonapi.BlessingFinderData;
-import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
-import io.github.pikibanana.dungeonapi.DungeonTracker;
-import io.github.pikibanana.dungeonapi.PlayerStats;
-import io.github.pikibanana.dungeonapi.essence.EssenceCounter;
+import io.github.pikibanana.dungeonapi.*;
 import io.github.pikibanana.dungeonapi.essence.EssenceTracker;
-import io.github.pikibanana.hud.FPSRenderer;
+import io.github.pikibanana.hud.HudRenderer;
 import io.github.pikibanana.keybinds.Keybinds;
 import io.github.pikibanana.keybinds.QuickDungeon;
 import io.github.pikibanana.keybinds.QuickWardrobe;
@@ -27,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
     public static final String MOD_ID = "dungeondodgeplus";
-    public static final String MOD_VERSION = "0.7";
+    public static final String MOD_VERSION = "0.7-beta";
     public static DungeonDodgePlusConfig.Features features;
 
     @Override
@@ -78,9 +74,8 @@ public class Main implements ModInitializer {
 
         // Register HUD Elements
         LOGGER.info("Registering HUD elements...");
-        EssenceCounter essenceCounter = EssenceCounter.getInstance();
-        HudRenderCallback.EVENT.register(essenceCounter::render);
-        HudRenderCallback.EVENT.register(FPSRenderer::renderFPS);
+        HudRenderer hudRenderer = new HudRenderer();
+        HudRenderCallback.EVENT.register(hudRenderer::render);
         LOGGER.info("HUD elements registered!");
 
         // Register Music Features
@@ -91,7 +86,7 @@ public class Main implements ModInitializer {
 
         // Register Additional Features
         LOGGER.info("Registering additional features...");
-        SheepRandomizer.registerSheepCommand();
+        SheepRandomizer.registerCommands();
         LOGGER.info("Additional features registered!");
 
         // Check for Updates

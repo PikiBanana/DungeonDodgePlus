@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class PlayerStats {
 
     //15/15? Health  |  56? Defense  |  56.67/563? Mana  |  35? Speed
-    private static final Pattern STAT_OVERLAY_MESSAGE_REGEX = Pattern.compile("(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Health.{5}(\\d*\\.?\\d*?). Defense.{5}(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Mana.{5}(\\d*\\.?\\d*?). Speed");
+    public static final Pattern STAT_OVERLAY_MESSAGE_REGEX = Pattern.compile("(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Health.{5}(\\d*\\.?\\d*?). Defense.{5}(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Mana.{5}(\\d*\\.?\\d*?). Speed");
 
     private static float healthValue;
     private static float healthMax;

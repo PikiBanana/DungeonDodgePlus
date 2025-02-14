@@ -5,7 +5,7 @@ import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.gui.widgets.TexturedButtonWidget;
 import io.github.pikibanana.gui.widgets.TexturedMenuWidgets;
-import io.github.pikibanana.hud.DungeonDodgePlusScreen;
+import io.github.pikibanana.hud.ModifyScreen;
 import io.github.pikibanana.util.UpdateChecker;
 import io.github.pikibanana.util.GUIUtils;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -104,7 +104,7 @@ public class DungeonDodgePlusMenu extends BaseReturnableScreen {
 
         ButtonWidget modifyScreenButton = GUIUtils.createButton("Modify Screen", centerX + 3, centerY, BUTTON_WIDTH, BUTTON_HEIGHT, action -> {
             assert client != null;
-            ScreenManager.pushScreen(new DungeonDodgePlusScreen());
+            ScreenManager.pushScreen(new ModifyScreen());
         });
 
         ButtonWidget changelogButton = GUIUtils.createButton("Changelog", centerX - BUTTON_WIDTH - 3, centerY, BUTTON_WIDTH, BUTTON_HEIGHT, action -> {
