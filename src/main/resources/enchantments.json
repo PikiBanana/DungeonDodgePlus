@@ -43,11 +43,13 @@
   "sparking": "VII",
   "power": "VII",
   "protection": "VII",
-  "fortune": "VII",
   "boss_slayer": "X",
   "mana_saver": "X",
   "infinite_quiver": "X",
   "agility": "X",
   "wisdom": "X",
-  "efficiency": "X"
+  "efficiency": "VII",
+  "fortune": "VI",
+  "brilliant": "VI",
+  "fragment": "V"
 }
