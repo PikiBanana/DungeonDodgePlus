@@ -1,6 +1,7 @@
 package io.github.pikibanana.hud;
 
 import io.github.pikibanana.gui.screens.BaseReturnableScreen;
+import io.github.pikibanana.gui.widgets.RecipeWidget;
 import io.github.pikibanana.hud.components.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -13,6 +14,7 @@ public class ModifyScreen extends BaseReturnableScreen {
     private final ManaBarComponent manaBarComponent = new ManaBarComponent();
     private final HealthBarComponent healthBarComponent = new HealthBarComponent();
     private DraggableComponent draggedComponent;
+    private final RecipeWidget recipeWidget = new RecipeWidget();
 
     public ModifyScreen() {
         super(Text.of("DungeonDodge+ Configuration"));
@@ -32,12 +34,15 @@ public class ModifyScreen extends BaseReturnableScreen {
         fpsComponent.render(context, mouseX, mouseY, delta);
 //        manaBarComponent.render(context, mouseX, mouseY, delta);
 //        healthBarComponent.render(context, mouseX, mouseY, delta);
+        recipeWidget.render(context, mouseX, mouseY, delta);
+
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            return handleComponentSelection(mouseX, mouseY);
+            return handleComponentSelection(mouseX, mouseY) ||
+                   recipeWidget.mouseClicked(mouseX, mouseY, button);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -73,7 +78,8 @@ public class ModifyScreen extends BaseReturnableScreen {
             draggedComponent = null;
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return recipeWidget.mouseReleased(mouseX, mouseY, button) ||
+               super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
@@ -82,7 +88,8 @@ public class ModifyScreen extends BaseReturnableScreen {
             draggedComponent.updatePosition(mouseX, mouseY);
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return recipeWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) ||
+               super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override
