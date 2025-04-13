@@ -1,15 +1,10 @@
 package io.github.pikibanana.gui;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.collection.DefaultedList;
 
 import java.util.function.Predicate;
-
-import static net.minecraft.sound.SoundEvents.BLOCK_NOTE_BLOCK_BASS;
 
 public class PinRecipe {
     private static final int MAX_PINNED_RECIPES = 5;
@@ -17,9 +12,10 @@ public class PinRecipe {
 
     private static final DefaultedList<DefaultedList<ItemStack>> pinnedRecipes =
             DefaultedList.ofSize(MAX_PINNED_RECIPES, DefaultedList.ofSize(RECIPE_SIZE, ItemStack.EMPTY));
+    private static int currentRecipeIndex = 0;
+
     private static final Predicate<ItemStack> EXCLUSION_FILTER = stack ->
             stack.getItem() == Items.GRAY_STAINED_GLASS_PANE;
-    private static int currentRecipeIndex = 0;
 
     public static void pin(DefaultedList<ItemStack> items) {
         if (items == null || items.isEmpty()) return;
@@ -49,14 +45,6 @@ public class PinRecipe {
         }
         return false;
     }
-
-    private static boolean isRecipeEmpty(DefaultedList<ItemStack> recipe) {
-        for (ItemStack stack : recipe) {
-            if (!stack.isEmpty()) return false;
-        }
-        return true;
-    }
-
 
     private static boolean areRecipesEqual(DefaultedList<ItemStack> a, DefaultedList<ItemStack> b) {
         if (a.size() != b.size()) return false;
@@ -94,31 +82,11 @@ public class PinRecipe {
     }
 
     public static void cycleNext() {
-        for (int i = 1; i < MAX_PINNED_RECIPES; i++) {
-            int nextIndex = (currentRecipeIndex + i) % MAX_PINNED_RECIPES;
-            if (!isRecipeEmpty(pinnedRecipes.get(nextIndex))) {
-                currentRecipeIndex = nextIndex;
-                return;
-            }
-        }
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null) {
-            player.playSound(Registries.SOUND_EVENT.get(BLOCK_NOTE_BLOCK_BASS.registryKey()), 1.0F, 0.8F);
-        }
+        currentRecipeIndex = (currentRecipeIndex + 1) % MAX_PINNED_RECIPES;
     }
 
     public static void cyclePrevious() {
-        for (int i = 1; i < MAX_PINNED_RECIPES; i++) {
-            int prevIndex = (currentRecipeIndex - i + MAX_PINNED_RECIPES) % MAX_PINNED_RECIPES;
-            if (!isRecipeEmpty(pinnedRecipes.get(prevIndex))) {
-                currentRecipeIndex = prevIndex;
-                return;
-            }
-        }
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null) {
-            player.playSound(Registries.SOUND_EVENT.get(BLOCK_NOTE_BLOCK_BASS.registryKey()), 1.0F, 0.8F);
-        }
+        currentRecipeIndex = (currentRecipeIndex - 1 + MAX_PINNED_RECIPES) % MAX_PINNED_RECIPES;
     }
 
     public static int getCurrentIndex() {
