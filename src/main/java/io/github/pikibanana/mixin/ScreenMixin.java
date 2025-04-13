@@ -114,7 +114,7 @@ public abstract class ScreenMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (isHovered(mouseX, mouseY, width / 2 + 69)) {
+        if (pinButton != null && isHovered(mouseX, mouseY, width / 2 + 69)) {
             context.drawTooltip(MinecraftClient.getInstance().textRenderer,
                     pinButton.getMessage(), mouseX, mouseY);
         }
