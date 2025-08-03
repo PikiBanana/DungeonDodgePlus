@@ -8,8 +8,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,37 +29,36 @@ public abstract class PlayerEntityRendererMixin {
     @Unique
     private static final int BACKGROUND_COLOR = 0x40000000; // Semi-transparent black
 
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("TAIL"))
-    private void onRender(AbstractClientPlayerEntity player, float entityYaw, float partialTicks,
-                          MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light,
-                          CallbackInfo ci) {
+    @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("TAIL"))
+    private void onRender(PlayerEntityRenderState playerEntityRenderState, Text text, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int i, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
+        Text playerName = playerEntityRenderState.playerName;
 
-        if (!validateRenderConditions(player, client)) return;
+        if (playerName == null || !validateRenderConditions(playerName.getString(), client)) return;
 
-        renderHealthDisplay(player, client, matrixStack, vertexConsumers);
+        renderHealthDisplay(playerEntityRenderState, client, matrixStack, vertexConsumers);
     }
 
     @Unique
-    private boolean validateRenderConditions(AbstractClientPlayerEntity player, MinecraftClient client) {
-        return player != null &&
+    private boolean validateRenderConditions(String playerName, MinecraftClient client) {
+        return playerName != null && client.player != null &&
                 DungeonTracker.inDungeon() &&
-                DUNGEON_UTILS.isParticipating(player.getName().getString()) &&
+                DUNGEON_UTILS.isParticipating(playerName) &&
                 DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.enabled &&
-                client.player != player;
+                !client.player.getName().getString().equals(playerName);
     }
 
     @Unique
-    private void renderHealthDisplay(AbstractClientPlayerEntity player, MinecraftClient client,
+    private void renderHealthDisplay(PlayerEntityRenderState playerEntityRenderState, MinecraftClient client,
                                      MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
         TextRenderer textRenderer = client.textRenderer;
-        String healthText = getHealthText(player);
+        String healthText = "NOT WORKING DUE TO BACKEND API CHANGE"; //getHealthText(player);
         int color = DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.color;
 
         matrixStack.push();
         try {
             // Position above player's head
-            matrixStack.translate(0, player.getHeight() + VERTICAL_OFFSET, 0);
+            matrixStack.translate(0, playerEntityRenderState.height + VERTICAL_OFFSET, 0);
 
             // Billboard effect - always face camera
             matrixStack.multiply(client.getEntityRenderDispatcher().getRotation());

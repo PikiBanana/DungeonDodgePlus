@@ -116,8 +116,8 @@ public class UpdateScreen extends BaseReturnableScreen {
         int yStart = centerY - RECTANGLE_HEIGHT / 2;
 
         // Render background
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        //RenderSystem.enableBlend();
+        //RenderSystem.defaultBlendFunc();
         context.fill(xStart, yStart, xStart + RECTANGLE_WIDTH, yStart + RECTANGLE_HEIGHT, 0x88000000);
 
         context.fill(xStart, yStart, xStart + RECTANGLE_WIDTH, yStart + 2, 0xFFFFFFFF);
@@ -137,7 +137,7 @@ public class UpdateScreen extends BaseReturnableScreen {
             }
             yPosition += LINE_HEIGHT + 2;
         }
-        RenderSystem.disableBlend();
+        //RenderSystem.disableBlend();
     }
 
     @Override

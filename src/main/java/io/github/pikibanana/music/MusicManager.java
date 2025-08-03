@@ -2,6 +2,7 @@ package io.github.pikibanana.music;
 
 import io.github.pikibanana.Main;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.MusicInstance;
 import net.minecraft.client.sound.SoundSystem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -65,8 +66,7 @@ public class MusicManager {
         }
 
         SoundEvent soundEvent = musicQueue.poll();
-        Identifier trackId = soundEvent.getId();
-        lastPlayedTrack = trackId; // Track the last played song
+        lastPlayedTrack = soundEvent.id(); // Track the last played song
 
         RegistryEntry<SoundEvent> soundEventEntry = Registries.SOUND_EVENT.getEntry(soundEvent);
 
@@ -79,7 +79,7 @@ public class MusicManager {
 
         stopAllSounds();
 
-        CLIENT.getMusicTracker().play(currentMusic);
+        CLIENT.getMusicTracker().play(new MusicInstance(currentMusic));
         isPlaying = true;
 //        Main.LOGGER.info("Playing music track: {}", trackId);
     }

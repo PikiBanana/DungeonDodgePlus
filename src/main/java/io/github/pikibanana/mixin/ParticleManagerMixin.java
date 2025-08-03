@@ -3,7 +3,7 @@ package io.github.pikibanana.mixin;
 import io.github.pikibanana.Main;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.VertexConsumerProvider;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,8 +21,8 @@ public abstract class ParticleManagerMixin {
     @Final
     private Map<ParticleTextureSheet, Queue<Particle>> particles;
 
-    @Inject(method = "renderParticles", at = @At("HEAD"))
-    public void onParticleRender(LightmapTextureManager lightmapTextureManager, Camera camera, float tickDelta, CallbackInfo ci) {
+    @Inject(method = "renderParticles(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/render/VertexConsumerProvider$Immediate;)V", at = @At("HEAD"))
+    public void onParticleRender(Camera camera, float tickProgress, VertexConsumerProvider.Immediate vertexConsumers, CallbackInfo ci) {
         if (Main.features.hideOtherFishingBobbers.enabled) {
             for (Queue<Particle> queue : particles.values()) {
                 queue.removeIf(particle ->

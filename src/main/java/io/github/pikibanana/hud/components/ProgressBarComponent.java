@@ -3,6 +3,7 @@ package io.github.pikibanana.hud.components;
 import io.github.pikibanana.data.DungeonData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 public abstract class ProgressBarComponent extends DraggableComponent {
@@ -89,7 +90,7 @@ public abstract class ProgressBarComponent extends DraggableComponent {
     }
 
     protected void renderTexture(DrawContext context, Identifier texture) {
-        context.drawTexture(texture, x, y, 0, 0, width, height, width, height);
+        context.drawTexture(identifier -> RenderLayer.getGuiTextured(texture), texture, x, y, 0, 0, width, height, width, height);
     }
 
     protected void updateDimensions() {

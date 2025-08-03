@@ -14,6 +14,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.profiler.Profilers;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -141,7 +142,7 @@ public abstract class InGameHudMixin {
         //only display if enabled in config
         if (!DungeonDodgePlusConfig.get().features.showManaBar.enabled) return i;
 
-        client.getProfiler().swap("dungeondodgeplus$manaBar");
+        Profilers.get().swap("dungeondodgeplus$manaBar");
         StatusBarRenderer.renderManaBar(ctxRef.get(), widthRef.get(), heightRef.get());
 
         return Integer.MAX_VALUE;
@@ -154,9 +155,9 @@ public abstract class InGameHudMixin {
     )
     private void dungeondodgeplus$renderExpOrb(DrawContext context, int x, CallbackInfo ci) {
         if (Features.DISPLAY_EXPERIENCE_ORB.getValue()) {
-            client.getProfiler().push("dungeondodgeplus$experienceOrb");
+            Profilers.get().push("dungeondodgeplus$experienceOrb");
             StatusBarRenderer.renderExperienceOrb(context, scaledWidth, scaledHeight);
-            client.getProfiler().pop();
+            Profilers.get().pop();
         }
     }
      */

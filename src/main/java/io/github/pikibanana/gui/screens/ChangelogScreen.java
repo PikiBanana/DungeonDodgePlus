@@ -1,6 +1,5 @@
 package io.github.pikibanana.gui.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.pikibanana.util.UpdateChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -13,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangelogScreen extends BaseReturnableScreen {
-    private static final int RECTANGLE_HEIGHT = 400;
     private static final int LINE_HEIGHT = 12;
     private static final int PADDING = 10;
-    private static final int RECTANGLE_WIDTH = 300;
+    private static int RECTANGLE_HEIGHT = 400;
+    private static int RECTANGLE_WIDTH = 300;
 
     private final List<String> changelogs = UpdateChecker.changelogs;
     private final List<Text> formattedChangelogs = new ArrayList<>();
@@ -29,6 +28,12 @@ public class ChangelogScreen extends BaseReturnableScreen {
         } else {
             parseMarkdown();
         }
+        RECTANGLE_HEIGHT = Math.min(RECTANGLE_HEIGHT,
+                MinecraftClient.getInstance().getWindow().getHeight() - MinecraftClient.getInstance().textRenderer.fontHeight
+                        - 20 //back button height
+                        - PADDING * 4 //extra space
+        );
+        RECTANGLE_WIDTH = Math.min(RECTANGLE_WIDTH, MinecraftClient.getInstance().getWindow().getWidth() - PADDING * 6);
     }
 
     private void parseMarkdown() {
@@ -84,7 +89,7 @@ public class ChangelogScreen extends BaseReturnableScreen {
     public void init() {
         super.init();
         ButtonWidget backButton = ButtonWidget.builder(Text.of("Back"), action -> ScreenManager.popScreen())
-                .dimensions(this.width / 2 - 150, this.height - 50, 300, 20)
+                .dimensions(this.width / 2 - 150, Math.min(this.height / 2 + RECTANGLE_HEIGHT / 2 + 20 + PADDING, this.height - 50), 300, 20)
                 .build();
         this.addDrawableChild(backButton);
     }
@@ -99,8 +104,6 @@ public class ChangelogScreen extends BaseReturnableScreen {
         int yStart = centerY - RECTANGLE_HEIGHT / 2;
 
         // Render background
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
         context.fill(xStart, yStart, xStart + RECTANGLE_WIDTH, yStart + RECTANGLE_HEIGHT, 0x88000000);
         renderBorders(context, xStart, yStart);
 
@@ -110,7 +113,6 @@ public class ChangelogScreen extends BaseReturnableScreen {
                 centerX - 75, yStart - 20, 0xFFFFFF);
 
         renderChangelogText(context, xStart, yStart);
-        RenderSystem.disableBlend();
     }
 
     private void renderBorders(DrawContext context, int xStart, int yStart) {

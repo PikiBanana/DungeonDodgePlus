@@ -36,6 +36,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public CustomModelDataDisplay customModelDataDisplay = new CustomModelDataDisplay();
 
         @ConfigEntry.Gui.CollapsibleObject
+        public ItemIDDisplay itemIDDisplay = new ItemIDDisplay();
+
+        @ConfigEntry.Gui.CollapsibleObject
         public AutoTogglePet autoTogglePet = new AutoTogglePet();
 
         @ConfigEntry.Gui.CollapsibleObject
@@ -127,6 +130,13 @@ public class DungeonDodgePlusConfig implements ConfigData {
             @ConfigEntry.Gui.PrefixText
             @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
             public CustomModelDataFormats format = CustomModelDataFormats.PLAIN;
+        }
+
+        public static class ItemIDDisplay {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Show DungeonDodge Item ID In Item Descriptions";
+
+            public boolean enabled = false;
         }
 
         public static class EssenceCounter {

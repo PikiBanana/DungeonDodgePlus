@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -84,7 +85,7 @@ public class RecipeWidget extends ClickableWidget {
             needsUpdate = false;
         }
 
-        context.drawTexture(TEXTURE, getX(), getY(), 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        context.drawTexture(identifier -> RenderLayer.getGuiTextured(TEXTURE), TEXTURE, getX(), getY(), 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
         DefaultedList<ItemStack> pinned = PinRecipe.getCurrentPinned();
         for (int i = 0; i < Math.min(SLOT_POSITIONS.length, pinned.size()); i++) {
@@ -93,7 +94,7 @@ public class RecipeWidget extends ClickableWidget {
             int slotY = getY() + SLOT_POSITIONS[i][1];
 
             context.drawItem(stack, slotX, slotY);
-            context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, stack, slotX, slotY);
+            context.drawItemTooltip(MinecraftClient.getInstance().textRenderer, stack, slotX, slotY);
 
             if (isHovered(mouseX, mouseY, slotX, slotY) && !stack.isEmpty()) {
                 context.drawTooltip(MinecraftClient.getInstance().textRenderer,
@@ -107,7 +108,7 @@ public class RecipeWidget extends ClickableWidget {
             int resultY = getY() + RESULT_SLOT_POS[1];
 
             context.drawItem(resultStack, resultX, resultY);
-            context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, resultStack, resultX, resultY);
+            context.drawItemTooltip(MinecraftClient.getInstance().textRenderer, resultStack, resultX, resultY);
 
             if (isHovered(mouseX, mouseY, resultX, resultY)) {
                 context.drawTooltip(MinecraftClient.getInstance().textRenderer,

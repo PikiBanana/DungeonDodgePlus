@@ -58,8 +58,8 @@ public abstract class ScreenMixin {
     @Inject(method = "handleTextClick", at = @At("HEAD"), cancellable = true)
     public void handleTextClick(Style style, CallbackInfoReturnable<Boolean> cir) {
         ClickEvent clickEvent = style.getClickEvent();
-        if (clickEvent != null && clickEvent.getAction() == ClickEvent.Action.RUN_COMMAND) {
-            if (clickEvent.getValue().equals("custom:openUpdateScreen")) {
+        if (clickEvent instanceof ClickEvent.RunCommand(String command)) {
+            if (command.equals("custom:openUpdateScreen")) {
                 ScreenManager.pushScreen(new UpdateScreen());
                 cir.setReturnValue(false);
             }

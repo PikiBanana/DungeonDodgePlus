@@ -1,6 +1,5 @@
 package io.github.pikibanana.gui.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.gui.widgets.TexturedButtonWidget;
@@ -13,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -49,12 +49,8 @@ public class DungeonDodgePlusMenu extends BaseReturnableScreen {
         int iconX = button.getX() + button.getWidth() - ICON_SIZE + 5;
         int iconY = button.getY() - ICON_SIZE + 12;
 
-        MinecraftClient.getInstance().getTextureManager().bindTexture(NOTIFICATION_ICON);
-        RenderSystem.enableBlend();
-        RenderSystem.depthFunc(519);
-        context.drawTexture(NOTIFICATION_ICON, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
-        RenderSystem.depthFunc(515);
-        RenderSystem.disableBlend();
+        MinecraftClient.getInstance().getTextureManager().getTexture(NOTIFICATION_ICON);
+        context.drawTexture(identifier -> RenderLayer.getGuiTextured(NOTIFICATION_ICON), NOTIFICATION_ICON, iconX, iconY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
     }
 
     @Override
@@ -70,10 +66,8 @@ public class DungeonDodgePlusMenu extends BaseReturnableScreen {
         int titleX = (width - titleWidth) / 2;
         int titleY = 80;
 
-        MinecraftClient.getInstance().getTextureManager().bindTexture(TITLE_IMAGE);
-        RenderSystem.enableBlend();
-        context.drawTexture(TITLE_IMAGE, titleX, titleY, 0, 0, titleWidth, titleHeight, titleWidth, titleHeight);
-        RenderSystem.disableBlend();
+        MinecraftClient.getInstance().getTextureManager().getTexture(TITLE_IMAGE);
+        context.drawTexture(identifier -> RenderLayer.getGuiTextured(TITLE_IMAGE), TITLE_IMAGE, titleX, titleY, 0, 0, titleWidth, titleHeight, titleWidth, titleHeight);
     }
 
 

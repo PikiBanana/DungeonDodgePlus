@@ -58,11 +58,10 @@ public class DungeonDodgeConnection {
         chatHud.addMessage(Text.literal(" "));
         chatHud.addMessage(Text.literal("A fresh new update is here, featuring exciting new features and improvements!")
                 .setStyle(Style.EMPTY.withColor(Formatting.YELLOW)));
-
         chatHud.addMessage(Text.literal("Don't miss out on the latest enhancements—download it now! ")
                 .append(Text.literal("Click here").setStyle(Style.EMPTY.withColor(Formatting.AQUA)
                         .withUnderline(true)
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "custom:openUpdateScreen"))))
+                        .withClickEvent(new ClickEvent.RunCommand("custom:openUpdateScreen"))))
                 .append(Text.literal(" or find the update button in the menu at the bottom right of the pause/title screen."))
                 .setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
 

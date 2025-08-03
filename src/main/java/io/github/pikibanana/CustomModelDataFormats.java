@@ -4,19 +4,19 @@ public enum CustomModelDataFormats {
 
     UNDERSCORES {
         @Override
-        public String format(int number) {
+        public String format(float number) {
             return formatWithUnderscores(number);
         }
     },
     PLAIN {
         @Override
-        public String format(int number) {
-            return Integer.toString(number);
+        public String format(float number) {
+            return Float.toString(number);
         }
     };
 
-    private static String formatWithUnderscores(int number) {
-        String numberStr = Integer.toString(number);
+    private static String formatWithUnderscores(float number) {
+        String numberStr = Float.toString(number);
         StringBuilder formatted = new StringBuilder();
         int length = numberStr.length();
         for (int i = 0; i < length; i++) {
@@ -28,5 +28,5 @@ public enum CustomModelDataFormats {
         return formatted.toString();
     }
 
-    public abstract String format(int number);
+    public abstract String format(float number);
 }
