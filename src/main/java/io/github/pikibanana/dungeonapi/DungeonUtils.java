@@ -1,10 +1,14 @@
 package io.github.pikibanana.dungeonapi;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.Team;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -89,5 +93,14 @@ public class DungeonUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Nullable
+    public static String getDungeonDodgeItemIDFrom(ItemStack itemStack) {
+        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        if (customData != null) {
+            return customData.copyNbt().getString("dd_item_id", null);
+        }
+        return null;
     }
 }

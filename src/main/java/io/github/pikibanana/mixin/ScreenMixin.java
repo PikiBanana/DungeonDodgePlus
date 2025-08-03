@@ -21,6 +21,7 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,6 +40,10 @@ public abstract class ScreenMixin {
     private static final List<Integer> RECIPE_SLOTS = List.of(11, 12, 13, 20, 21, 22, 29, 30, 31);
     @Unique
     private static final int RESULT_SLOT = 24;
+    @Unique
+    private static final int PIN_BUTTON_SIZE = 12;
+    @Unique
+    private static final int PIN_BUTTON_PADDING = 4;
     @Shadow
     public int width;
     @Shadow
@@ -48,12 +53,24 @@ public abstract class ScreenMixin {
     TexturedButtonWidget pinButton;
     @Unique
     private RecipeWidget recipeWidget;
+    @Unique
+    private int pinButtonX;
+    @Unique
+    private int pinButtonY;
 
     @Shadow
     protected abstract <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement);
 
     @Shadow
     public abstract Text getTitle();
+
+    @Shadow @Nullable protected MinecraftClient client;
+
+    @Shadow public int height;
+
+    @Shadow public abstract void init(MinecraftClient client, int width, int height);
+
+    @Shadow protected abstract void init();
 
     @Inject(method = "handleTextClick", at = @At("HEAD"), cancellable = true)
     public void handleTextClick(Style style, CallbackInfoReturnable<Boolean> cir) {
@@ -76,19 +93,23 @@ public abstract class ScreenMixin {
         this.addDrawableChild(recipeWidget);
 
 
-        if (this.getTitle().getString().toLowerCase().contains("recipe browser")) {
-            TexturedMenuWidgets texturedMenuWidgets = new TexturedMenuWidgets();
-            pinButton = texturedMenuWidgets.getPinButton(width / 2 + 69, 163, 12, () -> {
-                if (screen.getScreenHandler() instanceof GenericContainerScreenHandler container) {
-                    DefaultedList<ItemStack> recipe = getRecipeFromContainer(container);
-                    PinRecipe.pin(recipe);
-                    recipeWidget.markDirty();
+        if (screen.getScreenHandler() instanceof GenericContainerScreenHandler container && this.getTitle().getString().toLowerCase().contains("recipe browser")) {
+            int backgroundWidth = 176;
+            int backgroundHeight = 114 + container.getRows() * 18;
 
-                    MinecraftClient client = MinecraftClient.getInstance();
-                    client.getSoundManager().play(
-                            PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f)
-                    );
-                }
+            pinButtonX = (width / 2) + (backgroundWidth / 2) - (PIN_BUTTON_SIZE + PIN_BUTTON_PADDING);
+            pinButtonY = (height / 2) - (backgroundHeight / 2) + PIN_BUTTON_PADDING;
+
+            TexturedMenuWidgets texturedMenuWidgets = new TexturedMenuWidgets();
+            pinButton = texturedMenuWidgets.getPinButton(pinButtonX, pinButtonY, PIN_BUTTON_SIZE, () -> {
+                DefaultedList<ItemStack> recipe = getRecipeFromContainer(container);
+                PinRecipe.pin(recipe);
+                recipeWidget.markDirty();
+
+                MinecraftClient client = MinecraftClient.getInstance();
+                client.getSoundManager().play(
+                        PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f)
+                );
             }, "Pin Recipe");
             this.addDrawableChild(pinButton);
         }
@@ -114,7 +135,7 @@ public abstract class ScreenMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (pinButton != null && isHovered(mouseX, mouseY, width / 2 + 69)) {
+        if (pinButton != null && isHoveringPinButton(mouseX, mouseY)) {
             context.drawTooltip(MinecraftClient.getInstance().textRenderer,
                     pinButton.getMessage(), mouseX, mouseY);
         }
@@ -122,9 +143,9 @@ public abstract class ScreenMixin {
 
 
     @Unique
-    private boolean isHovered(int mouseX, int mouseY, int x) {
-        return mouseX >= x && mouseX < x + 12 &&
-               mouseY >= 163 && mouseY < 163 + 12;
+    private boolean isHoveringPinButton(int mouseX, int mouseY) {
+        return mouseX >= pinButtonX && mouseX < pinButtonX + PIN_BUTTON_SIZE &&
+               mouseY >= pinButtonY && mouseY < pinButtonY + PIN_BUTTON_SIZE;
     }
 
 

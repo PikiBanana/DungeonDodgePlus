@@ -5,7 +5,6 @@ import io.github.pikibanana.data.DungeonData;
 import io.github.pikibanana.gui.PinRecipe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -19,13 +18,13 @@ public class RecipeWidget extends ClickableWidget {
     private static final Identifier TEXTURE = Identifier.of(Main.MOD_ID, "textures/gui/recipe_container.png");
     private static final int SLOT_SIZE = 18;
     private static final int TEXTURE_WIDTH = 140;
-    private static final int TEXTURE_HEIGHT = 68;
+    private static final int TEXTURE_HEIGHT = 80;
     private static final int[][] SLOT_POSITIONS = {
-            {26, 8}, {44, 8}, {62, 8},
-            {26, 26}, {44, 26}, {62, 26},
-            {26, 44}, {44, 44}, {62, 44}
+            {26, 20}, {44, 20}, {62, 20},
+            {26, 38}, {44, 38}, {62, 38},
+            {26, 56}, {44, 56}, {62, 56}
     };
-    private static final int[] RESULT_SLOT_POS = {98, 26};
+    private static final int[] RESULT_SLOT_POS = {98, 38};
     private final DungeonData data = DungeonData.getInstance();
     TexturedMenuWidgets texturedMenuWidgets = new TexturedMenuWidgets();
     private boolean dragging = false;
@@ -94,11 +93,10 @@ public class RecipeWidget extends ClickableWidget {
             int slotY = getY() + SLOT_POSITIONS[i][1];
 
             context.drawItem(stack, slotX, slotY);
-            context.drawItemTooltip(MinecraftClient.getInstance().textRenderer, stack, slotX, slotY);
+            context.drawStackOverlay(MinecraftClient.getInstance().textRenderer, stack, slotX, slotY);
 
             if (isHovered(mouseX, mouseY, slotX, slotY) && !stack.isEmpty()) {
-                context.drawTooltip(MinecraftClient.getInstance().textRenderer,
-                        Screen.getTooltipFromItem(MinecraftClient.getInstance(), stack), mouseX, mouseY);
+                context.drawItemTooltip(MinecraftClient.getInstance().textRenderer, stack, slotX + mouseX - slotX, slotY + mouseY - slotY);
             }
         }
 
@@ -108,14 +106,16 @@ public class RecipeWidget extends ClickableWidget {
             int resultY = getY() + RESULT_SLOT_POS[1];
 
             context.drawItem(resultStack, resultX, resultY);
-            context.drawItemTooltip(MinecraftClient.getInstance().textRenderer, resultStack, resultX, resultY);
+            context.drawStackOverlay(MinecraftClient.getInstance().textRenderer, resultStack, resultX, resultY);
 
             if (isHovered(mouseX, mouseY, resultX, resultY)) {
-                context.drawTooltip(MinecraftClient.getInstance().textRenderer,
-                        Screen.getTooltipFromItem(MinecraftClient.getInstance(), resultStack), mouseX, mouseY);
+                context.drawItemTooltip(MinecraftClient.getInstance().textRenderer, resultStack, resultX + mouseX - resultX, resultY + mouseY - resultY);
             }
         }
 
+        //add recipe text (see which recipe you are viewing)
+        String recipeText = "Pinned Recipe: " + (PinRecipe.getCurrentIndex() + 1) + "/" + PinRecipe.getMaxRecipes();
+        context.drawText(MinecraftClient.getInstance().textRenderer, recipeText, getX() + 6, getY() + 6, 0x373737, false);
 
         prevButton.render(context, mouseX, mouseY, delta);
         nextButton.render(context, mouseX, mouseY, delta);
@@ -143,14 +143,14 @@ public class RecipeWidget extends ClickableWidget {
     }
 
     private void updateButtonPositions() {
-        prevButton.setX(getX() + TEXTURE_WIDTH - 38);
-        prevButton.setY(getY() + 2);
+        prevButton.setX(getX() + TEXTURE_WIDTH - 40);
+        prevButton.setY(getY() + 4);
 
-        nextButton.setX(getX() + TEXTURE_WIDTH - 26);
-        nextButton.setY(getY() + 2);
+        nextButton.setX(getX() + TEXTURE_WIDTH - 28);
+        nextButton.setY(getY() + 4);
 
-        removeButton.setX(getX() + TEXTURE_WIDTH - 14);
-        removeButton.setY(getY() + 2);
+        removeButton.setX(getX() + TEXTURE_WIDTH - 16);
+        removeButton.setY(getY() + 4);
     }
 
     @Override
@@ -205,6 +205,16 @@ public class RecipeWidget extends ClickableWidget {
     private boolean isHovered(int mouseX, int mouseY, int slotX, int slotY) {
         return mouseX >= slotX && mouseX < slotX + RecipeWidget.SLOT_SIZE &&
                mouseY >= slotY && mouseY < slotY + RecipeWidget.SLOT_SIZE;
+    }
+
+    private void renderItemAmount(DrawContext context, ItemStack itemStack, int itemX, int itemY) {
+        if (itemStack.isEmpty() || itemStack.getCount() < 2) return; //no amount text for empty slots or items with an amount of 1
+        String amount = itemStack.getCount() + "";
+        int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(amount);
+        int textHeight = MinecraftClient.getInstance().textRenderer.fontHeight;
+        int textX = itemX + SLOT_SIZE - 1 - textWidth;
+        int textY = itemY + SLOT_SIZE - textHeight;
+        context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, amount, textX, textY, 0xFFFFFF);
     }
 
     @Override

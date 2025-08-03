@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.pikibanana.CustomModelDataFormats;
 import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.dungeonapi.DungeonUtils;
 import io.github.pikibanana.util.EnchantmentUtils;
 import net.minecraft.component.*;
 import net.minecraft.component.type.CustomModelDataComponent;
@@ -92,12 +93,9 @@ public abstract class ItemStackMixin {
         }
         if (DungeonDodgePlusConfig.get().features.itemIDDisplay.enabled) {
             ItemStack itemStack = (ItemStack) (Object) this;
-            NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-            if (customData != null) {
-                String itemID = customData.copyNbt().getString("dd_item_id", null);
-                if (itemID != null) {
-                    original.add(Text.literal("DungeonDodge Item ID: " + itemID).formatted(Formatting.DARK_GRAY));
-                }
+            String itemID = DungeonUtils.getDungeonDodgeItemIDFrom(itemStack);
+            if (itemID != null) {
+                original.add(Text.literal("DungeonDodge Item ID: " + itemID).formatted(Formatting.DARK_GRAY));
             }
         }
         return original;
