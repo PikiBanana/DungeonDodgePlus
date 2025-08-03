@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangelogScreen extends BaseReturnableScreen {
-    private static final int LINE_HEIGHT = 12;
     private static final int PADDING = 10;
+    private static int LINE_HEIGHT = 12;
     private static int RECTANGLE_HEIGHT = 400;
     private static int RECTANGLE_WIDTH = 300;
 
@@ -29,11 +29,12 @@ public class ChangelogScreen extends BaseReturnableScreen {
             parseMarkdown();
         }
         RECTANGLE_HEIGHT = Math.min(RECTANGLE_HEIGHT,
-                MinecraftClient.getInstance().getWindow().getHeight() - MinecraftClient.getInstance().textRenderer.fontHeight
+                MinecraftClient.getInstance().getWindow().getScaledHeight() - MinecraftClient.getInstance().textRenderer.fontHeight
                         - 20 //back button height
-                        - PADDING * 4 //extra space
+                        - PADDING * 2 //extra space
         );
-        RECTANGLE_WIDTH = Math.min(RECTANGLE_WIDTH, MinecraftClient.getInstance().getWindow().getWidth() - PADDING * 6);
+        RECTANGLE_WIDTH = Math.min(RECTANGLE_WIDTH, MinecraftClient.getInstance().getWindow().getScaledWidth() - PADDING * 6);
+        LINE_HEIGHT = MinecraftClient.getInstance().textRenderer.fontHeight + 3;
     }
 
     private void parseMarkdown() {
@@ -89,7 +90,7 @@ public class ChangelogScreen extends BaseReturnableScreen {
     public void init() {
         super.init();
         ButtonWidget backButton = ButtonWidget.builder(Text.of("Back"), action -> ScreenManager.popScreen())
-                .dimensions(this.width / 2 - 150, Math.min(this.height / 2 + RECTANGLE_HEIGHT / 2 + 20 + PADDING, this.height - 50), 300, 20)
+                .dimensions(this.width / 2 - 150, Math.min((this.height + 2) + (RECTANGLE_HEIGHT / 2) + 20 + PADDING, this.height - 30), 300, 20)
                 .build();
         this.addDrawableChild(backButton);
     }
@@ -105,7 +106,6 @@ public class ChangelogScreen extends BaseReturnableScreen {
 
         // Render background
         context.fill(xStart, yStart, xStart + RECTANGLE_WIDTH, yStart + RECTANGLE_HEIGHT, 0x88000000);
-        renderBorders(context, xStart, yStart);
 
         // Render title text
         context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("DungeonDodge+ Changelog")
@@ -113,6 +113,9 @@ public class ChangelogScreen extends BaseReturnableScreen {
                 centerX - 75, yStart - 20, 0xFFFFFF);
 
         renderChangelogText(context, xStart, yStart);
+
+        //render borders last
+        renderBorders(context, xStart, yStart);
     }
 
     private void renderBorders(DrawContext context, int xStart, int yStart) {
@@ -125,7 +128,7 @@ public class ChangelogScreen extends BaseReturnableScreen {
     private void renderChangelogText(DrawContext context, int xStart, int yStart) {
         int yPosition = yStart + PADDING - scrollOffset;
         for (Text line : formattedChangelogs) {
-            if (yPosition >= yStart + PADDING && yPosition < yStart + RECTANGLE_HEIGHT - PADDING) {
+            if (yPosition >= yStart + PADDING - 2 && yPosition < yStart + RECTANGLE_HEIGHT - PADDING + 2) {
                 context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, line, xStart + PADDING, yPosition, 0xFFFFFF);
             }
             yPosition += LINE_HEIGHT + 2;
