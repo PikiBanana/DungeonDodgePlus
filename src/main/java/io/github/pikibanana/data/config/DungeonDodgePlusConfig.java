@@ -2,6 +2,7 @@ package io.github.pikibanana.data.config;
 
 import io.github.pikibanana.CustomModelDataFormats;
 import io.github.pikibanana.dungeonapi.DungeonDifficulty;
+import io.github.pikibanana.dungeonapi.DungeonDodgeConnection;
 import io.github.pikibanana.dungeonapi.DungeonType;
 import io.github.pikibanana.misc.Color;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -153,6 +154,11 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public int color = 0xffffff;
 
             public boolean enabled = true;
+            public boolean showInOtherServers = false;
+
+            public boolean isEnabled() {
+                return enabled && (showInOtherServers || DungeonDodgeConnection.isConnected());
+            }
         }
 
         public static class TeammateHighlighter {
@@ -215,6 +221,11 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public String label = "Show Mana Bar";
 
             public boolean enabled = true;
+            public boolean showInOtherServers = false;
+
+            public boolean isEnabled() {
+                return enabled && (showInOtherServers || DungeonDodgeConnection.isConnected());
+            }
         }
 
         public static class ShowFPSCounter {

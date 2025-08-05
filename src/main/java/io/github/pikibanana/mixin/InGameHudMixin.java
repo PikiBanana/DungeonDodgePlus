@@ -140,7 +140,7 @@ public abstract class InGameHudMixin {
                                                   @Share("dungeondodgeplus$height") LocalIntRef heightRef,
                                                   @Share("dungeondodgeplus$ctx") LocalRef<DrawContext> ctxRef) {
         //only display if enabled in config
-        if (!DungeonDodgePlusConfig.get().features.showManaBar.enabled) return i;
+        if (!DungeonDodgePlusConfig.get().features.showManaBar.isEnabled()) return i;
 
         Profilers.get().swap("dungeondodgeplus$manaBar");
         StatusBarRenderer.renderManaBar(ctxRef.get(), widthRef.get(), heightRef.get());

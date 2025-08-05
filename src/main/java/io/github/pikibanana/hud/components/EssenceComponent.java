@@ -30,7 +30,7 @@ public class EssenceComponent extends DraggableComponent {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (!DungeonDodgePlusConfig.get().features.essenceCounter.enabled) return;
+        if (!DungeonDodgePlusConfig.get().features.essenceCounter.isEnabled()) return;
 
         final boolean sheepMode = DungeonData.getInstance().getBoolean("sheepMode", false);
         final Identifier texture = getCurrentTexture(sheepMode);
