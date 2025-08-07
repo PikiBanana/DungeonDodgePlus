@@ -19,6 +19,7 @@
     "EntityRenderDispatchMixin",
     "FishingBobberEntityRendererMixin",
     "GameMenuScreenMixin",
+    "HandledScreenMixin",
     "InGameHudMixin",
     "InventoryScreenMixin",
     "LightmapTextureManagerMixin",

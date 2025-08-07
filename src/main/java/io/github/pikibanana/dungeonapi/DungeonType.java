@@ -3,10 +3,10 @@ package io.github.pikibanana.dungeonapi;
 public enum DungeonType {
 
     UNKNOWN(-1),
-    CASTLE(0),
-    ICE(1),
-    JUNGLE(2),
-    DESERT(3);
+    THE_RUINED_CASTLE(0),
+    THE_FROSTED_PASSAGE(1),
+    THE_UNDERGROUND_JUNGLE(2),
+    THE_SCORCHING_CANYON(3);
 
     private final int id;
 

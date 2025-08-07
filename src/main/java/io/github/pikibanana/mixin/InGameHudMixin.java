@@ -3,17 +3,19 @@ package io.github.pikibanana.mixin;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
-import io.github.pikibanana.dungeonapi.PlayerStats;
+import io.github.pikibanana.dungeonapi.DungeonUtils;
 import io.github.pikibanana.dungeonapi.event.SentMessageEvents;
 import io.github.pikibanana.hud.StatusBarRenderer;
 import io.github.pikibanana.util.FormattingUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.profiler.Profilers;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,8 +24,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.regex.Pattern;
 
 /**
  * Mixin that handles interactions with the player's HUD.
@@ -55,6 +55,17 @@ public abstract class InGameHudMixin {
 //    private void renderFood(DrawContext context, PlayerEntity player, int top, int right, CallbackInfo ci) {
 //        ci.cancel();
 //    }
+
+    @Inject(
+            method = "renderHotbarItem",
+            at = @At("HEAD")
+    )
+    private void dungeondodgeplus$renderItemSlot(DrawContext context, int x, int y, RenderTickCounter tickCounter, PlayerEntity player,
+                                                 ItemStack stack, int seed, CallbackInfo ci) {
+        if (stack.isEmpty() || !Main.features.showItemRarityBackgrounds.enabled) return;
+
+        DungeonUtils.drawItemRaritySlotOverlay(context, x, y, stack);
+    }
 
     @Inject(
             method = "setOverlayMessage",

@@ -39,9 +39,9 @@ public abstract class BiomeEffectsMixin {
     @Unique
     private int getColorForDungeon(DungeonType dungeonType) {
         return switch (dungeonType) {
-            case ICE -> 0xA4C1FE;
-            case JUNGLE -> 0x478800;
-            case DESERT -> 0x0092a3;
+            case THE_FROSTED_PASSAGE -> 0xA4C1FE;
+            case THE_UNDERGROUND_JUNGLE -> 0x478800;
+            case THE_SCORCHING_CANYON -> 0x0092a3;
             default -> -1;
         };
     }

@@ -73,6 +73,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         public ColorMaxEnchantments colorMaxEnchantments = new ColorMaxEnchantments();
 
         @ConfigEntry.Gui.CollapsibleObject
+        public ShowItemRarityBackgrounds showItemRarityBackgrounds = new ShowItemRarityBackgrounds();
+
+        @ConfigEntry.Gui.CollapsibleObject
         public FishingAnnouncement fishingAnnouncement = new FishingAnnouncement();
 
         @ConfigEntry.Gui.CollapsibleObject
@@ -257,6 +260,79 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.BoundedDiscrete(min = 32, max = 256)
             public int animationSmoothness = 256;
+        }
+
+        public static class ShowItemRarityBackgrounds {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Show Item Rarity Backgrounds";
+
+            public boolean enabled = true;
+
+            //awful code below, I don't know enough AutoConfig to make this cleaner but a map for the colors would be 1000x better
+            @ConfigEntry.ColorPicker
+            public int commonColor = 0xFFFFFF;
+            @ConfigEntry.ColorPicker
+            public int uncommonColor = 0x55FF55;
+            @ConfigEntry.ColorPicker
+            public int rareColor = 0x5555FF;
+            @ConfigEntry.ColorPicker
+            public int epicColor = 0xAA00AA;
+            @ConfigEntry.ColorPicker
+            public int legendaryColor = 0xFFAA00;
+            @ConfigEntry.ColorPicker
+            public int mythicColor = 0xFF55FF;
+            @ConfigEntry.ColorPicker
+            public int heroicColor = 0xAA0000;
+            @ConfigEntry.ColorPicker
+            public int supremeColor = 0x00AAAA;
+            @ConfigEntry.ColorPicker
+            public int otherworldlyColor = 0xF700FF;
+            @ConfigEntry.ColorPicker
+            public int ghostlyColor = 0xB0FCFF;
+            @ConfigEntry.ColorPicker
+            public int specialColor = 0xFF5555;
+
+            @ConfigEntry.Gui.PrefixText
+            @ConfigEntry.BoundedDiscrete(min = 0x00, max = 0xFF)
+            public int transparency = 40;
+
+            public int getRarityColorFor(String rarity) {
+                switch (rarity.toLowerCase()) {
+                    case "uncommon" -> {
+                        return uncommonColor;
+                    }
+                    case "rare" -> {
+                        return rareColor;
+                    }
+                    case "epic" -> {
+                        return epicColor;
+                    }
+                    case "legendary" -> {
+                        return legendaryColor;
+                    }
+                    case "mythic" -> {
+                        return mythicColor;
+                    }
+                    case "heroic" -> {
+                        return heroicColor;
+                    }
+                    case "supreme" -> {
+                        return supremeColor;
+                    }
+                    case "otherworldly" -> {
+                        return otherworldlyColor;
+                    }
+                    case "ghostly" -> {
+                        return ghostlyColor;
+                    }
+                    case "special" -> {
+                        return specialColor;
+                    }
+                    default -> {
+                        return commonColor;
+                    }
+                }
+            }
         }
 
         public static class FishingAnnouncement {

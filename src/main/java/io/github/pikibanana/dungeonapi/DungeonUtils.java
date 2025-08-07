@@ -1,13 +1,20 @@
 package io.github.pikibanana.dungeonapi;
 
+import io.github.pikibanana.Main;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.component.Component;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -102,5 +109,45 @@ public class DungeonUtils {
             return customData.copyNbt().getString("dd_item_id", null);
         }
         return null;
+    }
+
+    @Nullable
+    public static String getDungeonDodgeItemRarityFrom(ItemStack itemStack) {
+        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        if (customData != null) {
+            return customData.copyNbt().getString("rarity", null);
+        }
+        return null;
+    }
+
+    public static boolean drawItemRaritySlotOverlay(DrawContext context, int x, int y, ItemStack stack) {
+        String rarity = DungeonUtils.getDungeonDodgeItemRarityFrom(stack);
+        int color = -1;
+        if (rarity == null) {
+            if (DungeonUtils.getDungeonDodgeItemIDFrom(stack) == null) return false; //only show for dungeon dodge items
+            //try fetching through lore
+            ComponentMap components = stack.getComponents();
+            if (components.contains(DataComponentTypes.LORE)) {
+                for (Component<?> component : components) {
+                    if (component.type().equals(DataComponentTypes.LORE)) {
+                        LoreComponent lore = (LoreComponent) component.value();
+                        if (lore.styledLines().isEmpty()) break;
+                        Text last = lore.styledLines().getLast();
+                        TextColor textColor = last.getStyle().getColor();
+                        if (textColor != null) color = textColor.getRgb();
+                        break;
+                    }
+                }
+            }
+            if (color == -1) return false;
+        } else {
+            color = Main.features.showItemRarityBackgrounds.getRarityColorFor(rarity);
+        }
+
+        int alpha = Main.features.showItemRarityBackgrounds.transparency;
+        int translucentColor = (alpha << 24) | (color & 0x00FFFFFF);
+
+        context.fill(x, y, x + 16, y + 16, translucentColor);
+        return true;
     }
 }

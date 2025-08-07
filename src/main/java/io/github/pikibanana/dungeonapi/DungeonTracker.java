@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class DungeonTracker {
 
     public static final EssenceCounter essenceCounter = EssenceCounter.getInstance();
-    private static final Pattern dungeonEntryRegex = Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*");
+    private static final Pattern dungeonEntryRegex = Pattern.compile("You entered ([\\w\\s]+)!.*");
     private static final Pattern dungeonDifficultyRegex = Pattern.compile("\\[!] Notice! Your dungeon difficulty is set to (\\w*)!");
     private static final Map<Pattern, DungeonMessage> MESSAGE_MAP = new HashMap<>();
     private static final DungeonData dungeonData = DungeonData.getInstance();
@@ -27,7 +27,7 @@ public class DungeonTracker {
     private static DungeonDifficulty dungeonDifficulty = DungeonDifficulty.UNKNOWN;
 
     static {
-        MESSAGE_MAP.put(Pattern.compile("You have entered the ([\\w\\s]+) dungeon.*"), DungeonMessage.ENTER);
+        MESSAGE_MAP.put(Pattern.compile("You entered ([\\w\\s]+)!.*"), DungeonMessage.ENTER);
         MESSAGE_MAP.put(Pattern.compile("Dungeon failed! The whole team died!"), DungeonMessage.DEATH);
         MESSAGE_MAP.put(Pattern.compile("Teleported you to spawn!"), DungeonMessage.LEAVE);
         MESSAGE_MAP.put(Pattern.compile("The boss has been defeated! The dungeon will close in (\\d+) seconds!"), DungeonMessage.END);
@@ -50,7 +50,7 @@ public class DungeonTracker {
             Matcher typeMatcher = dungeonEntryRegex.matcher(message);
             if (typeMatcher.find()) {
                 isInDungeon = true;
-                String dungeonName = typeMatcher.group(1).toUpperCase();
+                String dungeonName = typeMatcher.group(1).toUpperCase().replaceAll(" ", "_");
                 try {
                     dungeonType = DungeonType.valueOf(dungeonName);
                 } catch (IllegalArgumentException e) {
