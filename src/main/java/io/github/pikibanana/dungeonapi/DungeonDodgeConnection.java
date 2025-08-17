@@ -1,8 +1,11 @@
 package io.github.pikibanana.dungeonapi;
 
+import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.dungeonapi.packet.serverbound.DungeonDodgePlusStatusC2SPayload;
 import io.github.pikibanana.util.TaskScheduler;
 import io.github.pikibanana.util.UpdateChecker;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
@@ -50,6 +53,11 @@ public class DungeonDodgeConnection {
             //DungeonDodge specific logic
             if (isOnServer("dungeondodge")) {
                 isConnected = true;
+
+                //send DungeonDodge+ connection packet
+                DungeonDodgePlusStatusC2SPayload payload = new DungeonDodgePlusStatusC2SPayload(Main.MOD_VERSION);
+                ClientPlayNetworking.send(payload);
+                Main.LOGGER.info("Sent DD+ status payload packet to DungeonDodge server!");
 
                 ClientPlayerEntity player = MinecraftClient.getInstance().player;
                 if (player != null && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled && !isToggled) {
