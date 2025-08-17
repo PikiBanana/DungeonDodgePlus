@@ -4,6 +4,9 @@ import io.github.pikibanana.chat.ChatMessageHandlerImpl;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.*;
 import io.github.pikibanana.dungeonapi.essence.EssenceTracker;
+import io.github.pikibanana.dungeonapi.packet.clientbound.DDItemS2CPayload;
+import io.github.pikibanana.dungeonapi.packet.serverbound.DungeonDodgePlusStatusC2SPayload;
+import io.github.pikibanana.dungeonapi.packet.PacketListener;
 import io.github.pikibanana.hud.HudRenderer;
 import io.github.pikibanana.keybinds.Keybinds;
 import io.github.pikibanana.keybinds.QuickDungeon;
@@ -16,15 +19,16 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
     public static final String MOD_ID = "dungeondodgeplus";
-    public static final String MOD_VERSION = "0.7-beta-recipe-pinning";
+    public static final String MOD_VERSION = "0.8";
     public static DungeonDodgePlusConfig.Features features;
 
     @Override
@@ -101,6 +105,15 @@ public class Main implements ModInitializer {
         ClientPlayConnectionEvents.JOIN.register(dungeonDodgeConnection::onJoin);
         ClientPlayConnectionEvents.DISCONNECT.register(dungeonDodgeConnection::onDisconnect);
         LOGGER.info("Connection events registered!");
+
+        LOGGER.info("Registering server bound packets...");
+        PayloadTypeRegistry.playC2S().register(DungeonDodgePlusStatusC2SPayload.ID, DungeonDodgePlusStatusC2SPayload.CODEC);
+        LOGGER.info("Registering client bound packets...");
+        PayloadTypeRegistry.playS2C().register(DDItemS2CPayload.ID, DDItemS2CPayload.CODEC);
+        LOGGER.info("Registering client bound packet listeners...");
+        PacketListener packetListener = new PacketListener();
+        ClientPlayNetworking.registerGlobalReceiver(DDItemS2CPayload.ID, packetListener::handleDungeonDodgeItemPayload);
+        LOGGER.info("Server and client packet handlers registered!");
 
         LOGGER.info("DungeonDodge+ has been successfully initialized!");
     }

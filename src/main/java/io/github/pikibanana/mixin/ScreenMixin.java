@@ -3,6 +3,7 @@ package io.github.pikibanana.mixin;
 import io.github.pikibanana.gui.PinRecipe;
 import io.github.pikibanana.gui.screens.ScreenManager;
 import io.github.pikibanana.gui.screens.UpdateScreen;
+import io.github.pikibanana.gui.widgets.ItemDisplayWidget;
 import io.github.pikibanana.gui.widgets.RecipeWidget;
 import io.github.pikibanana.gui.widgets.TexturedButtonWidget;
 import io.github.pikibanana.gui.widgets.TexturedMenuWidgets;
@@ -91,7 +92,7 @@ public abstract class ScreenMixin {
             this.recipeWidget = new RecipeWidget();
         }
         this.addDrawableChild(recipeWidget);
-
+        this.addDrawableChild(new ItemDisplayWidget(this.width, this.height));
 
         if (screen.getScreenHandler() instanceof GenericContainerScreenHandler container && this.getTitle().getString().toLowerCase().contains("recipe browser")) {
             int backgroundWidth = 176;
