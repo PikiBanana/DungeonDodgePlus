@@ -120,7 +120,7 @@ public class DungeonUtils {
         return null;
     }
 
-    public static boolean drawItemRaritySlotOverlay(DrawContext context, int x, int y, ItemStack stack) {
+    public static boolean drawItemRaritySlotOverlay(DrawContext context, int x, int y, ItemStack stack, boolean isInHotbar) {
         String rarity = DungeonUtils.getDungeonDodgeItemRarityFrom(stack);
         int color = -1;
         if (rarity == null) {
@@ -144,10 +144,25 @@ public class DungeonUtils {
             color = Main.features.showItemRarityBackgrounds.getRarityColorFor(rarity);
         }
 
-        int alpha = Main.features.showItemRarityBackgrounds.transparency;
-        int translucentColor = (alpha << 24) | (color & 0x00FFFFFF);
+        int alpha = Math.min(Main.features.showItemRarityBackgrounds.transparency + (isInHotbar ? 0x10 : 0), 0xFF);
 
-        context.fill(x, y, x + 16, y + 16, translucentColor);
+        int border = 0;
+        if (Main.features.showItemRarityBackgrounds.backgroundBorder) {
+            border = Main.features.showItemRarityBackgrounds.borderThickness;
+
+            for (int t = 0; t < border; t++) {
+                //color border from outside to in, meaning the alpha is largest at the outside
+                int changeFactor = 0x22;
+                int alphaChange = (border - t) * changeFactor;
+                int borderAlpha = Math.min(alpha + alphaChange, 0xFF);
+                int borderColor = (borderAlpha << 24) | (color & 0x00FFFFFF);
+                context.drawBorder(x + t, y + t, 16 - t * 2, 16 - t * 2, borderColor);
+            }
+        }
+
+        int translucentColor = (alpha << 24) | (color & 0x00FFFFFF);
+        context.fill(x + border, y + border, x + 16 - border, y + 16 - border, translucentColor);
+
         return true;
     }
 }

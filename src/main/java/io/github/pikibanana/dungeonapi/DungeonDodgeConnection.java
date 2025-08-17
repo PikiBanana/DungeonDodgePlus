@@ -80,6 +80,7 @@ public class DungeonDodgeConnection {
         if (isConnected) {
             isConnected = false;
             isToggled = false;
+            DungeonTracker.handleLeave(Text.empty(), true);
         }
     }
 

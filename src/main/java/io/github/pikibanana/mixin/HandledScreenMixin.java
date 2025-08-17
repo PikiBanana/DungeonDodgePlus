@@ -38,7 +38,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
             if (!slot.isEnabled()) continue;
             ItemStack stack = slot.getStack();
 
-            if (DungeonUtils.drawItemRaritySlotOverlay(context, slot.x, slot.y, stack)) ci.cancel();
+            if (DungeonUtils.drawItemRaritySlotOverlay(context, slot.x, slot.y, stack, false)) ci.cancel();
         }
     }
 

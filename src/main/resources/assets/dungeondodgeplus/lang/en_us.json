@@ -67,6 +67,8 @@
   "text.autoconfig.DungeonDodgePlus.option.features.showItemRarityBackgrounds.specialColor": "Special Rarity Background Color",
   "text.autoconfig.DungeonDodgePlus.option.features.showItemRarityBackgrounds.transparency.@PrefixText": "The background color transparency level is a number between 0 and 255, where 0 is fully transparent and 255 is fully opaque.",
   "text.autoconfig.DungeonDodgePlus.option.features.showItemRarityBackgrounds.transparency": "Background Color Transparency Level",
+  "text.autoconfig.DungeonDodgePlus.option.features.showItemRarityBackgrounds.backgroundBorder": "Show Background Border Around Rarity Background",
+  "text.autoconfig.DungeonDodgePlus.option.features.showItemRarityBackgrounds.borderThickness": "Background Border Thickness",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement": "Fish Caught Announcement",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.enabled": "Enable Fish Caught Announcement",
   "text.autoconfig.DungeonDodgePlus.option.features.fishingAnnouncement.bold": "Bold Text",

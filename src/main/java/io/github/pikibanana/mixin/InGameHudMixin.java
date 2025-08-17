@@ -64,7 +64,7 @@ public abstract class InGameHudMixin {
                                                  ItemStack stack, int seed, CallbackInfo ci) {
         if (stack.isEmpty() || !Main.features.showItemRarityBackgrounds.enabled) return;
 
-        DungeonUtils.drawItemRaritySlotOverlay(context, x, y, stack);
+        DungeonUtils.drawItemRaritySlotOverlay(context, x, y, stack, true);
     }
 
     @Inject(

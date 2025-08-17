@@ -128,13 +128,14 @@ public class DungeonTracker {
     }
 
 
-    public static void handleLeave(Text message) {
+    public static void handleLeave(Text message, boolean isDisconnect) {
         isInDungeon = false;
         int essence = essenceCounter.getCurrentEssence();
         dungeonData.addInt("totalEssence", essence);
         essenceCounter.setCurrentEssence(0);
         dungeonType = DungeonType.UNKNOWN;
-        if (MinecraftClient.getInstance().player != null && DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
+        if (!isDisconnect && MinecraftClient.getInstance().player != null &&
+                DungeonDodgeConnection.isConnected() && DungeonDodgePlusConfig.get().features.autoTogglePet.enabled) {
             MinecraftClient.getInstance().player.networkHandler.sendCommand("togglepet");
         }
         MusicManager.stopMusic();
@@ -182,7 +183,7 @@ public class DungeonTracker {
                         handleDeath(text);
                         break;
                     case LEAVE:
-                        handleLeave(text);
+                        handleLeave(text, false);
                         break;
                     case TELEPORTING:
                         handleTeleport(text);

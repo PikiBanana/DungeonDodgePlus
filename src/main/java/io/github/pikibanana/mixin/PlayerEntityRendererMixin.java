@@ -1,5 +1,7 @@
 package io.github.pikibanana.mixin;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import io.github.pikibanana.dungeonapi.DungeonUtils;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntityRenderer.class)
@@ -29,30 +32,44 @@ public abstract class PlayerEntityRendererMixin {
     @Unique
     private static final int BACKGROUND_COLOR = 0x40000000; // Semi-transparent black
 
+    @ModifyVariable(
+            method = "updateRenderState(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V",
+            at = @At("HEAD"),
+            ordinal = 0,
+            argsOnly = true
+    )
+    private AbstractClientPlayerEntity dungeondodgeplus$renderPlayer_holdPlayerRef(
+            AbstractClientPlayerEntity player, @Share("dungeondodgeplus$playerRef") LocalRef<AbstractClientPlayerEntity> ref
+    ) {
+        ref.set(player);
+        return player;
+    }
+
     @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("TAIL"))
-    private void onRender(PlayerEntityRenderState playerEntityRenderState, Text text, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int i, CallbackInfo ci) {
+    private void onRender(PlayerEntityRenderState playerEntityRenderState, Text text, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers,
+                          int i, CallbackInfo ci, @Share("dungeondodgeplus$playerRef") LocalRef<AbstractClientPlayerEntity> ref) {
         MinecraftClient client = MinecraftClient.getInstance();
-        Text playerName = playerEntityRenderState.playerName;
+        AbstractClientPlayerEntity target = ref.get();
 
-        if (playerName == null || !validateRenderConditions(playerName.getString(), client)) return;
+        if (!validateRenderConditions(target, client)) return;
 
-        renderHealthDisplay(playerEntityRenderState, client, matrixStack, vertexConsumers);
+        renderHealthDisplay(target, playerEntityRenderState, client, matrixStack, vertexConsumers);
     }
 
     @Unique
-    private boolean validateRenderConditions(String playerName, MinecraftClient client) {
-        return playerName != null && client.player != null &&
+    private boolean validateRenderConditions(AbstractClientPlayerEntity player, MinecraftClient client) {
+        return player != null && client.player != null &&
                 DungeonTracker.inDungeon() &&
-                DUNGEON_UTILS.isParticipating(playerName) &&
+                DUNGEON_UTILS.isParticipating(player.getName().getString()) &&
                 DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.enabled &&
-                !client.player.getName().getString().equals(playerName);
+                !client.player.getName().equals(player.getName());
     }
 
     @Unique
-    private void renderHealthDisplay(PlayerEntityRenderState playerEntityRenderState, MinecraftClient client,
-                                     MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
+    private void renderHealthDisplay(AbstractClientPlayerEntity target, PlayerEntityRenderState playerEntityRenderState,
+                                     MinecraftClient client, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
         TextRenderer textRenderer = client.textRenderer;
-        String healthText = "NOT WORKING DUE TO BACKEND API CHANGE"; //getHealthText(player);
+        String healthText = getHealthText(target);
         int color = DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.color;
 
         matrixStack.push();

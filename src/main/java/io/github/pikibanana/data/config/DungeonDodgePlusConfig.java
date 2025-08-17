@@ -294,7 +294,11 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
             @ConfigEntry.Gui.PrefixText
             @ConfigEntry.BoundedDiscrete(min = 0x00, max = 0xFF)
-            public int transparency = 40;
+            public int transparency = 80;
+
+            public boolean backgroundBorder = true;
+            @ConfigEntry.BoundedDiscrete(min = 0, max = 8)
+            public int borderThickness = 2;
 
             public int getRarityColorFor(String rarity) {
                 switch (rarity.toLowerCase()) {
