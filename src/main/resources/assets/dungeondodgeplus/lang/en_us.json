@@ -105,7 +105,7 @@
   "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon": "Auto Dungeon",
   "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.autoLeave": "Auto Leave Dungeon",
   "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.amountOfTimeBeforeLeave": "Time Before Auto Leave (Seconds)",
-  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.autoQuickDungeon": "Enable Auto Quick Dungeon (Legend Rank+)",
+  "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.autoQuickDungeon": "Enable Auto Quick Dungeon After Auto-Leave (Legend Rank+)",
   "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.amountOfTimeBeforeAutoDungeon": "Time Before Auto Dungeon (Seconds)",
   "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.dungeonType": "Dungeon Type",
   "text.autoconfig.DungeonDodgePlus.option.features.autoDungeon.dungeonDifficulty": "Dungeon Difficulty",

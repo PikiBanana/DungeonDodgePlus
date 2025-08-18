@@ -100,6 +100,7 @@ public class DungeonTracker {
     }
 
     public static void handleEnd(Text message) {
+        isInDungeon = false;
         DungeonDodgePlusConfig.Features.AutoDungeon autoDungeon = Main.features.autoDungeon;
 
         if (autoDungeon.autoLeave) {
