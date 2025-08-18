@@ -1,7 +1,7 @@
 package io.github.pikibanana.mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
 import io.github.pikibanana.dungeonapi.DungeonTracker;
 import io.github.pikibanana.dungeonapi.DungeonUtils;
@@ -12,7 +12,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,37 +38,41 @@ public abstract class PlayerEntityRendererMixin {
             argsOnly = true
     )
     private AbstractClientPlayerEntity dungeondodgeplus$renderPlayer_holdPlayerRef(
-            AbstractClientPlayerEntity player, @Share("dungeondodgeplus$playerRef") LocalRef<AbstractClientPlayerEntity> ref
+            AbstractClientPlayerEntity playerTarget,
+            @Share("dungeondodgeplus$targetPlayerHealth") LocalFloatRef healthRef,
+            @Share("dungeondodgeplus$targetPlayerMaxHealth") LocalFloatRef maxHealthRef
     ) {
-        ref.set(player);
-        return player;
+        healthRef.set(playerTarget.getHealth());
+        maxHealthRef.set(playerTarget.getMaxHealth());
+        return playerTarget;
     }
 
     @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("TAIL"))
     private void onRender(PlayerEntityRenderState playerEntityRenderState, Text text, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers,
-                          int i, CallbackInfo ci, @Share("dungeondodgeplus$playerRef") LocalRef<AbstractClientPlayerEntity> ref) {
+                          int i, CallbackInfo ci,
+                          @Share("dungeondodgeplus$targetPlayerHealth") LocalFloatRef healthRef,
+                          @Share("dungeondodgeplus$targetPlayerMaxHealth") LocalFloatRef maxHealthRef) {
         MinecraftClient client = MinecraftClient.getInstance();
-        AbstractClientPlayerEntity target = ref.get();
 
-        if (!validateRenderConditions(target, client)) return;
+        if (!validateRenderConditions(playerEntityRenderState, client)) return;
 
-        renderHealthDisplay(target, playerEntityRenderState, client, matrixStack, vertexConsumers);
+        renderHealthDisplay(playerEntityRenderState, client, matrixStack, vertexConsumers, healthRef.get(), maxHealthRef.get());
     }
 
     @Unique
-    private boolean validateRenderConditions(AbstractClientPlayerEntity player, MinecraftClient client) {
-        return player != null && client.player != null &&
+    private boolean validateRenderConditions(PlayerEntityRenderState state, MinecraftClient client) {
+        return state.playerName != null && client.player != null &&
                 DungeonTracker.inDungeon() &&
-                DUNGEON_UTILS.isParticipating(player.getName().getString()) &&
+                DUNGEON_UTILS.isParticipating(state.playerName.getString()) &&
                 DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.enabled &&
-                !client.player.getName().equals(player.getName());
+                !client.player.getName().getString().equals(state.playerName.getString());
     }
 
     @Unique
-    private void renderHealthDisplay(AbstractClientPlayerEntity target, PlayerEntityRenderState playerEntityRenderState,
-                                     MinecraftClient client, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers) {
+    private void renderHealthDisplay(PlayerEntityRenderState playerEntityRenderState, MinecraftClient client, MatrixStack matrixStack,
+                                     VertexConsumerProvider vertexConsumers, float health, float maxHealth) {
         TextRenderer textRenderer = client.textRenderer;
-        String healthText = getHealthText(target);
+        String healthText = getHealthText(health, maxHealth);
         int color = DungeonDodgePlusConfig.get().features.teammateHighlighter.teammateHealthDisplay.color;
 
         matrixStack.push();
@@ -95,8 +98,8 @@ public abstract class PlayerEntityRendererMixin {
     }
 
     @Unique
-    private String getHealthText(PlayerEntity player) {
-        float healthPercent = (player.getHealth() / player.getMaxHealth()) * 100;
+    private String getHealthText(float health, float maxHealth) {
+        float healthPercent = (health / maxHealth) * 100;
         return String.format("%.0f%%", healthPercent);
     }
 }

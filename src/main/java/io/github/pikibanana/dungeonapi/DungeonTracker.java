@@ -116,7 +116,7 @@ public class DungeonTracker {
                         () -> {
                             MinecraftClient client = MinecraftClient.getInstance();
                             if (client.player != null && autoDungeon.dungeonType != DungeonType.UNKNOWN) {
-                                String quickDungeonCommand = "quickdungeon" + " " + autoDungeon.dungeonType.name().toLowerCase() + " "
+                                String quickDungeonCommand = "quickdungeon" + " " + autoDungeon.dungeonType.getCommandID() + " "
                                         + autoDungeon.dungeonDifficulty.name().toLowerCase();
                                 Main.LOGGER.info("Command String {}", quickDungeonCommand);
                                 client.player.networkHandler.sendCommand(quickDungeonCommand);

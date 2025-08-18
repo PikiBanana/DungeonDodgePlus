@@ -34,12 +34,13 @@ public class DungeonUtils {
                 List<String> dungeonMembers = new ArrayList<>();
 
                 boolean playersSectionFound = false;
-                Pattern playerPattern = Pattern.compile("- \\[\\d+] (\\S+) \\d+%");
+                //second group of regex is the player's health, can be a number, a text, or a combination of the two
+                Pattern playerPattern = Pattern.compile(".+ \\[\\d+.] (\\S+) (\\d+.+|\\d+|.+)");
 
                 for (Team team : teams) {
                     String prefix = team.getPrefix().getString().replaceAll("§[0-9a-fk-or]", "").trim();
 
-                    if (prefix.contains("Players:")) {
+                    if (prefix.contains("party")) {
                         playersSectionFound = true;
                     } else if (playersSectionFound) {
                         if (prefix.isEmpty()) {
@@ -89,13 +90,13 @@ public class DungeonUtils {
                     break;
                 }
             }
+            if (sidebarObjective == null) return new ArrayList<>();
 
             Scoreboard scoreboard = sidebarObjective.getScoreboard();
-            List<Team> teams = scoreboard.getTeams().stream()
+            return scoreboard.getTeams().stream()
                     .filter(team -> team.getName().startsWith("TAB-Sidebar-"))
                     .sorted(Comparator.comparingInt(team -> Integer.parseInt(team.getName().substring("TAB-Sidebar-".length()))))
                     .toList();
-            return teams != null ? teams : new ArrayList<>();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

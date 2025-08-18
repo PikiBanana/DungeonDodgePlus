@@ -63,8 +63,7 @@ public class QuickDungeon {
         if (dungeonType != DungeonType.UNKNOWN && DungeonDodgeConnection.isConnected()) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             if (player != null) {
-                String quickDungeonCommand = "quickdungeon  " + dungeonType.name().toLowerCase()
-                        + " " + dungeonDifficulty.name().toLowerCase();
+                String quickDungeonCommand = "quickdungeon  " + dungeonType.getCommandID() + " " + dungeonDifficulty.name().toLowerCase();
                 player.networkHandler.sendCommand(quickDungeonCommand);
             }
         }
