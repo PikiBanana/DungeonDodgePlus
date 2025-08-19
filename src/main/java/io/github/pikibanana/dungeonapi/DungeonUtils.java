@@ -27,6 +27,96 @@ public class DungeonUtils {
 
     MinecraftClient client = MinecraftClient.getInstance();
 
+    @Nullable
+    public static String getDungeonDodgeItemIDFrom(ItemStack itemStack) {
+        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        if (customData != null) {
+            return customData.copyNbt().getString("dd_item_id", null);
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String getDungeonDodgeItemRarityFrom(ItemStack itemStack) {
+        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+        if (customData != null) {
+            return customData.copyNbt().getString("rarity", null);
+        }
+        return null;
+    }
+
+    public static boolean drawItemRaritySlotOverlay(DrawContext context, int x, int y, ItemStack stack, boolean isInHotbar) {
+        String rarity = DungeonUtils.getDungeonDodgeItemRarityFrom(stack);
+        int color = -1;
+
+        if (rarity == null) {
+            if (DungeonUtils.getDungeonDodgeItemIDFrom(stack) == null) return false; // only dungeon dodge items
+
+            ComponentMap components = stack.getComponents();
+            if (components.contains(DataComponentTypes.LORE)) {
+                List<String> rarityList = List.of(
+                        "ᴄᴏᴍᴍᴏɴ", "ᴜɴᴄᴏᴍᴍᴏɴ", "ʀᴀʀᴇ", "ᴇᴘɪᴄ", "ʟᴇɢᴇɴᴅᴀʀʏ",
+                        "ᴍʏᴛʜɪᴄ", "ʜᴇʀᴏɪᴄ", "sᴜᴘʀᴇᴍᴇ", "ᴏᴛʜᴇʀᴡᴏʀʟᴅʟʏ", "ɢʜᴏꜱᴛʟʏ", "sᴘᴇᴄɪᴀʟ"
+                );
+
+                // Scan all lore components for the latest matching rarity
+                for (Component<?> component : components) {
+                    if (!component.type().equals(DataComponentTypes.LORE)) continue;
+
+                    LoreComponent lore = (LoreComponent) component.value();
+                    var lines = lore.styledLines();
+                    if (lines.isEmpty()) continue;
+
+                    for (int i = lines.size() - 1; i >= 0; i--) {
+                        Text line = lines.get(i);
+                        String plain = line.getString().replaceAll("§.", "").toLowerCase().trim(); // remove formatting codes
+
+                        if (plain.isEmpty()) continue;
+
+                        for (String rarityWord : rarityList) {
+                            if (plain.contains(rarityWord)) {
+                                TextColor textColor = line.getStyle().getColor();
+                                if (textColor != null) {
+                                    color = textColor.getRgb();
+                                    break; // found latest rarity
+                                }
+                            }
+                        }
+
+                        if (color != -1) break; // stop scanning once found
+                    }
+
+
+                    if (color != -1) break; // stop scanning components once found
+                }
+            }
+
+            if (color == -1) return false; // no valid rarity found
+        } else {
+            color = Main.features.showItemRarityBackgrounds.getRarityColorFor(rarity);
+        }
+
+        int alpha = Math.min(Main.features.showItemRarityBackgrounds.transparency + (isInHotbar ? 0x10 : 0), 0xFF);
+
+        int border = 0;
+        if (Main.features.showItemRarityBackgrounds.backgroundBorder) {
+            border = Main.features.showItemRarityBackgrounds.borderThickness;
+
+            for (int t = 0; t < border; t++) {
+                int changeFactor = 0x22;
+                int alphaChange = (border - t) * changeFactor;
+                int borderAlpha = Math.min(alpha + alphaChange, 0xFF);
+                int borderColor = (borderAlpha << 24) | (color & 0x00FFFFFF);
+                context.drawBorder(x + t, y + t, 16 - t * 2, 16 - t * 2, borderColor);
+            }
+        }
+
+        int translucentColor = (alpha << 24) | (color & 0x00FFFFFF);
+        context.fill(x + border, y + border, x + 16 - border, y + 16 - border, translucentColor);
+
+        return true;
+    }
+
     public List<String> getDungeonMembers() {
         if (DungeonTracker.inDungeon()) {
             List<Team> teams = getScoreboardTeams();
@@ -62,7 +152,6 @@ public class DungeonUtils {
     public boolean isParticipating(String playerName) {
         return getDungeonMembers().contains(playerName);
     }
-
 
     public String getRoom() {
         List<Team> teams = getScoreboardTeams();
@@ -101,69 +190,5 @@ public class DungeonUtils {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Nullable
-    public static String getDungeonDodgeItemIDFrom(ItemStack itemStack) {
-        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-        if (customData != null) {
-            return customData.copyNbt().getString("dd_item_id", null);
-        }
-        return null;
-    }
-
-    @Nullable
-    public static String getDungeonDodgeItemRarityFrom(ItemStack itemStack) {
-        NbtComponent customData = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-        if (customData != null) {
-            return customData.copyNbt().getString("rarity", null);
-        }
-        return null;
-    }
-
-    public static boolean drawItemRaritySlotOverlay(DrawContext context, int x, int y, ItemStack stack, boolean isInHotbar) {
-        String rarity = DungeonUtils.getDungeonDodgeItemRarityFrom(stack);
-        int color = -1;
-        if (rarity == null) {
-            if (DungeonUtils.getDungeonDodgeItemIDFrom(stack) == null) return false; //only show for dungeon dodge items
-            //try fetching through lore
-            ComponentMap components = stack.getComponents();
-            if (components.contains(DataComponentTypes.LORE)) {
-                for (Component<?> component : components) {
-                    if (component.type().equals(DataComponentTypes.LORE)) {
-                        LoreComponent lore = (LoreComponent) component.value();
-                        if (lore.styledLines().isEmpty()) break;
-                        Text last = lore.styledLines().getLast();
-                        TextColor textColor = last.getStyle().getColor();
-                        if (textColor != null) color = textColor.getRgb();
-                        break;
-                    }
-                }
-            }
-            if (color == -1) return false;
-        } else {
-            color = Main.features.showItemRarityBackgrounds.getRarityColorFor(rarity);
-        }
-
-        int alpha = Math.min(Main.features.showItemRarityBackgrounds.transparency + (isInHotbar ? 0x10 : 0), 0xFF);
-
-        int border = 0;
-        if (Main.features.showItemRarityBackgrounds.backgroundBorder) {
-            border = Main.features.showItemRarityBackgrounds.borderThickness;
-
-            for (int t = 0; t < border; t++) {
-                //color border from outside to in, meaning the alpha is largest at the outside
-                int changeFactor = 0x22;
-                int alphaChange = (border - t) * changeFactor;
-                int borderAlpha = Math.min(alpha + alphaChange, 0xFF);
-                int borderColor = (borderAlpha << 24) | (color & 0x00FFFFFF);
-                context.drawBorder(x + t, y + t, 16 - t * 2, 16 - t * 2, borderColor);
-            }
-        }
-
-        int translucentColor = (alpha << 24) | (color & 0x00FFFFFF);
-        context.fill(x + border, y + border, x + 16 - border, y + 16 - border, translucentColor);
-
-        return true;
     }
 }
