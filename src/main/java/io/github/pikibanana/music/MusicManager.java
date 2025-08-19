@@ -77,7 +77,7 @@ public class MusicManager {
 
         currentMusic = new MusicSound(soundEventEntry, 0, 0, true);
 
-        stopAllSounds();
+        stopCurrentMusic();
 
         CLIENT.getMusicTracker().play(new MusicInstance(currentMusic));
         isPlaying = true;
@@ -96,6 +96,15 @@ public class MusicManager {
     private static void stopAllSounds() {
         CLIENT.getSoundManager().stopAll();
     }
+
+    private static void stopCurrentMusic() {
+        if (currentMusic != null && isPlaying) {
+            CLIENT.getMusicTracker().stop();
+            isPlaying = false;
+            currentMusic = null;
+        }
+    }
+
 
     public static void skip() {
         stopMusic();
