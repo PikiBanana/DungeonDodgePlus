@@ -16,7 +16,8 @@ import java.util.regex.Pattern;
 public class PlayerStats {
 
     //15/15? Health  |  56? Defense  |  56.67/563? Mana  |  35? Speed
-    public static final Pattern STAT_OVERLAY_MESSAGE_REGEX = Pattern.compile("(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Health.{5}(\\d*\\.?\\d*?). Defense.{5}(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Mana.{5}(\\d*\\.?\\d*?). Speed");
+    private static final Pattern STAT_OVERLAY_MESSAGE_REGEX = Pattern.compile("(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Health.{5}(\\d*\\.?\\d*?). Defense.{5}(\\d*\\.?\\d*?)/(\\d*\\.?\\d*?). Mana.{5}(\\d*\\.?\\d*?). Speed");
+    private static final Pattern HYPIXEL_MANA_OVERLAY_REGEX = Pattern.compile("(\\d+)/(\\d+). Mana");
 
     private static float healthValue;
     private static float healthMax;
@@ -53,6 +54,15 @@ public class PlayerStats {
 
     public static void tryReceive(String literalMessage) {
         try {
+            if (DungeonDodgeConnection.isOnServer("hypixel")) {
+                var matchesHypixel = HYPIXEL_MANA_OVERLAY_REGEX.matcher(literalMessage);
+                if (matchesHypixel.find()) {
+                    manaValue = Float.parseFloat(matchesHypixel.group(1));
+                    manaMax = Float.parseFloat(matchesHypixel.group(2));
+                }
+                return;
+            }
+
             var matches = STAT_OVERLAY_MESSAGE_REGEX.matcher(literalMessage);
             if (matches.find()) {
                 healthValue = Float.parseFloat(matches.group(1));

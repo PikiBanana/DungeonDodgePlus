@@ -4,17 +4,18 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.pikibanana.CustomModelDataFormats;
 import io.github.pikibanana.Main;
 import io.github.pikibanana.data.config.DungeonDodgePlusConfig;
+import io.github.pikibanana.dungeonapi.DungeonUtils;
 import io.github.pikibanana.util.EnchantmentUtils;
-import net.minecraft.component.Component;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.*;
 import net.minecraft.component.type.CustomModelDataComponent;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -23,6 +24,10 @@ import java.util.Map;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
+
+    @Shadow public abstract ItemStack copy();
+
+    @Shadow public abstract <T> void copy(ComponentType<T> type, ComponentsAccess from);
 
     @Unique
     private static boolean isHasMatched(String enchantment) {
@@ -72,7 +77,8 @@ public abstract class ItemStackMixin {
                 for (Component<?> component : components) {
                     if (component.type().equals(DataComponentTypes.CUSTOM_MODEL_DATA)) {
                         CustomModelDataComponent customModelDataComponent = (CustomModelDataComponent) component.value();
-                        int customModelData = customModelDataComponent.value();
+                        if (customModelDataComponent.floats().isEmpty()) continue;
+                        float customModelData = customModelDataComponent.getFloat(0);
 
                         CustomModelDataFormats selectedFormat = DungeonDodgePlusConfig.get().features.customModelDataDisplay.format;
                         String formattedData = selectedFormat.format(customModelData);
@@ -83,6 +89,13 @@ public abstract class ItemStackMixin {
                         );
                     }
                 }
+            }
+        }
+        if (DungeonDodgePlusConfig.get().features.itemIDDisplay.enabled) {
+            ItemStack itemStack = (ItemStack) (Object) this;
+            String itemID = DungeonUtils.getDungeonDodgeItemIDFrom(itemStack);
+            if (itemID != null) {
+                original.add(Text.literal("DungeonDodge Item ID: " + itemID).formatted(Formatting.DARK_GRAY));
             }
         }
         return original;

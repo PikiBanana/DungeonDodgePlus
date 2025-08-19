@@ -9,7 +9,9 @@ import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,11 +39,13 @@ public abstract class TitleScreenMixin extends Screen {
                     if (button.getMessage().getString().equalsIgnoreCase("Singleplayer")) {
                         this.remove(button);
 
-                        ServerAddress serverAddress = new ServerAddress("mc.dungeondodge.net", 25565);
+                        ServerAddress serverAddress = new ServerAddress("dungeondodge.net", 25565);
                         ServerInfo serverInfo = new ServerInfo("DungeonDodge", serverAddress.getAddress(), ServerInfo.ServerType.OTHER);
                         serverInfo.setResourcePackPolicy(ServerInfo.ResourcePackPolicy.ENABLED);
 
-                        addDrawableChild(ButtonWidget.builder(Text.of("Play DungeonDodge"), action -> {
+                        Style style = Style.EMPTY.withColor(0xFFDE75).withBold(true);
+
+                        addDrawableChild(ButtonWidget.builder(Text.literal("Play DungeonDodge").fillStyle(style), action -> {
                                     action.active = false;
                                     ConnectScreen.connect(this, client, serverAddress, serverInfo, false, null);
                                 })

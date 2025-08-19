@@ -5,6 +5,8 @@ import io.github.pikibanana.dungeonapi.PlayerStats;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.util.Identifier;
 
 /**
@@ -21,7 +23,7 @@ public final class StatusBarRenderer {
 
         for (int i = 0; i < 10; i++) {
             int posX = x - i * 8 - 9;
-            ctx.drawTexture(MANA_BUBBLE_RESOURCES, posX, y, 9, 0, 9, 9);
+            ctx.drawTexture(identifier -> RenderLayer.getGuiTextured(MANA_BUBBLE_RESOURCES), MANA_BUBBLE_RESOURCES, posX, y, 9, 0, 9, 9, 256, 256);
 
             int offset = 7; // Always empty
             if (manaRatio >= i && manaRatio < (i + 1)) {
@@ -31,7 +33,7 @@ public final class StatusBarRenderer {
                 offset = 0;
             }
 
-            ctx.drawTexture(MANA_BUBBLE_RESOURCES, posX + offset + 1, y, offset + 1, 0, 7 - offset, 9);
+            ctx.drawTexture(identifier -> RenderLayer.getGuiTextured(MANA_BUBBLE_RESOURCES), MANA_BUBBLE_RESOURCES, posX + offset + 1, y, offset + 1, 0, 7 - offset, 9, 256, 256);
         }
     }
 

@@ -13,6 +13,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.ChestBlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,10 +42,10 @@ public abstract class ChestRenderer<T extends BlockEntity> implements BlockEntit
 
 
     @Inject(
-            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
+            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/util/math/Vec3d;)V",
             at = @At("HEAD")
     )
-    private void dungeondodgeplus$isValidChest(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci, @Share("dungeondodgeplus$validChest") LocalBooleanRef validChest) {
+    private void dungeondodgeplus$isValidChest(T entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos, CallbackInfo ci, @Share("dungeondodgeplus$validChest") LocalBooleanRef validChest) {
         validChest.set(isValidChest(entity));
         if (!BlessingFinderData.isClicked(entity.getPos())) {
             BlessingFinderData.mark(entity.getPos());
@@ -56,7 +57,7 @@ public abstract class ChestRenderer<T extends BlockEntity> implements BlockEntit
     }
 
     @ModifyVariable(
-            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
+            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/util/math/Vec3d;)V",
             at = @At("HEAD"),
             index = 4,
             argsOnly = true
@@ -75,9 +76,9 @@ public abstract class ChestRenderer<T extends BlockEntity> implements BlockEntit
     }
 
     @ModifyVariable(
-            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
+            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/util/math/Vec3d;)V",
             at = @At(value = "STORE"),
-            index = 17
+            index = 18
     )
     private int dungeondodgeplus$modifyChestRenderLight(int light, @Share("dungeondodgeplus$validChest") LocalBooleanRef validChest) {
         if (validChest.get()) {
@@ -87,14 +88,14 @@ public abstract class ChestRenderer<T extends BlockEntity> implements BlockEntit
     }
 
     @Inject(
-            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
+            method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/util/math/Vec3d;)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/util/math/MatrixStack;pop()V",
-                    shift = At.Shift.BEFORE
+                    shift = At.Shift.AFTER
             )
     )
-    private void dungeondodgeplus$drawVertexConsumer(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci, @Share("dungeondodgeplus$validChest") LocalBooleanRef validChest) {
+    private void dungeondodgeplus$drawVertexConsumer(T entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos, CallbackInfo ci, @Share("dungeondodgeplus$validChest") LocalBooleanRef validChest) {
         if (validChest.get()) {
             outlineVertexConsumerProvider.draw();
         }

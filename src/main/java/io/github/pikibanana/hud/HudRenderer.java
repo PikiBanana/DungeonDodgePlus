@@ -16,10 +16,10 @@ public class HudRenderer {
     private final RecipeWidget recipeWidget = new RecipeWidget();
 
     public void render(DrawContext context, RenderTickCounter tickCounter) {
-        essenceComponent.render(context, 0, 0, tickCounter.getTickDelta(true));
-        fpsComponent.render(context, 0, 0, tickCounter.getTickDelta(true));
+        essenceComponent.render(context, 0, 0, tickCounter.getTickProgress(true));
+        fpsComponent.render(context, 0, 0, tickCounter.getTickProgress(true));
 //        manaBarComponent.render(context, 0, 0, tickCounter.getTickDelta(true));
 //        healthBarComponent.render(context, 0, 0, tickCounter.getTickDelta(true));
-        recipeWidget.render(context, 0, 0, tickCounter.getTickDelta(true));
+        recipeWidget.render(context, 0, 0, tickCounter.getTickProgress(true));
     }
 }

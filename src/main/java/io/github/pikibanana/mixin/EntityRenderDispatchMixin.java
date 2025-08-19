@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatchMixin {
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void hidePlayers(Entity entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+    @Inject(method = "render*", at = @At("HEAD"), cancellable = true)
+    public void hidePlayers(Entity entity,  double x, double y, double z, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (entity instanceof AbstractClientPlayerEntity player) {
             if (DungeonData.getInstance().getBoolean("hidePlayers", false) && !player.equals(MinecraftClient.getInstance().player)) {
                 ci.cancel();

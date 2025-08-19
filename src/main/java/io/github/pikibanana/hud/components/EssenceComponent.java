@@ -8,6 +8,7 @@ import io.github.pikibanana.misc.SheepRandomizer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 public class EssenceComponent extends DraggableComponent {
@@ -29,11 +30,10 @@ public class EssenceComponent extends DraggableComponent {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (!DungeonDodgePlusConfig.get().features.essenceCounter.enabled) return;
+        if (!DungeonDodgePlusConfig.get().features.essenceCounter.isEnabled()) return;
 
         final boolean sheepMode = DungeonData.getInstance().getBoolean("sheepMode", false);
         final Identifier texture = getCurrentTexture(sheepMode);
-        client.getTextureManager().bindTexture(texture);
 
         updateDimensions(sheepMode);
         renderTexture(context, texture);
@@ -54,7 +54,7 @@ public class EssenceComponent extends DraggableComponent {
 
 
     private void renderTexture(DrawContext context, Identifier texture) {
-        context.drawTexture(texture, x, y, 0, 0, width, height, width, height);
+        context.drawTexture(identifier -> RenderLayer.getGuiTextured(texture), texture, x, y, 0, 0, width, height, width, height);
     }
 
     private void renderText(DrawContext context) {
