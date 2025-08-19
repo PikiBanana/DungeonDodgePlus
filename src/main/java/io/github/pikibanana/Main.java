@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class Main implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("DungeonDodge+");
     public static final String MOD_ID = "dungeondodgeplus";
-    public static final String MOD_VERSION = "0.8";
+    public static final String MOD_VERSION = "0.81";
     public static DungeonDodgePlusConfig.Features features;
 
     @Override
