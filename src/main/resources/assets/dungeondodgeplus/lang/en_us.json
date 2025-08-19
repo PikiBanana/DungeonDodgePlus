@@ -143,5 +143,9 @@
   "key.dungeondodgeplus.stopSong": "Stop Song",
 
   "text.autoconfig.DungeonDodgePlus.option.features.music": "Music",
-  "text.autoconfig.DungeonDodgePlus.option.features.music.musicInDungeon": "Play background music in dungeon"
+  "text.autoconfig.DungeonDodgePlus.option.features.music.musicInDungeon": "Play background music in dungeon",
+
+  "text.autoconfig.DungeonDodgePlus.option.features.recipePinning": "Recipe Pinning",
+  "text.autoconfig.DungeonDodgePlus.option.features.recipePinning.savePinsAcrossInstances": "Save Pins Across Instances",
+  "text.autoconfig.DungeonDodgePlus.option.features.recipePinning.maxPinnedRecipes": "Max Pinned Recipes"
 }

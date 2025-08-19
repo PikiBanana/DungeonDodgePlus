@@ -93,6 +93,9 @@ public class DungeonDodgePlusConfig implements ConfigData {
         @ConfigEntry.Gui.CollapsibleObject
         public Music music = new Music();
 
+        @ConfigEntry.Gui.CollapsibleObject
+        public RecipePinning recipePinning = new RecipePinning();
+
         public static class EssenceFinder {
             @ConfigEntry.Gui.Excluded
             public String label = "Essence Finder Settings";
@@ -269,6 +272,7 @@ public class DungeonDodgePlusConfig implements ConfigData {
             public boolean enabled = true;
 
             //awful code below, I don't know enough AutoConfig to make this cleaner but a map for the colors would be 1000x better
+            //the entire mod is awful code -piki
             @ConfigEntry.ColorPicker
             public int commonColor = 0xFFFFFF;
             @ConfigEntry.ColorPicker
@@ -419,6 +423,16 @@ public class DungeonDodgePlusConfig implements ConfigData {
 
         public static class Music {
             public boolean musicInDungeon = true;
+        }
+
+        public static class RecipePinning {
+            @ConfigEntry.Gui.Excluded
+            public String label = "Recipe Pinning";
+
+            public boolean savePinsAcrossInstances = true;
+
+            @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
+            public int maxPinnedRecipes = 5;
         }
 
     }
